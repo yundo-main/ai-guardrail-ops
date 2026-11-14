@@ -32,7 +32,9 @@
 
 - 단계 포털(`0N_*/index.html`)은 `templates/gen_portal.py`로 생성 — **직접 편집 금지**, `PROJECTS` 설정 수정 후 `python3 templates/gen_portal.py` 재실행
 - 루트 `index.html`은 `templates/gen_index.py`로 생성 — **직접 편집 금지**, `STEPS` 설정 수정 후 `python3 templates/gen_index.py` 재실행
-- 템플릿 변경은 `templates/project-portal.html`(단계 포털), `templates/index-portal.html`(루트 인덱스)에 반영
+- `00_intro/index.html`은 `templates/gen_intro.py`로 생성 — `python3 templates/gen_intro.py` 재실행
+- `99_ref/glossary/index.html` + `99_ref/glossary.md`는 `templates/gen_glossary.py`로 생성 — `python3 templates/gen_glossary.py` 재실행 (용어 소스: `gen_portal.py`의 `PROJECTS.gloss`)
+- 템플릿 변경은 `templates/project-portal.html`(단계·인트로 포털 공용 CSS/JS), `templates/index-portal.html`(루트 인덱스)에 반영
 - `templates/`는 `.gitignore`로 git 추적 제외(로컬 전용)
 - 포털은 `file://`로 서버 없이 동작해야 한다
 
