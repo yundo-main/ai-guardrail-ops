@@ -104,9 +104,9 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <div class="wrap">
 <nav class="topnav">
 <a class="brand" href="#top">📘 04_risk_rating_system</a>
-<a href="#tab-overview">개요</a><a href="#tab-gloss">용어</a><a href="#tab-slides">슬라이드</a><a href="#tab-practice">실습</a><a href="#tab-help">도움말</a>
+<a href="#tab-overview">개요</a><a href="#tab-slides">슬라이드</a><a href="#tab-practice">실습</a><a href="#tab-help">도움말</a>
 </nav>
-<div class="stepidx"><span class="lbl">단계</span><a href="../index.html">⌂</a><a href="../01_guardrail_concept_architecture/index.html">1</a><a href="../02_llama_guard_nemo_guardrails/index.html">2</a><a href="../03_policy_blocking_output_filtering/index.html">3</a><a href="../04_risk_rating_system/index.html" class="cur">4</a><a href="../05_security_dashboard_alerts/index.html">5</a><a href="../06_operations_report_integrated_lab/index.html">6</a></div>
+<div class="stepidx"><span class="lbl">단계</span><a href="../index.html">⌂</a><a href="../00_intro/slides/00-course-flow.svg">0</a><a href="../01_guardrail_concept_architecture/index.html">1</a><a href="../02_llama_guard_nemo_guardrails/index.html">2</a><a href="../03_policy_blocking_output_filtering/index.html">3</a><a href="../04_risk_rating_system/index.html" class="cur">4</a><a href="../05_security_dashboard_alerts/index.html">5</a><a href="../06_operations_report_integrated_lab/index.html">6</a></div>
 <div class="hero" id="top">
 <div class="eyebrow">STEP 04 · RISK RATING · SECURITY EVENT</div>
 <h1>위험 등급 체계</h1>
@@ -119,6 +119,7 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <div class="card card-link" onclick="show('tab-overview')"><span class="ico">🧠</span><h3>이론 <span class="go">→</span></h3><p>보안 이벤트의 영향과 긴급도를 기준으로 위험 등급과 대응 절차를 설계한다.</p></div>
 <div class="card card-link" onclick="show('tab-practice')"><span class="ico">🛡️</span><h3>실습 <span class="go">→</span></h3><p>1. 입력 차단과 출력 검열 사례를 등급별로 분류한다. 2. 등급별 대응 시간과 담당자를 정의한다. 3. `src/monitoring.py`의 `SecurityEvent` 구조로 이벤트를 생성한다.</p></div>
 <div class="card card-link" onclick="show('tab-overview')"><span class="ico">📊</span><h3>단계 연결 <span class="go">→</span></h3><p>[← 3단계](../03_policy_blocking_output_filtering/readme.md) · [5단계 →](../05_security_dashboard_alerts/readme.md) · [전체 과정](../readme.md)</p></div>
+<div class="card card-link" onclick="location.href='../10_ai_guardrail_ops_framework/readme.md'"><span class="ico">🧩</span><h3>통합 프레임워크 <span class="go">→</span></h3><p>6단계에서 배운 정책·검열·위험등급·대시보드·리포트를 하나로 합친 운영 프레임워크 (10_ai_guardrail_ops_framework)</p></div>
 </div>
 <section class="ltab on" id="tab-overview">
 <div class="ltitle">개요 — STEP 04 학습 내용</div>
@@ -134,10 +135,6 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <div class="dtree"><div class="dtn">04_risk_rating_system/</div><div class="dtl">index.html</div><div class="dtl">readme.md</div><details class="dt" open><summary>slides/</summary><div class="dt-kids"><div class="dtl">readme.md</div><div class="dtl">s00-tech-spec.svg</div><div class="dtl">s01-risk-rating.svg</div><div class="dtl">s02-risk-theory.svg</div><div class="dtl">s03-risk-source.svg</div><div class="dtl">s04-risk-checklist.svg</div><div class="dtl">s05-summary.svg</div></div></details><details class="dt" open><summary>src/</summary><div class="dt-kids"><div class="dtl">monitoring.py</div><div class="dtl">policy.py</div><div class="dtl">risk.py</div></div></details></div>
 <p class="sub" style="margin-top:.8rem">단계 간 연결: [← 3단계](../03_policy_blocking_output_filtering/readme.md) · [5단계 →](../05_security_dashboard_alerts/readme.md) · [전체 과정](../readme.md)</p>
 <p class="sub" style="margin-top:.4rem">상위 프로젝트: <a href="../10_ai_guardrail_ops_framework/readme.md">10 통합 프레임워크 readme →</a> (도움말 탭에서 뷰어로도 열람 가능)</p>
-</section>
-<section class="ltab" id="tab-gloss" hidden>
-<div class="ltitle">용어 정리 — STEP 04 핵심 개념</div>
-<div class="gidx"><a href="#gloss-top" style="min-width:2.2rem">전체</a><a href="#g-ㄱ">ㄱ</a><span class="gidx-off">ㄲ</span><span class="gidx-off">ㄴ</span><a href="#g-ㄷ">ㄷ</a><span class="gidx-off">ㄸ</span><span class="gidx-off">ㄹ</span><a href="#g-ㅁ">ㅁ</a><span class="gidx-off">ㅂ</span><span class="gidx-off">ㅃ</span><a href="#g-ㅅ">ㅅ</a><span class="gidx-off">ㅆ</span><a href="#g-ㅇ">ㅇ</a><a href="#g-ㅈ">ㅈ</a><span class="gidx-off">ㅉ</span><span class="gidx-off">ㅊ</span><span class="gidx-off">ㅋ</span><span class="gidx-off">ㅌ</span><span class="gidx-off">ㅍ</span><a href="#g-ㅎ">ㅎ</a><a href="#g-#">#</a></div><div id="gloss-top"></div><h3 class="ggroup" id="g-ㄱ">ㄱ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>긴급도</b></td><td>대응이 필요한 시간적 급박함</td></tr></table><h3 class="ggroup" id="g-ㄷ">ㄷ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>대응 계약</b></td><td>등급이 올라갈수록 강한 조치를 연결하는 규칙</td></tr><tr><td style="width:180px"><b>등급 변경 기록</b></td><td>변경자·시각·사유를 별도 기록 — 원본 덮어쓰기 금지</td></tr></table><h3 class="ggroup" id="g-ㅁ">ㅁ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>민감도</b></td><td>노출된 데이터·시스템의 민감 정도</td></tr></table><h3 class="ggroup" id="g-ㅅ">ㅅ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>사후 분석</b></td><td>사건 종료 후 원인·대응을 분석하는 절후 활동</td></tr></table><h3 class="ggroup" id="g-ㅇ">ㅇ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>악용 가능성</b></td><td>공격자가 실제로 악용할 수 있는 정도</td></tr><tr><td style="width:180px"><b>에스컬레이션</b></td><td>상위 담당자·팀으로 사건을 escalation하는 절차</td></tr><tr><td style="width:180px"><b>영향 범위</b></td><td>사고 발생 시 피해가 미치는 범위</td></tr><tr><td style="width:180px"><b>위험 등급</b></td><td>영향·악용 가능성·노출 범위로 정한 대응 강도 단계</td></tr><tr><td style="width:180px"><b>이벤트 ID·시각·카테고리·판정·상세</b></td><td>이벤트에 남겨야 할 필수 필드</td></tr></table><h3 class="ggroup" id="g-ㅈ">ㅈ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>즉시 알림</b></td><td>Critical 등급에 발송되는 긴급 통지</td></tr></table><h3 class="ggroup" id="g-ㅎ">ㅎ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>행동 기준</b></td><td>등급을 숫자가 아닌 구체적 조치로 정의한 기준</td></tr></table><h3 class="ggroup" id="g-#">#</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>Critical</b></td><td>즉시 알림·에스컬레이션이 필요한 최고 위험 등급</td></tr><tr><td style="width:180px"><b>High</b></td><td>담당자 검토·차단을 요구하는 높은 위험 등급</td></tr><tr><td style="width:180px"><b>Low</b></td><td>추세 관찰 수준의 최저 위험 등급</td></tr><tr><td style="width:180px"><b>Medium</b></td><td>일상 모니터링 대상의 중간 위험 등급</td></tr><tr><td style="width:180px"><b>SecurityEvent</b></td><td>위험 판정을 운영 이벤트로 변환한 기록 구조</td></tr><tr><td style="width:180px"><b>classify_risk</b></td><td>영향·악용·노출 점수를 Low~Critical으로 변환</td></tr><tr><td style="width:180px"><b>event_from_guardrail_file</b></td><td>3단계 결과 JSON을 SecurityEvent로 변환</td></tr><tr><td style="width:180px"><b>risk.py</b></td><td>3축 점수→등급 분류·이벤트 변환 모듈</td></tr><tr><td style="width:180px"><b>step04-security-event.json</b></td><td>4단계 결과 — 5단계 API 전달 파일</td></tr><tr><td style="width:180px"><b>write_event_result</b></td><td>이벤트를 step04-security-event.json으로 저장</td></tr></table>
 </section>
 <section class="ltab" id="tab-slides" hidden>
 <div class="ltitle">슬라이드 — 발표 자료 (SVG)</div>
@@ -161,7 +158,7 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
   &quot;risk&quot;: &quot;Critical&quot;,
   &quot;category&quot;: &quot;guardrail&quot;,
   &quot;detail&quot;: &quot;&quot;,
-  &quot;timestamp&quot;: &quot;2026-11-14T09:45:27.824374+00:00&quot;,
+  &quot;timestamp&quot;: &quot;2026-11-14T12:34:29.044236+00:00&quot;,
   &quot;schema_version&quot;: &quot;1.0&quot;,
   &quot;trace_id&quot;: &quot;step03-guardrail-result&quot;,
   &quot;source_stage&quot;: &quot;step04&quot;,

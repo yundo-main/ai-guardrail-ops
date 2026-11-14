@@ -29,7 +29,7 @@ Guardrail은 모델 자체를 바꾸는 기능이 아니라 모델 앞뒤에 정
 
 1. 사용자 입력 → 입력 가드레일 → 모델 → 출력 검열 → 관제 흐름을 그린다.
 2. 각 단계의 검사 대상과 실패 시 대응을 정의한다.
-3. [course-flow.svg](../99_ref/docs/slides/00-course-flow.svg)와 [s01-guardrail-flow.svg](slides/s01-guardrail-flow.svg)를 기준 자료로 확인한다.
+3. [course-flow.svg](../00_intro/slides/00-course-flow.svg)와 [s01-guardrail-flow.svg](slides/s01-guardrail-flow.svg)를 기준 자료로 확인한다.
 
 실습 코드는 `src/architecture.py`에서 실행한다. 1단계는 실제 LLM을 호출하지 않고
 결정적인 더미 모델로 입력 → 모델 → 출력 → 관제의 삽입 지점을 실행한다. 이후 단계는

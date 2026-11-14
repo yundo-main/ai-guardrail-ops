@@ -11,7 +11,7 @@
 - 단계 폴더: 01_guardrail_concept_architecture/ ~ 06_operations_report_integrated_lab/
 - 각 단계 슬라이드: {단계폴더}/slides/sNN-이름.svg
 - 공통 지원 폴더: 99_ref/ (contracts, docs, integration, logs, results, scripts, tests)
-- 프로젝트 전체 관계도 SVG: 99_ref/docs/slides/00~04-*.svg
+- 프로젝트 전체 관계도 SVG: 00_intro/slides/00~04-*.svg
 - 진입점: 루트의 index.html (python3 -m http.server 8000 또는 직접 열기)
 
 [디자인 기준]
@@ -25,11 +25,11 @@
 2. 헤더: eyebrow(AI GUARDRAILS OPS · SVG INDEX) + h1(실습 SVG 슬라이드 인덱스) + 부제
 3. 빠른 링크 nav: readme.md / 99_ref/integration/README.md / 2단계 소스 관계도
 4. 프로젝트 전체 관계도 섹션 (h2 + 카드 그리드)
-   - 99_ref/docs/slides/00-course-flow.svg       · 전체 과정 흐름
-   - 99_ref/docs/slides/01-practice-guide.svg    · 실습 가이드
-   - 99_ref/docs/slides/02-technology-stack.svg  · 기술 스택
-   - 99_ref/docs/slides/03-integration-flow.svg  · 점층 통합 흐름
-   - 99_ref/docs/slides/04-result-check.svg      · 결과 확인
+   - 00_intro/slides/00-course-flow.svg       · 전체 과정 흐름
+   - 00_intro/slides/01-practice-guide.svg    · 실습 가이드
+   - 00_intro/slides/02-technology-stack.svg  · 기술 스택
+   - 00_intro/slides/03-integration-flow.svg  · 점층 통합 흐름
+   - 00_intro/slides/04-result-check.svg      · 결과 확인
 5. 단계별 섹션: <details> + draw() JS 함수로 카드 자동 생성
    - 01~02 단계: details[open] (기본 펼침)
    - 03~06 단계: 기본 접힘
