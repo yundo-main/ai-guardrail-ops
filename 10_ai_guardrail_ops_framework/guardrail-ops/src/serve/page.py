@@ -568,7 +568,7 @@ LLM 요청이 정책·레일·분류기·마스킹을 통과하는 파이프라�
 <div class="cta">
 <a href="/ops">🛡️ 가드레일 운영 열기</a>
 <a href="/chat" class="ghost">💬 챗봇 체험하기</a>
-<a href="#flows" class="ghost">흐름도 보기</a>
+<a href="#tab-flow" class="ghost">흐름도 보기</a>
 </div>
 <div class="steps">
 <span>① 입력 정책 17규칙</span><span>② 대화 레일</span><span>③ LLM 모델</span><span>④ 안전 분류기</span><span>⑤ 출력 마스킹</span>
@@ -749,8 +749,9 @@ function showTab(id){document.querySelectorAll('.ltab').forEach(s=>s.hidden=s.id
 if(id==='tab-set'&&window.lwLoad)lwLoad()
 if(location.hash!=='#'+id)history.replaceState(null,'','#'+id);
 const p=document.getElementById(id);if(p)p.scrollIntoView({behavior:'smooth',block:'start'});
-document.querySelectorAll('.topnav a[href^="#tab-"]').forEach(a=>a.classList.toggle('active',a.hash==='#'+id))}
-document.querySelectorAll('.topnav a[href^="#tab-"]').forEach(a=>a.onclick=e=>{e.preventDefault();showTab(a.hash.slice(1))});
+document.querySelectorAll('a[href^="#tab-"]').forEach(a=>a.classList.toggle('active',a.hash==='#'+id))}
+document.querySelectorAll('a[href^="#tab-"]').forEach(a=>a.onclick=e=>{e.preventDefault();showTab(a.hash.slice(1))});
+window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&document.getElementById(h))showTab(h)});
 (function(){const h=location.hash.slice(1);if(h&&document.getElementById(h))showTab(h);else{const d=document.querySelector('.topnav a[href="#tab-struct"]');if(d)d.classList.add('active')}})();
 document.querySelectorAll('.dgbtn').forEach(b=>{b.onclick=()=>{const box=b.closest('.dgi').querySelector('figure,.dgi-body');const h=box.hidden;box.hidden=!h;b.textContent=h?'－ 접기':'＋ 더 보기'}});
 </script>

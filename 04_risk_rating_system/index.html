@@ -115,7 +115,7 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <p>등급 변경은 이벤트 원본을 덮어쓰지 말고 변경자·시각·사유를 별도 기록한다. 그래야 사후 분석에서 최초 판정과 최종 대응을 비교할 수 있다.</p>
 <h3>산출물 · 완료 기준</h3><ul><li>위험 등급 기준표</li><li>등급별 대응 절차</li><li>보안 이벤트 필드 정의서</li><li><code>results/step04-security-event.json</code> API 전달 파일</li></ul><p>같은 규칙을 반복 적용해 이벤트 등급을 일관되게 부여하고, Critical 이벤트의 즉시 대응 조건을 설명할 수 있다.</p>
 <h3>프로젝트 구조</h3>
-<div class="dtree"><div class="dtn">04_risk_rating_system/</div><div class="dtl">index.html</div><div class="dtl">readme.md</div><details class="dt" open><summary>slides/</summary><div class="dt-kids"><div class="dtl">readme.md</div><div class="dtl">s00-tech-spec.svg</div><div class="dtl">s01-risk-rating.svg</div><div class="dtl">s02-risk-theory.svg</div><div class="dtl">s03-risk-source.svg</div><div class="dtl">s04-risk-checklist.svg</div><div class="dtl">s05-summary.svg</div></div></details><details class="dt" open><summary>src/</summary><div class="dt-kids"><div class="dtl">monitoring.py</div><div class="dtl">policy.py</div><div class="dtl">risk.py</div></div></details></div>
+<div class="dtree"><div class="dtn">04_risk_rating_system/</div><div class="dtl">index.html <span class="dt-note">— 포털 페이지</span></div><div class="dtl">readme.md <span class="dt-note">— 단계 학습 문서</span></div><details class="dt" open><summary>slides/</summary><div class="dt-kids"><div class="dtl">readme.md <span class="dt-note">— 단계 학습 문서</span></div><div class="dtl">s00-tech-spec.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s01-risk-rating.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s02-risk-theory.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s03-risk-source.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s04-risk-checklist.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s05-summary.svg <span class="dt-note">— 슬라이드 SVG</span></div></div></details><details class="dt" open><summary>src/</summary><div class="dt-kids"><div class="dtl">monitoring.py <span class="dt-note">— 지표 집계</span></div><div class="dtl">policy.py <span class="dt-note">— 정책 규칙 로드·판정</span></div><div class="dtl">risk.py <span class="dt-note">— 위험 등급 분류·이벤트 변환</span></div></div></details></div>
 <p class="sub" style="margin-top:.8rem">단계 간 연결: [← 3단계](../03_policy_blocking_output_filtering/readme.md) · [5단계 →](../05_security_dashboard_alerts/readme.md) · [전체 과정](../readme.md)</p>
 <p class="sub" style="margin-top:.4rem">상위 프로젝트: <a href="../10_ai_guardrail_ops_framework/readme.md">10 통합 프레임워크 readme →</a> (도움말 탭에서 뷰어로도 열람 가능)</p>
 </section>
@@ -141,7 +141,7 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
   &quot;risk&quot;: &quot;Critical&quot;,
   &quot;category&quot;: &quot;guardrail&quot;,
   &quot;detail&quot;: &quot;&quot;,
-  &quot;timestamp&quot;: &quot;2026-11-14T13:00:53.778547+00:00&quot;,
+  &quot;timestamp&quot;: &quot;2026-11-14T13:12:06.633712+00:00&quot;,
   &quot;schema_version&quot;: &quot;1.0&quot;,
   &quot;trace_id&quot;: &quot;step03-guardrail-result&quot;,
   &quot;source_stage&quot;: &quot;step04&quot;,
