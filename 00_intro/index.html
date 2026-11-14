@@ -93,30 +93,50 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <div class="wrap">
 <nav class="topnav">
 <a class="brand" href="#top">📘 00_intro · 과정 개요</a>
-<a href="#tab-overview">개요</a><a href="#tab-slides">슬라이드</a><a href="#tab-help">도움말</a>
+<a href="#tab-overview">과정 개요</a><a href="#tab-flow">흐름</a><a href="#tab-stack">기술 스택</a><a href="#tab-slides">슬라이드</a><a href="#tab-help">도움말</a>
 </nav>
-<div class="stepidx"><span class="lbl">단계</span><a href="../index.html">⌂</a><a href="index.html" class="cur">0</a><a href="../01_guardrail_concept_architecture/index.html">1</a><a href="../02_llama_guard_nemo_guardrails/index.html">2</a><a href="../03_policy_blocking_output_filtering/index.html">3</a><a href="../04_risk_rating_system/index.html">4</a><a href="../05_security_dashboard_alerts/index.html">5</a><a href="../06_operations_report_integrated_lab/index.html">6</a></div>
+<div class="stepidx"><span class="lbl">단계</span><a href="../index.html">⌂</a><a href="index.html" class="cur">0</a><a href="../01_guardrail_concept_architecture/index.html">1</a><a href="../02_llama_guard_nemo_guardrails/index.html">2</a><a href="../03_policy_blocking_output_filtering/index.html">3</a><a href="../04_risk_rating_system/index.html">4</a><a href="../05_security_dashboard_alerts/index.html">5</a><a href="../06_operations_report_integrated_lab/index.html">6</a><a href="../10_ai_guardrail_ops_framework/index.html">10</a><a href="../99_ref/index.html">99</a></div>
 <div class="hero" id="top">
 <div class="eyebrow">STEP 00 · COURSE OVERVIEW</div>
 <h1>과정 개요와 전체 흐름</h1>
-<p class="sub">6단계 커리큘럼의 전체 목표·챕터 목록·처리 흐름·실행 방법을 정리한 개요 단계입니다. 슬라이드 탭에서 과정 흐름·기술 스택·통합 구조를 확인하세요.</p>
+<p class="sub">6단계 커리큘럼의 전체 목표·챕터 목록·처리 흐름·기술 스택·실행 방법을 정리한 개요 단계입니다. 각 탭에서 주제별 내용을 확인하세요.</p>
 </div>
 <section class="ltab on" id="tab-overview">
-<div class="ltitle">개요 — STEP 00 학습 내용</div>
+<div class="ltitle">과정 개요 — 목표·챕터·학습 흐름·산출물</div>
 <h2>0단계 · 과정 개요 — AI 가드레일과 보안 관제 운영</h2>
 <p>AI 서비스 운영 단계에서 입력·출력 가드레일, 위험 분류, 보안 이벤트 관제, 알림, 운영 리포트를 연결하는 실습 과정의 전체 개요다.</p>
-<p>강의 진행 순서와 강사 시연·수강생 실습·결과 확인 기준은 <a href="../99_ref/docs/teaching-guide.md">teaching-guide.md</a>를 참고한다.</p>
-<h3>SVG 슬라이드 보기</h3>
-<p>각 <code>slides/*.svg</code> 파일을 브라우저로 바로 열면 된다(Finder에서 더블클릭 또는 <code>open &lt;파일&gt;.svg</code>). 전체 슬라이드 목록은 각 단계의 <code>slides/readme.md</code>에 있다.</p>
-<h4>루트 SVG 권장 열람 순서</h4>
-<ol><li><a href="slides/00-course-flow.svg">slides/00-course-flow.svg</a> — 전체 학습 지도</li><li><a href="slides/01-practice-guide.svg">slides/01-practice-guide.svg</a> — 실제 강의·실습 진행 순서</li><li><a href="slides/02-technology-stack.svg">slides/02-technology-stack.svg</a> — 설치·실행에 필요한 기술</li><li><a href="slides/03-integration-flow.svg">slides/03-integration-flow.svg</a> — 단계별 독립성과 점층 통합 관계</li><li><a href="slides/04-result-check.svg">slides/04-result-check.svg</a> — 실행 결과·API·대시보드 확인 방법</li></ol>
-<p>학습에 필요한 런타임·API·선택적 LLM·SVG·검증 도구는 <a href="slides/02-technology-stack.svg">slides/02-technology-stack.svg</a>에서 한눈에 확인할 수 있다.</p>
-<p>각 단계에 필요한 기술만 정리한 기술 사양 SVG는 각 폴더의 <code>slides/s00-tech-spec.svg</code>에서 확인한다.</p>
-<p>독립 단계 실습은 기존 01~06단계 폴더에서 진행하고, 점층적인 실제형 통합 실습은 <a href="../99_ref/integration/README.md">99_ref/integration/README.md</a>를 따른다. 결과 계약과 품질 평가 기준은 <a href="../99_ref/contracts/README.md">99_ref/contracts/README.md</a>에서 확인한다.</p>
 <h3>전체 목표</h3>
 <ul><li>AI 서비스의 입력과 출력을 정책에 따라 검사한다.</li><li>위험 요청을 차단하고 안전한 대체 응답을 반환한다.</li><li>PII·기밀정보·API 키 등 민감한 출력을 마스킹한다.</li><li>보안 이벤트를 Critical/High/Medium/Low로 분류한다.</li><li>차단 건수·공격 유형·위험 등급을 대시보드 지표로 집계한다.</li><li>Critical 이벤트 알림과 주간·월간 운영 리포트를 구성한다.</li></ul>
 <h3>챕터 목록</h3>
 <table><tr><th>단계</th><th>챕터</th><th>학습 목표</th><th>학습 자료</th></tr><tr><td>0단계</td><td>과정 개요</td><td>전체 흐름·기술 스택·실행 방법을 파악한다.</td><td><a href="readme.md">00_intro</a></td></tr><tr><td>1단계</td><td>Guardrail 개념과 아키텍처</td><td>Guardrail의 개념과 입력·출력 통제 구조를 이해한다.</td><td><a href="../01_guardrail_concept_architecture/readme.md">01_guardrail_concept_architecture</a></td></tr><tr><td>2단계</td><td>Llama Guard·NeMo Guardrails 적용</td><td>위험 분류와 대화 정책의 역할을 이해한다.</td><td><a href="../02_llama_guard_nemo_guardrails/readme.md">02_llama_guard_nemo_guardrails</a></td></tr><tr><td>3단계</td><td>정책 기반 차단 및 출력 검열 구현</td><td>정책 차단과 출력 마스킹을 구현한다.</td><td><a href="../03_policy_blocking_output_filtering/readme.md">03_policy_blocking_output_filtering</a></td></tr><tr><td>4단계</td><td>위험 등급 체계 설계</td><td>보안 이벤트를 위험 등급으로 분류한다.</td><td><a href="../04_risk_rating_system/readme.md">04_risk_rating_system</a></td></tr><tr><td>5단계</td><td>보안 대시보드 및 알림 구축</td><td>보안 지표를 집계하고 Critical 알림을 구성한다.</td><td><a href="../05_security_dashboard_alerts/readme.md">05_security_dashboard_alerts</a></td></tr><tr><td>6단계</td><td>운영 리포트 작성 및 통합 실습</td><td>운영 지표를 리포트로 정리하고 전체 흐름을 통합한다.</td><td><a href="../06_operations_report_integrated_lab/readme.md">06_operations_report_integrated_lab</a></td></tr></table>
+<h3>단계별 학습 흐름</h3>
+<p>0단계에 전체 개요와 실행 방법을 파악하고, 1단계에 개념과 아키텍처를 세우며, 2~5단계에 정책·검열·위험 분류·관제를 구현한 뒤, 6단계에 운영 리포트와 전체 흐름을 통합한다.</p>
+<p>각 단계 README는 학습 목표보다 먼저 해당 주제를 배우는 이유와 앞뒤 단계와의 연결을 설명하는 <code>이론적 배경</code>으로 시작한다.</p>
+<p>단계별 소스코드는 독립·중복 유지하고, 단계 간 연결은 <a href="../99_ref/results/README.md">99_ref/results/README.md</a>의 JSON 결과 파일과 5단계 API를 사용한다.</p>
+<p>실제형 통합 트랙도 독립 트랙을 수정하지 않는다. <code>99_ref/integration/</code>은 단계별 실행 결과를 별도 저장해 01→06 점층 구조를 재현한다.</p>
+<p>각 단계의 상세 안내는 다음 폴더에 분리했다.</p>
+<ul><li><a href="../01_guardrail_concept_architecture/readme.md">01_guardrail_concept_architecture</a></li><li><a href="../02_llama_guard_nemo_guardrails/readme.md">02_llama_guard_nemo_guardrails</a></li><li><a href="../03_policy_blocking_output_filtering/readme.md">03_policy_blocking_output_filtering</a></li><li><a href="../04_risk_rating_system/readme.md">04_risk_rating_system</a></li><li><a href="../05_security_dashboard_alerts/readme.md">05_security_dashboard_alerts</a></li><li><a href="../06_operations_report_integrated_lab/readme.md">06_operations_report_integrated_lab</a></li></ul>
+<h3>단계별 실습 산출물</h3>
+<h4>1단계 · Guardrail 개념과 아키텍처</h4>
+<p>입력 가드레일과 출력 가드레일의 위치, 모델 호출 전후의 통제 지점을 도식화한다.</p>
+<h4>2단계 · Llama Guard·NeMo Guardrails 적용</h4>
+<p>Llama Guard의 위험 분류와 NeMo Guardrails의 대화 흐름 제어를 비교한다. 실제 운영 적용 시에는 사용 모델과 정책 범위를 별도로 검증한다.</p>
+<h4>3단계 · 정책 기반 차단 및 출력 검열 구현</h4>
+<p>허용·거부 규칙을 코드로 정의하고, 출력 단계에서 이메일·전화번호·API 키·비밀 키워드를 탐지해 마스킹한다.</p>
+<h4>4단계 · 위험 등급 체계 설계</h4>
+<p>위험도, 영향 범위, 노출 가능성, 대응 긴급도를 기준으로 등급을 부여하고 등급별 대응 절차를 정의한다.</p>
+<h4>5단계 · 보안 대시보드 및 알림 구축</h4>
+<p>차단 건수, 검토 건수, 공격 유형, 위험 등급 분포를 집계하고 Critical 이벤트용 Slack·이메일 연동 payload를 설계한다.</p>
+<h4>6단계 · 운영 리포트 작성 및 통합 실습</h4>
+<p>탐지 건수, 차단율, 검토 건수, 미대응 이슈를 주간·월간 리포트로 정리하고 전체 처리 흐름을 통합 실행한다.</p>
+<h3>주의사항</h3>
+<p>각 단계 폴더의 <code>src/</code> 구현은 학습용 휴리스틱이다. 5단계는 SQLite·API Key·웹 대시보드까지 포함하지만, 실제 운영 환경에서는 PostgreSQL 또는 이벤트 스트림, 강한 인증·권한 관리, 감사 로그 보존, 정책 버전 관리, 오탐·미탐 평가를 별도로 검증해야 한다.</p>
+<h3>최상위 파일·디렉터리 역할</h3>
+<table><tr><th>경로</th><th>역할</th></tr><tr><td><code>00_intro/</code></td><td>과정 개요·전체 흐름·기술 스택 SVG</td></tr><tr><td><code>01_...</code> ~ <code>06_...</code></td><td>서로 독립적인 단계별 학습 코드·문서·SVG</td></tr><tr><td><code>99_ref/integration/</code></td><td>단계별 코드를 침범하지 않는 01→06 점층 통합 실습</td></tr><tr><td><code>99_ref/contracts/</code></td><td>단계 간 JSON 결과 형식·버전 기준 · 품질 평가 기준</td></tr><tr><td><code>99_ref/results/</code></td><td>독립 단계 실습의 JSON 결과와 전달 규칙</td></tr><tr><td><code>99_ref/tests/</code></td><td>공통 회귀·API·규약 테스트</td></tr><tr><td><code>99_ref/scripts/</code></td><td>빠른 파일 기반 파이프라인 보조 실행</td></tr><tr><td><code>99_ref/logs/</code></td><td>작업·검증·재구성 이력</td></tr><tr><td><code>10_ai_guardrail_ops_framework/</code></td><td>1~6단계를 하나로 합친 통합 운영 프레임워크</td></tr><tr><td><code>readme.md</code></td><td>저장소 진입점 — 포털·단계별 문서 링크</td></tr><tr><td><code>requirements.txt</code></td><td>루트 공통 실행 의존성</td></tr><tr><td><code>.env.example</code></td><td>API 키·DB·Ollama 환경 변수 예시</td></tr><tr><td><code>slides/*.svg</code></td><td>0단계 과정 개요 슬라이드 5종</td></tr></table>
+<p class="sub" style="margin-top:.8rem">상위 프로젝트: <a href="../10_ai_guardrail_ops_framework/readme.md">10 통합 프레임워크 readme →</a></p>
+</section>
+<section class="ltab" id="tab-flow" hidden>
+<div class="ltitle">흐름 — 처리 흐름·실행 방법·결과 확인</div>
 <h3>처리 흐름</h3>
 <pre><code>사용자 입력
   → 입력 가드레일: 허용 / 차단 / 검토
@@ -169,7 +189,7 @@ curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/metrics
 curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/alerts/critical</code></pre>
 <p>브라우저에서 <code>http://127.0.0.1:8000/docs</code>를 열면 Swagger UI로 요청을 직접 실행할 수 있다. 5단계 지표를 파일로 보관하려면 <code>/metrics</code> 응답을 <code>99_ref/results/step05-metrics.json</code>으로 저장한다.</p>
 <pre><code>curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/metrics &gt; 99_ref/results/step05-metrics.json</code></pre>
-<p>각 단계의 실행 목적과 산출물은 해당 폴더의 <code>readme.md</code>, 슬라이드 목록은 <code>slides/readme.md</code>, 강의 진행표는 <a href="../99_ref/docs/teaching-guide.md">teaching-guide.md</a>, 단계 간 JSON 계약은 <code>99_ref/results/README.md</code>에서 확인한다.</p>
+<p>각 단계의 실행 목적과 산출물은 해당 폴더의 <code>readme.md</code>, 슬라이드 목록은 <code>slides/readme.md</code>, 단계 간 결과 규약은 <code>99_ref/results/README.md</code>에서 확인한다.</p>
 <h4>선택적 로컬 LLM 실행</h4>
 <p>기본 실행은 더미 응답을 사용한다. Ollama를 설치하고 서버와 모델을 준비한 뒤 <code>USE_LLM=1</code>을 지정하면 6단계 통합 실습이 로컬 모델 응답을 받아 출력 검열 단계로 전달한다.</p>
 <pre><code>ollama serve
@@ -188,97 +208,31 @@ uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000<
 <p><code>OLLAMA_BASE_URL</code>로 다른 로컬 Ollama 주소를 지정할 수 있다. 서버가 없거나 호출에 실패하면 더미 응답으로 자동 대체되며, 모델 응답도 동일하게 <code>safe_response()</code>의 입력·출력 가드레일을 통과한다.</p>
 <p>실행 예제는 다음을 확인한다.</p>
 <ul><li>정상 요청은 허용된다.</li><li>프롬프트 인젝션·비밀정보 탈취 요청은 차단된다.</li><li>이메일·API 키 등 민감한 출력은 마스킹된다.</li><li>Critical 이벤트는 알림 payload로 생성된다.</li><li>차단 건수와 위험 등급 분포가 리포트 지표로 집계된다.</li></ul>
-<h3>단계별 학습 흐름</h3>
-<p>0단계에 전체 개요와 실행 방법을 파악하고, 1단계에 개념과 아키텍처를 세우며, 2~5단계에 정책·검열·위험 분류·관제를 구현한 뒤, 6단계에 운영 리포트와 전체 흐름을 통합한다.</p>
-<p>각 단계 README는 학습 목표보다 먼저 해당 주제를 배우는 이유와 앞뒤 단계와의 연결을 설명하는 <code>이론적 배경</code>으로 시작한다.</p>
-<p>단계별 소스코드는 독립·중복 유지하고, 단계 간 연결은 <a href="../99_ref/results/README.md">99_ref/results/README.md</a>의 JSON 결과 파일과 5단계 API를 사용한다.</p>
-<p>실제형 통합 트랙도 독립 트랙을 수정하지 않는다. <code>99_ref/integration/</code>은 단계별 실행 결과를 별도 저장해 01→06 점층 구조를 재현한다.</p>
-<p>각 단계의 상세 안내는 다음 폴더에 분리했다.</p>
-<ul><li><a href="../01_guardrail_concept_architecture/readme.md">01_guardrail_concept_architecture</a></li><li><a href="../02_llama_guard_nemo_guardrails/readme.md">02_llama_guard_nemo_guardrails</a></li><li><a href="../03_policy_blocking_output_filtering/readme.md">03_policy_blocking_output_filtering</a></li><li><a href="../04_risk_rating_system/readme.md">04_risk_rating_system</a></li><li><a href="../05_security_dashboard_alerts/readme.md">05_security_dashboard_alerts</a></li><li><a href="../06_operations_report_integrated_lab/readme.md">06_operations_report_integrated_lab</a></li></ul>
-<h3>단계별 실습 산출물</h3>
-<h4>1단계 · Guardrail 개념과 아키텍처</h4>
-<p>입력 가드레일과 출력 가드레일의 위치, 모델 호출 전후의 통제 지점을 도식화한다.</p>
-<h4>2단계 · Llama Guard·NeMo Guardrails 적용</h4>
-<p>Llama Guard의 위험 분류와 NeMo Guardrails의 대화 흐름 제어를 비교한다. 실제 운영 적용 시에는 사용 모델과 정책 범위를 별도로 검증한다.</p>
-<h4>3단계 · 정책 기반 차단 및 출력 검열 구현</h4>
-<p>허용·거부 규칙을 코드로 정의하고, 출력 단계에서 이메일·전화번호·API 키·비밀 키워드를 탐지해 마스킹한다.</p>
-<h4>4단계 · 위험 등급 체계 설계</h4>
-<p>위험도, 영향 범위, 노출 가능성, 대응 긴급도를 기준으로 등급을 부여하고 등급별 대응 절차를 정의한다.</p>
-<h4>5단계 · 보안 대시보드 및 알림 구축</h4>
-<p>차단 건수, 검토 건수, 공격 유형, 위험 등급 분포를 집계하고 Critical 이벤트용 Slack·이메일 연동 payload를 설계한다.</p>
-<h4>6단계 · 운영 리포트 작성 및 통합 실습</h4>
-<p>탐지 건수, 차단율, 검토 건수, 미대응 이슈를 주간·월간 리포트로 정리하고 전체 처리 흐름을 통합 실행한다.</p>
-<h3>SVG 작성 및 검수 규칙</h3>
-<ul><li>캔버스는 <code>viewBox=&quot;0 0 1280 720&quot;</code>으로 작성한다.</li><li><code>&lt;title&gt;</code>, <code>&lt;desc&gt;</code>, <code>role=&quot;img&quot;</code>, <code>aria-labelledby</code>를 포함한다.</li><li>색상은 CSS 클래스와 다크 모드 규칙으로 관리한다.</li><li>챕터 표시, 제목, 요약, 본문 도식, 우측 하단 페이지 푸터를 포함한다.</li><li>외부 폰트·이미지·스크립트·링크를 사용하지 않는다.</li><li>완성 후 XML 검증과 PNG 렌더링 확인을 수행한다.</li></ul>
-<pre><code>xmllint --noout slides/00-course-flow.svg ../01_guardrail_concept_architecture/slides/s01-guardrail-flow.svg
-qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
-<h3>SVG 메타프롬프트</h3>
-<p>슬라이드·도식 SVG를 만들 때 아래 프롬프트와 검수 기준을 사용한다. 슬라이드 원문이 별도로 있으면 원문을 먼저 제공하고, 결과 SVG는 원문에 없는 수치·사실·명령을 추가하지 않는다.</p>
-<h4>프롬프트</h4>
-<pre><code>너는 AI 가드레일 학습 자료의 SVG 슬라이드를 만드는 작성자다. 아래 원문을 슬라이드 {{N}}장으로 옮겨라.
-
-[입력]
-- 챕터: {{0단계 챕터 표시}} / 제목: {{슬라이드 제목}} / 한 줄 요약: {{요약}}
-- 원문(변환 대상): {{readme의 해당 절 본문}}
-- 기준 파일: 기존 슬라이드의 스타일과 공통 배치를 따른다.
-
-[캔버스와 구성]
-- viewBox 0 0 1280 720 (16:9)을 사용한다.
-- 위에서 아래로 챕터 chip(0단계, 빨강), 큰 제목, 한 줄 요약, 본문 도식, 우측 하단 푸터(n / 총장수)를 둔다.
-- 본문 좌우 여백은 60px 이상으로 하고 푸터와 겹치지 않게 한다.
-- &lt;svg&gt;에 role=&quot;img&quot;, aria-labelledby, &lt;title&gt;, &lt;desc&gt;를 넣는다.
-- 글꼴은 -apple-system, &#x27;Apple SD Gothic Neo&#x27;, &#x27;Noto Sans KR&#x27;, sans-serif를 사용한다.
-- 외부 폰트·이미지·스크립트·링크는 사용하지 않는다.
-
-[색과 다크 모드]
-- 파랑은 기본, 주황은 핵심·전제, 초록은 방어·통제, 빨강은 챕터 표시와 경고에 사용한다.
-- 색상은 CSS 클래스에서만 지정하고 인라인 fill·stroke는 사용하지 않는다.
-- .bg 배경 사각형을 항상 둔다.
-- 모든 색상 클래스에 prefers-color-scheme: dark 대응을 둔다.
-- 색만으로 의미를 전달하지 말고 라벨·번호·아이콘 문자를 함께 사용한다.
-
-[내용 규칙]
-- 도식은 실제 흐름·구조·관계·판정 기준을 보여 준다.
-- 한 슬라이드에는 한 메시지만 담는다.
-- 원문에 없는 수치·사실·명령을 만들지 않는다.
-- 명령어와 출력은 고정폭 코드 블록으로 표시한다.
-- 용어는 &quot;탈옥(Jailbreak)&quot;처럼 일관되게 표기한다.
-- 공격 예시는 중립적인 더미 문구와 예약 도메인(.invalid)만 사용한다.
-- 실제 자격증명·개인정보·실행 가능한 유해 페이로드는 넣지 않는다.
-
-[글자와 줄바꿈]
-- 본문 16px 이상, 제목 40px 안팎, 요약 20px, 표 17px, 각주 14px 이상을 사용한다.
-- SVG는 자동 줄바꿈을 하지 않으므로 줄마다 &lt;text&gt;를 따로 둔다.
-- 박스 안 텍스트가 넘치면 글자 크기를 줄이지 말고 줄바꿈하거나 슬라이드를 나눈다.
-- 한글 폭을 영문 폭으로 계산하지 않는다.
-
-[파일 이름]
-- 슬라이드는 단계 폴더의 slides/sNN-이름.svg로 저장한다.
-- 이름은 소문자와 하이픈을 사용한다.
-- 장수가 바뀌면 모든 슬라이드의 푸터 n / 총장수와 slides/readme.md를 함께 갱신한다.
-
-[출력 전 자체 점검]
-1) XML이 유효한가
-2) 모든 글자가 박스와 캔버스 안에 있는가
-3) 글자와 박스가 서로 겹치지 않는가
-4) 푸터 번호가 맞는가
-5) 숫자와 명령이 원문과 같은가
-6) 다크 모드에서도 읽을 수 있는가</code></pre>
-<h4>검수 명령</h4>
-<p>사람이 렌더링 결과를 눈으로 확인한다. XML 검증만으로 글자 잘림과 겹침을 확인할 수 없다.</p>
-<pre><code>xmllint --noout slides/00-course-flow.svg
-find ../0[1-6]_*/slides -name &#x27;*.svg&#x27; -print0 | xargs -0 -n1 xmllint --noout
-qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
-<p>검수 항목:</p>
-<ul><li>글자가 박스·캔버스·푸터를 넘지 않는가</li><li>카드와 화살표가 겹치지 않는가</li><li>오른쪽·왼쪽 여백이 60px 이상인가</li><li>푸터의 <code>n / 총장수</code>가 맞는가</li><li>원문과 숫자·명령이 같은가</li><li>다크 모드에서 텍스트 대비가 충분한가</li></ul>
-<h3>주의사항</h3>
-<p>각 단계 폴더의 <code>src/</code> 구현은 학습용 휴리스틱이다. 5단계는 SQLite·API Key·웹 대시보드까지 포함하지만, 실제 운영 환경에서는 PostgreSQL 또는 이벤트 스트림, 강한 인증·권한 관리, 감사 로그 보존, 정책 버전 관리, 오탐·미탐 평가를 별도로 검증해야 한다.</p>
-<h3>최상위 파일·디렉터리 역할</h3>
-<table><tr><th>경로</th><th>역할</th></tr><tr><td><code>00_intro/</code></td><td>과정 개요·전체 흐름·기술 스택 SVG</td></tr><tr><td><code>01_...</code> ~ <code>06_...</code></td><td>서로 독립적인 단계별 학습 코드·문서·SVG</td></tr><tr><td><code>99_ref/integration/</code></td><td>단계별 코드를 침범하지 않는 01→06 점층 통합 실습</td></tr><tr><td><code>99_ref/contracts/</code></td><td>단계 간 JSON 결과 형식·버전 기준 · 품질 평가 기준</td></tr><tr><td><code>99_ref/results/</code></td><td>독립 단계 실습의 JSON 결과와 전달 규칙</td></tr><tr><td><code>99_ref/tests/</code></td><td>공통 회귀·API·계약 테스트</td></tr><tr><td><code>99_ref/scripts/</code></td><td>빠른 파일 기반 파이프라인 보조 실행</td></tr><tr><td><code>99_ref/logs/</code></td><td>작업·검증·재구성 이력</td></tr><tr><td><code>10_ai_guardrail_ops_framework/</code></td><td>1~6단계를 하나로 합친 통합 운영 프레임워크</td></tr><tr><td><code>readme.md</code></td><td>저장소 진입점 — 포털·단계별 문서 링크</td></tr><tr><td><code>requirements.txt</code></td><td>루트 공통 실행 의존성</td></tr><tr><td><code>.env.example</code></td><td>API 키·DB·Ollama 환경 변수 예시</td></tr><tr><td><code>slides/*.svg</code></td><td>0단계 과정 개요 슬라이드 5종</td></tr></table>
-<p class="sub" style="margin-top:.8rem">상위 프로젝트: <a href="../10_ai_guardrail_ops_framework/readme.md">10 통합 프레임워크 readme →</a></p>
+</section>
+<section class="ltab" id="tab-stack" hidden>
+<div class="ltitle">기술 스택 — 실행 환경·AI 모델·백엔드·프론트엔드</div>
+<h3>사용 기술 스택</h3>
+<h4>실행 환경 (전 단계 공통)</h4>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td>Python 3.12+ (3.9 호환)</td><td>전체 학습 코드 언어</td></tr><tr><td>표준 라이브러리 (<code>dataclass</code>·<code>Enum</code>·<code>re</code>·<code>json</code>·<code>sqlite3</code>)</td><td>1~4단계 가드레일·정책·위험 등급 — 외부 패키지 없이 동작</td></tr></table>
+<h4>AI 안전 모델 (2단계·선택적)</h4>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td>Llama Guard 3 (Transformers·PyTorch)</td><td>요청·응답 안전성 범주 분류 — <code>requirements-llm.txt</code> 선택 의존성</td></tr><tr><td>NeMo Guardrails</td><td>대화 주제·절차·응답 경로 제어 (RailsConfig·LLMRails)</td></tr><tr><td>Ollama (<code>qwen2.5:3b</code>, localhost:11434)</td><td>로컬 LLM 응답 생성 — <code>USE_LLM=1</code> 시에만</td></tr></table>
+<h4>백엔드</h4>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td><code>http.server</code> (stdlib, <code>BaseHTTPRequestHandler</code>+<code>ThreadingHTTPServer</code>)</td><td>10 프레임워크 <code>:8000</code> 서버 — 라우팅·정적 파일·JSON API를 프레임워크 없이 구현</td></tr><tr><td>FastAPI + Uvicorn + <code>httpx</code></td><td>5단계 학습 API — <code>/events</code>·<code>/metrics</code>·<code>/alerts</code>·<code>/dashboard</code>·Swagger</td></tr><tr><td>SQLite (<code>sqlite3</code>)</td><td>보안 이벤트·감사 로그·설정 영속 저장 (양쪽 공통)</td></tr><tr><td>JSON 파일 규약 (<code>results/*.json</code>, <code>config/*.json</code>)</td><td>단계 간 결과 전달·정책 규칙·출력 패턴·알림 로그</td></tr><tr><td><code>X-API-Key</code> 헤더 인증</td><td><code>GUARDRAIL_API_KEY</code> 환경변수 (기본 <code>dev-only-key</code>)</td></tr><tr><td>환경변수 (<code>USE_LLM</code>·<code>OLLAMA_*</code>·<code>GUARDRAIL_DB_PATH</code>)</td><td>LLM 활성화·모델·DB 경로 설정</td></tr></table>
+<h4>프론트엔드</h4>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td>순수 HTML/CSS/JS (<code>file://</code> 동작)</td><td>단계별 학습 포털·통합 용어집·루트 인덱스</td></tr><tr><td>SVG 뷰어 (팝업·‹›/←→ 이동)</td><td>발표 슬라이드 열람</td></tr><tr><td>FastAPI 서빙 정적 페이지</td><td>10 프레임워크 운영 대시보드·챗봇 (<code>/ops</code>·<code>/chat</code>)</td></tr><tr><td>다크 모드 (<code>localStorage</code> 테마)</td><td>10 프레임워크 페이지 테마 전환</td></tr></table>
+<h4>문서·슬라이드·검증</h4>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td>SVG (1280×720, CSS 클래스, 다크 모드, <code>role</code>/<code>aria</code>)</td><td>단계별 발표 슬라이드</td></tr><tr><td>Markdown</td><td>readme·용어집·개발 문서</td></tr><tr><td><code>python3 -m unittest</code></td><td><code>99_ref/tests</code> 공통 테스트</td></tr><tr><td><code>xmllint --noout</code> / <code>py_compile</code> / <code>node --check</code></td><td>SVG·Python·JS 문법 검증</td></tr><tr><td><code>curl</code></td><td>API 엔드포인트 확인</td></tr></table>
+<p>단계 간 연결은 외부 메시지 큐·DB 없이 <b>JSON 결과 파일 + REST API</b>로 구성한다.</p>
 </section>
 <section class="ltab" id="tab-slides" hidden>
 <div class="ltitle">슬라이드 — 과정 개요 (SVG)</div>
+<h3>SVG 슬라이드 보기</h3>
+<p>각 <code>slides/*.svg</code> 파일을 브라우저로 바로 열면 된다(Finder에서 더블클릭 또는 <code>open &lt;파일&gt;.svg</code>). 전체 슬라이드 목록은 각 단계의 <code>slides/readme.md</code>에 있다.</p>
+<h4>루트 SVG 권장 열람 순서</h4>
+<ol><li><a href="slides/00-course-flow.svg">slides/00-course-flow.svg</a> — 전체 학습 지도</li><li><a href="slides/01-practice-guide.svg">slides/01-practice-guide.svg</a> — 실제 강의·실습 진행 순서</li><li><a href="slides/02-technology-stack.svg">slides/02-technology-stack.svg</a> — 설치·실행에 필요한 기술</li><li><a href="slides/03-integration-flow.svg">slides/03-integration-flow.svg</a> — 단계별 독립성과 점층 통합 관계</li><li><a href="slides/04-result-check.svg">slides/04-result-check.svg</a> — 실행 결과·API·대시보드 확인 방법</li></ol>
+<p>학습에 필요한 런타임·API·선택적 LLM·SVG·검증 도구는 <a href="slides/02-technology-stack.svg">slides/02-technology-stack.svg</a>에서 한눈에 확인할 수 있다.</p>
+<p>각 단계에 필요한 기술만 정리한 기술 사양 SVG는 각 폴더의 <code>slides/s00-tech-spec.svg</code>에서 확인한다.</p>
+<p>독립 단계 실습은 기존 01~06단계 폴더에서 진행하고, 점층적인 실제형 통합 실습은 <a href="../99_ref/integration/README.md">99_ref/integration/README.md</a>를 따른다. 결과 규약과 품질 평가 기준은 <a href="../99_ref/contracts/README.md">99_ref/contracts/README.md</a>에서 확인한다.</p>
 <p class="sub">이미지를 클릭하면 뷰어가 열리고 <b>‹ ›</b> 버튼 또는 <b>← →</b> 키로 슬라이드 간 이동합니다.</p>
 <div class="dgi"><div class="dgi-head"><span class="dgi-t">00-course-flow · 과정 흐름</span><span class="badge">SVG</span></div><img src="slides/00-course-flow.svg" alt="과정 흐름" loading="lazy"></div>
 <div class="dgi"><div class="dgi-head"><span class="dgi-t">01-practice-guide · 실습 진행 순서</span><span class="badge">SVG</span></div><img src="slides/01-practice-guide.svg" alt="실습 진행 순서" loading="lazy"></div>
@@ -287,7 +241,11 @@ qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
 <div class="dgi"><div class="dgi-head"><span class="dgi-t">04-result-check · 결과 확인</span><span class="badge">SVG</span></div><img src="slides/04-result-check.svg" alt="결과 확인" loading="lazy"></div>
 </section>
 <section class="ltab" id="tab-help" hidden>
-<div class="ltitle">도움말 — 페이지 사용법</div>
+<div class="ltitle">도움말 — SVG 규칙·메타프롬프트·페이지 사용법</div>
+<h3>SVG 작성 및 검수 규칙</h3>
+<ul><li>캔버스는 <code>viewBox=&quot;0 0 1280 720&quot;</code>으로 작성한다.</li><li><code>&lt;title&gt;</code>, <code>&lt;desc&gt;</code>, <code>role=&quot;img&quot;</code>, <code>aria-labelledby</code>를 포함한다.</li><li>색상은 CSS 클래스와 다크 모드 규칙으로 관리한다.</li><li>챕터 표시, 제목, 요약, 본문 도식, 우측 하단 페이지 푸터를 포함한다.</li><li>외부 폰트·이미지·스크립트·링크를 사용하지 않는다.</li><li>완성 후 XML 검증과 PNG 렌더링 확인을 수행한다.</li></ul>
+<pre><code>xmllint --noout slides/00-course-flow.svg ../01_guardrail_concept_architecture/slides/s01-guardrail-flow.svg
+qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
 <h3>SVG 뷰어</h3>
 <ul>
 <li>슬라이드 탭의 <b>SVG 이미지를 클릭</b>하면 팝업 뷰어로 확대 표시됩니다</li>
@@ -307,14 +265,13 @@ qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
 </div>
 <div id="md-readme" hidden><h2>0단계 · 과정 개요 — AI 가드레일과 보안 관제 운영</h2>
 <p>AI 서비스 운영 단계에서 입력·출력 가드레일, 위험 분류, 보안 이벤트 관제, 알림, 운영 리포트를 연결하는 실습 과정의 전체 개요다.</p>
-<p>강의 진행 순서와 강사 시연·수강생 실습·결과 확인 기준은 <a href="../99_ref/docs/teaching-guide.md">teaching-guide.md</a>를 참고한다.</p>
 <h3>SVG 슬라이드 보기</h3>
 <p>각 <code>slides/*.svg</code> 파일을 브라우저로 바로 열면 된다(Finder에서 더블클릭 또는 <code>open &lt;파일&gt;.svg</code>). 전체 슬라이드 목록은 각 단계의 <code>slides/readme.md</code>에 있다.</p>
 <h4>루트 SVG 권장 열람 순서</h4>
 <ol><li><a href="slides/00-course-flow.svg">slides/00-course-flow.svg</a> — 전체 학습 지도</li><li><a href="slides/01-practice-guide.svg">slides/01-practice-guide.svg</a> — 실제 강의·실습 진행 순서</li><li><a href="slides/02-technology-stack.svg">slides/02-technology-stack.svg</a> — 설치·실행에 필요한 기술</li><li><a href="slides/03-integration-flow.svg">slides/03-integration-flow.svg</a> — 단계별 독립성과 점층 통합 관계</li><li><a href="slides/04-result-check.svg">slides/04-result-check.svg</a> — 실행 결과·API·대시보드 확인 방법</li></ol>
 <p>학습에 필요한 런타임·API·선택적 LLM·SVG·검증 도구는 <a href="slides/02-technology-stack.svg">slides/02-technology-stack.svg</a>에서 한눈에 확인할 수 있다.</p>
 <p>각 단계에 필요한 기술만 정리한 기술 사양 SVG는 각 폴더의 <code>slides/s00-tech-spec.svg</code>에서 확인한다.</p>
-<p>독립 단계 실습은 기존 01~06단계 폴더에서 진행하고, 점층적인 실제형 통합 실습은 <a href="../99_ref/integration/README.md">99_ref/integration/README.md</a>를 따른다. 결과 계약과 품질 평가 기준은 <a href="../99_ref/contracts/README.md">99_ref/contracts/README.md</a>에서 확인한다.</p>
+<p>독립 단계 실습은 기존 01~06단계 폴더에서 진행하고, 점층적인 실제형 통합 실습은 <a href="../99_ref/integration/README.md">99_ref/integration/README.md</a>를 따른다. 결과 규약과 품질 평가 기준은 <a href="../99_ref/contracts/README.md">99_ref/contracts/README.md</a>에서 확인한다.</p>
 <h3>전체 목표</h3>
 <ul><li>AI 서비스의 입력과 출력을 정책에 따라 검사한다.</li><li>위험 요청을 차단하고 안전한 대체 응답을 반환한다.</li><li>PII·기밀정보·API 키 등 민감한 출력을 마스킹한다.</li><li>보안 이벤트를 Critical/High/Medium/Low로 분류한다.</li><li>차단 건수·공격 유형·위험 등급을 대시보드 지표로 집계한다.</li><li>Critical 이벤트 알림과 주간·월간 운영 리포트를 구성한다.</li></ul>
 <h3>챕터 목록</h3>
@@ -328,6 +285,18 @@ qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
   → 위험 등급 분류
   → 대시보드 집계 및 Critical 알림
   → 주간·월간 운영 리포트</code></pre>
+<h3>사용 기술 스택</h3>
+<h4>실행 환경 (전 단계 공통)</h4>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td>Python 3.12+ (3.9 호환)</td><td>전체 학습 코드 언어</td></tr><tr><td>표준 라이브러리 (<code>dataclass</code>·<code>Enum</code>·<code>re</code>·<code>json</code>·<code>sqlite3</code>)</td><td>1~4단계 가드레일·정책·위험 등급 — 외부 패키지 없이 동작</td></tr></table>
+<h4>AI 안전 모델 (2단계·선택적)</h4>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td>Llama Guard 3 (Transformers·PyTorch)</td><td>요청·응답 안전성 범주 분류 — <code>requirements-llm.txt</code> 선택 의존성</td></tr><tr><td>NeMo Guardrails</td><td>대화 주제·절차·응답 경로 제어 (RailsConfig·LLMRails)</td></tr><tr><td>Ollama (<code>qwen2.5:3b</code>, localhost:11434)</td><td>로컬 LLM 응답 생성 — <code>USE_LLM=1</code> 시에만</td></tr></table>
+<h4>백엔드</h4>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td><code>http.server</code> (stdlib, <code>BaseHTTPRequestHandler</code>+<code>ThreadingHTTPServer</code>)</td><td>10 프레임워크 <code>:8000</code> 서버 — 라우팅·정적 파일·JSON API를 프레임워크 없이 구현</td></tr><tr><td>FastAPI + Uvicorn + <code>httpx</code></td><td>5단계 학습 API — <code>/events</code>·<code>/metrics</code>·<code>/alerts</code>·<code>/dashboard</code>·Swagger</td></tr><tr><td>SQLite (<code>sqlite3</code>)</td><td>보안 이벤트·감사 로그·설정 영속 저장 (양쪽 공통)</td></tr><tr><td>JSON 파일 규약 (<code>results/*.json</code>, <code>config/*.json</code>)</td><td>단계 간 결과 전달·정책 규칙·출력 패턴·알림 로그</td></tr><tr><td><code>X-API-Key</code> 헤더 인증</td><td><code>GUARDRAIL_API_KEY</code> 환경변수 (기본 <code>dev-only-key</code>)</td></tr><tr><td>환경변수 (<code>USE_LLM</code>·<code>OLLAMA_*</code>·<code>GUARDRAIL_DB_PATH</code>)</td><td>LLM 활성화·모델·DB 경로 설정</td></tr></table>
+<h4>프론트엔드</h4>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td>순수 HTML/CSS/JS (<code>file://</code> 동작)</td><td>단계별 학습 포털·통합 용어집·루트 인덱스</td></tr><tr><td>SVG 뷰어 (팝업·‹›/←→ 이동)</td><td>발표 슬라이드 열람</td></tr><tr><td>FastAPI 서빙 정적 페이지</td><td>10 프레임워크 운영 대시보드·챗봇 (<code>/ops</code>·<code>/chat</code>)</td></tr><tr><td>다크 모드 (<code>localStorage</code> 테마)</td><td>10 프레임워크 페이지 테마 전환</td></tr></table>
+<h4>문서·슬라이드·검증</h4>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td>SVG (1280×720, CSS 클래스, 다크 모드, <code>role</code>/<code>aria</code>)</td><td>단계별 발표 슬라이드</td></tr><tr><td>Markdown</td><td>readme·용어집·개발 문서</td></tr><tr><td><code>python3 -m unittest</code></td><td><code>99_ref/tests</code> 공통 테스트</td></tr><tr><td><code>xmllint --noout</code> / <code>py_compile</code> / <code>node --check</code></td><td>SVG·Python·JS 문법 검증</td></tr><tr><td><code>curl</code></td><td>API 엔드포인트 확인</td></tr></table>
+<p>단계 간 연결은 외부 메시지 큐·DB 없이 <b>JSON 결과 파일 + REST API</b>로 구성한다.</p>
 <h3>로컬 구현 예제</h3>
 <p>외부 API나 LLM 없이 핵심 흐름을 재현하는 교육용 예제다.</p>
 <p>권장 실행 환경은 Python 3.12 이상이다. 현재 코드와 테스트는 Python 3.9 호환성을 유지하며, Python 3.12.16 격리 환경에서도 전체 테스트를 검증했다. API 실행에는 루트 <code>requirements.txt</code>의 FastAPI·Uvicorn·테스트 클라이언트 의존성이 필요하다.</p>
@@ -371,7 +340,7 @@ curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/metrics
 curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/alerts/critical</code></pre>
 <p>브라우저에서 <code>http://127.0.0.1:8000/docs</code>를 열면 Swagger UI로 요청을 직접 실행할 수 있다. 5단계 지표를 파일로 보관하려면 <code>/metrics</code> 응답을 <code>99_ref/results/step05-metrics.json</code>으로 저장한다.</p>
 <pre><code>curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/metrics &gt; 99_ref/results/step05-metrics.json</code></pre>
-<p>각 단계의 실행 목적과 산출물은 해당 폴더의 <code>readme.md</code>, 슬라이드 목록은 <code>slides/readme.md</code>, 강의 진행표는 <a href="../99_ref/docs/teaching-guide.md">teaching-guide.md</a>, 단계 간 JSON 계약은 <code>99_ref/results/README.md</code>에서 확인한다.</p>
+<p>각 단계의 실행 목적과 산출물은 해당 폴더의 <code>readme.md</code>, 슬라이드 목록은 <code>slides/readme.md</code>, 단계 간 결과 규약은 <code>99_ref/results/README.md</code>에서 확인한다.</p>
 <h4>선택적 로컬 LLM 실행</h4>
 <p>기본 실행은 더미 응답을 사용한다. Ollama를 설치하고 서버와 모델을 준비한 뒤 <code>USE_LLM=1</code>을 지정하면 6단계 통합 실습이 로컬 모델 응답을 받아 출력 검열 단계로 전달한다.</p>
 <pre><code>ollama serve
@@ -414,69 +383,10 @@ uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000<
 <ul><li>캔버스는 <code>viewBox=&quot;0 0 1280 720&quot;</code>으로 작성한다.</li><li><code>&lt;title&gt;</code>, <code>&lt;desc&gt;</code>, <code>role=&quot;img&quot;</code>, <code>aria-labelledby</code>를 포함한다.</li><li>색상은 CSS 클래스와 다크 모드 규칙으로 관리한다.</li><li>챕터 표시, 제목, 요약, 본문 도식, 우측 하단 페이지 푸터를 포함한다.</li><li>외부 폰트·이미지·스크립트·링크를 사용하지 않는다.</li><li>완성 후 XML 검증과 PNG 렌더링 확인을 수행한다.</li></ul>
 <pre><code>xmllint --noout slides/00-course-flow.svg ../01_guardrail_concept_architecture/slides/s01-guardrail-flow.svg
 qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
-<h3>SVG 메타프롬프트</h3>
-<p>슬라이드·도식 SVG를 만들 때 아래 프롬프트와 검수 기준을 사용한다. 슬라이드 원문이 별도로 있으면 원문을 먼저 제공하고, 결과 SVG는 원문에 없는 수치·사실·명령을 추가하지 않는다.</p>
-<h4>프롬프트</h4>
-<pre><code>너는 AI 가드레일 학습 자료의 SVG 슬라이드를 만드는 작성자다. 아래 원문을 슬라이드 {{N}}장으로 옮겨라.
-
-[입력]
-- 챕터: {{0단계 챕터 표시}} / 제목: {{슬라이드 제목}} / 한 줄 요약: {{요약}}
-- 원문(변환 대상): {{readme의 해당 절 본문}}
-- 기준 파일: 기존 슬라이드의 스타일과 공통 배치를 따른다.
-
-[캔버스와 구성]
-- viewBox 0 0 1280 720 (16:9)을 사용한다.
-- 위에서 아래로 챕터 chip(0단계, 빨강), 큰 제목, 한 줄 요약, 본문 도식, 우측 하단 푸터(n / 총장수)를 둔다.
-- 본문 좌우 여백은 60px 이상으로 하고 푸터와 겹치지 않게 한다.
-- &lt;svg&gt;에 role=&quot;img&quot;, aria-labelledby, &lt;title&gt;, &lt;desc&gt;를 넣는다.
-- 글꼴은 -apple-system, &#x27;Apple SD Gothic Neo&#x27;, &#x27;Noto Sans KR&#x27;, sans-serif를 사용한다.
-- 외부 폰트·이미지·스크립트·링크는 사용하지 않는다.
-
-[색과 다크 모드]
-- 파랑은 기본, 주황은 핵심·전제, 초록은 방어·통제, 빨강은 챕터 표시와 경고에 사용한다.
-- 색상은 CSS 클래스에서만 지정하고 인라인 fill·stroke는 사용하지 않는다.
-- .bg 배경 사각형을 항상 둔다.
-- 모든 색상 클래스에 prefers-color-scheme: dark 대응을 둔다.
-- 색만으로 의미를 전달하지 말고 라벨·번호·아이콘 문자를 함께 사용한다.
-
-[내용 규칙]
-- 도식은 실제 흐름·구조·관계·판정 기준을 보여 준다.
-- 한 슬라이드에는 한 메시지만 담는다.
-- 원문에 없는 수치·사실·명령을 만들지 않는다.
-- 명령어와 출력은 고정폭 코드 블록으로 표시한다.
-- 용어는 &quot;탈옥(Jailbreak)&quot;처럼 일관되게 표기한다.
-- 공격 예시는 중립적인 더미 문구와 예약 도메인(.invalid)만 사용한다.
-- 실제 자격증명·개인정보·실행 가능한 유해 페이로드는 넣지 않는다.
-
-[글자와 줄바꿈]
-- 본문 16px 이상, 제목 40px 안팎, 요약 20px, 표 17px, 각주 14px 이상을 사용한다.
-- SVG는 자동 줄바꿈을 하지 않으므로 줄마다 &lt;text&gt;를 따로 둔다.
-- 박스 안 텍스트가 넘치면 글자 크기를 줄이지 말고 줄바꿈하거나 슬라이드를 나눈다.
-- 한글 폭을 영문 폭으로 계산하지 않는다.
-
-[파일 이름]
-- 슬라이드는 단계 폴더의 slides/sNN-이름.svg로 저장한다.
-- 이름은 소문자와 하이픈을 사용한다.
-- 장수가 바뀌면 모든 슬라이드의 푸터 n / 총장수와 slides/readme.md를 함께 갱신한다.
-
-[출력 전 자체 점검]
-1) XML이 유효한가
-2) 모든 글자가 박스와 캔버스 안에 있는가
-3) 글자와 박스가 서로 겹치지 않는가
-4) 푸터 번호가 맞는가
-5) 숫자와 명령이 원문과 같은가
-6) 다크 모드에서도 읽을 수 있는가</code></pre>
-<h4>검수 명령</h4>
-<p>사람이 렌더링 결과를 눈으로 확인한다. XML 검증만으로 글자 잘림과 겹침을 확인할 수 없다.</p>
-<pre><code>xmllint --noout slides/00-course-flow.svg
-find ../0[1-6]_*/slides -name &#x27;*.svg&#x27; -print0 | xargs -0 -n1 xmllint --noout
-qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
-<p>검수 항목:</p>
-<ul><li>글자가 박스·캔버스·푸터를 넘지 않는가</li><li>카드와 화살표가 겹치지 않는가</li><li>오른쪽·왼쪽 여백이 60px 이상인가</li><li>푸터의 <code>n / 총장수</code>가 맞는가</li><li>원문과 숫자·명령이 같은가</li><li>다크 모드에서 텍스트 대비가 충분한가</li></ul>
 <h3>주의사항</h3>
 <p>각 단계 폴더의 <code>src/</code> 구현은 학습용 휴리스틱이다. 5단계는 SQLite·API Key·웹 대시보드까지 포함하지만, 실제 운영 환경에서는 PostgreSQL 또는 이벤트 스트림, 강한 인증·권한 관리, 감사 로그 보존, 정책 버전 관리, 오탐·미탐 평가를 별도로 검증해야 한다.</p>
 <h3>최상위 파일·디렉터리 역할</h3>
-<table><tr><th>경로</th><th>역할</th></tr><tr><td><code>00_intro/</code></td><td>과정 개요·전체 흐름·기술 스택 SVG</td></tr><tr><td><code>01_...</code> ~ <code>06_...</code></td><td>서로 독립적인 단계별 학습 코드·문서·SVG</td></tr><tr><td><code>99_ref/integration/</code></td><td>단계별 코드를 침범하지 않는 01→06 점층 통합 실습</td></tr><tr><td><code>99_ref/contracts/</code></td><td>단계 간 JSON 결과 형식·버전 기준 · 품질 평가 기준</td></tr><tr><td><code>99_ref/results/</code></td><td>독립 단계 실습의 JSON 결과와 전달 규칙</td></tr><tr><td><code>99_ref/tests/</code></td><td>공통 회귀·API·계약 테스트</td></tr><tr><td><code>99_ref/scripts/</code></td><td>빠른 파일 기반 파이프라인 보조 실행</td></tr><tr><td><code>99_ref/logs/</code></td><td>작업·검증·재구성 이력</td></tr><tr><td><code>10_ai_guardrail_ops_framework/</code></td><td>1~6단계를 하나로 합친 통합 운영 프레임워크</td></tr><tr><td><code>readme.md</code></td><td>저장소 진입점 — 포털·단계별 문서 링크</td></tr><tr><td><code>requirements.txt</code></td><td>루트 공통 실행 의존성</td></tr><tr><td><code>.env.example</code></td><td>API 키·DB·Ollama 환경 변수 예시</td></tr><tr><td><code>slides/*.svg</code></td><td>0단계 과정 개요 슬라이드 5종</td></tr></table></div>
+<table><tr><th>경로</th><th>역할</th></tr><tr><td><code>00_intro/</code></td><td>과정 개요·전체 흐름·기술 스택 SVG</td></tr><tr><td><code>01_...</code> ~ <code>06_...</code></td><td>서로 독립적인 단계별 학습 코드·문서·SVG</td></tr><tr><td><code>99_ref/integration/</code></td><td>단계별 코드를 침범하지 않는 01→06 점층 통합 실습</td></tr><tr><td><code>99_ref/contracts/</code></td><td>단계 간 JSON 결과 형식·버전 기준 · 품질 평가 기준</td></tr><tr><td><code>99_ref/results/</code></td><td>독립 단계 실습의 JSON 결과와 전달 규칙</td></tr><tr><td><code>99_ref/tests/</code></td><td>공통 회귀·API·규약 테스트</td></tr><tr><td><code>99_ref/scripts/</code></td><td>빠른 파일 기반 파이프라인 보조 실행</td></tr><tr><td><code>99_ref/logs/</code></td><td>작업·검증·재구성 이력</td></tr><tr><td><code>10_ai_guardrail_ops_framework/</code></td><td>1~6단계를 하나로 합친 통합 운영 프레임워크</td></tr><tr><td><code>readme.md</code></td><td>저장소 진입점 — 포털·단계별 문서 링크</td></tr><tr><td><code>requirements.txt</code></td><td>루트 공통 실행 의존성</td></tr><tr><td><code>.env.example</code></td><td>API 키·DB·Ollama 환경 변수 예시</td></tr><tr><td><code>slides/*.svg</code></td><td>0단계 과정 개요 슬라이드 5종</td></tr></table></div>
 <div id="viewer" hidden><div class="vbox"><div class="vhead"><span id="vtitle"></span><span style="display:flex;gap:.8rem;align-items:center"><a id="vopen" href="#" target="_blank">새 탭에서 열기</a><button class="dgbtn" id="vclose">✕ 닫기</button></span></div><div class="vbody" id="vbody"></div><button class="vside" id="vsprev" hidden title="이전 슬라이드">‹</button><button class="vside" id="vsnext" hidden title="다음 슬라이드">›</button></div></div>
 <script>
 // ===== 탭 전환 (해시 동기화 + 활성 표시) =====
@@ -501,7 +411,7 @@ function openViewer(href,title){
   $('vtitle').textContent=title||href.split('/').pop();
   $('vopen').href=href;
   const body=$('vbody');body.innerHTML='';
-  const key=Object.keys(MD).find(k=>href.endsWith(k)||href===k);
+  const key=Object.keys(MD).sort((a,b)=>b.length-a.length).find(k=>href===k||href.endsWith('/'+k)||href.endsWith(k));
   if(key){body.innerHTML='<div class="mdview">'+document.getElementById(MD[key]).innerHTML+'</div>';}
   else{const im=new Image();im.src=href;im.style.maxWidth='100%';body.appendChild(im);}
   // 슬라이드 목록 내 이전/다음

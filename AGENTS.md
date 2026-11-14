@@ -17,8 +17,8 @@
 # 2026-11-15 개발 로그
 
 ## 포털 템플릿 갱신
-- `templates/gen_portal.py`, `templates/project-portal.html`에 단계 인덱스 `0` 링크와 통합 프레임워크 카드 반영
-- 검증: `python3 templates/gen_portal.py` 재생성, JS `node --check` 통과
+- `100_teacher/templates/gen_portal.py`, `100_teacher/templates/project-portal.html`에 단계 인덱스 `0` 링크와 통합 프레임워크 카드 반영
+- 검증: `python3 100_teacher/templates/gen_portal.py` 재생성, JS `node --check` 통과
 - 미처리: 없음
 ```
 
@@ -30,12 +30,13 @@
 
 ## 포털 페이지 규칙
 
-- 단계 포털(`0N_*/index.html`)은 `templates/gen_portal.py`로 생성 — **직접 편집 금지**, `PROJECTS` 설정 수정 후 `python3 templates/gen_portal.py` 재실행
-- 루트 `index.html`은 `templates/gen_index.py`로 생성 — **직접 편집 금지**, `STEPS` 설정 수정 후 `python3 templates/gen_index.py` 재실행
-- `00_intro/index.html`은 `templates/gen_intro.py`로 생성 — `python3 templates/gen_intro.py` 재실행
-- `99_ref/glossary/index.html` + `99_ref/glossary.md`는 `templates/gen_glossary.py`로 생성 — `python3 templates/gen_glossary.py` 재실행 (용어 소스: `gen_portal.py`의 `PROJECTS.gloss`)
-- 템플릿 변경은 `templates/project-portal.html`(단계·인트로 포털 공용 CSS/JS), `templates/index-portal.html`(루트 인덱스)에 반영
-- `templates/`는 `.gitignore`로 git 추적 제외(로컬 전용)
+- 단계 포털(`0N_*/index.html`)은 `100_teacher/templates/gen_portal.py`로 생성 — **직접 편집 금지**, `PROJECTS` 설정 수정 후 `python3 100_teacher/templates/gen_portal.py` 재실행
+- 루트 `index.html`은 `100_teacher/templates/gen_index.py`로 생성 — **직접 편집 금지**, `STEPS` 설정 수정 후 `python3 100_teacher/templates/gen_index.py` 재실행
+- `00_intro/index.html`은 `100_teacher/templates/gen_intro.py`로 생성 — `python3 100_teacher/templates/gen_intro.py` 재실행
+- `99_ref/glossary/index.html` + `99_ref/glossary.md`는 `100_teacher/templates/gen_glossary.py`로 생성 — `python3 100_teacher/templates/gen_glossary.py` 재실행 (용어 소스: `gen_portal.py`의 `PROJECTS.gloss`)
+- `10_ai_guardrail_ops_framework/index.html`, `99_ref/index.html`은 `100_teacher/templates/gen_docs.py`로 생성 — `python3 100_teacher/templates/gen_docs.py` 재실행
+- 템플릿 변경은 `100_teacher/templates/project-portal.html`(단계·인트로 포털 공용 CSS/JS), `100_teacher/templates/index-portal.html`(루트 인덱스)에 반영
+- `100_teacher/`는 `.gitignore`로 git 추적 제외 — 강사 전용(템플릿·교사용 가이드 포함, 로컬 전용)
 - 포털은 `file://`로 서버 없이 동작해야 한다
 
 ## 검증
@@ -46,7 +47,7 @@
 
 ## SVG 슬라이드
 
-- SVG 슬라이드·도식 작성 시 `templates/svg-metaprompt.md`의 프롬프트와 검수 기준을 따른다 (로컬 전용, git 제외)
+- SVG 슬라이드·도식 작성 시 `100_teacher/templates/svg-metaprompt.md`의 프롬프트와 검수 기준을 따른다 (로컬 전용, git 제외)
 - 완료 후 `xmllint --noout` XML 검증 + 렌더링 육안 확인
 
 ## 기타

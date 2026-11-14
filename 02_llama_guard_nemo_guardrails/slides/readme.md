@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | s01 | Llama Guard·NeMo Guardrails 적용 | 위험 분류와 대화 정책 흐름 |
 | s02 | 두 Guardrails의 역할 이론 | 안전성 분류와 대화 흐름 제어 |
-| s03 | 2단계 소스코드 관계도 | 계약·실행 진입점·provider·설정·결과 연결 |
+| s03 | 2단계 소스코드 관계도 | 규약·실행 진입점·provider·설정·결과 연결 |
 | s04 | Llama Guard 역할 상세 | 분류·범주·정책 변환 |
 | s05 | NeMo Guardrails 역할 상세 | 대화 흐름·주제·응답 경로 |
 | s06 | 실행 백엔드 선택 | 기본 Ollama·심화 Transformers 경로 |

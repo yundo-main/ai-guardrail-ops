@@ -12,4 +12,4 @@
 
 실제 슬라이드: [s01-risk-rating.svg](s01-risk-rating.svg), [s02-risk-theory.svg](s02-risk-theory.svg), [s03-risk-source.svg](s03-risk-source.svg), [s04-risk-checklist.svg](s04-risk-checklist.svg), [s05-summary.svg](s05-summary.svg)
 
-`s00-tech-spec.svg`는 위험 점수·이벤트·JSON 전달의 기술 사양 참고 자료다. `s01`~`s05`는 발표용 SVG이며, `s03-risk-source.svg`는 `src/risk.py` 실행과 변환 계약을 설명한다.
+`s00-tech-spec.svg`는 위험 점수·이벤트·JSON 전달의 기술 사양 참고 자료다. `s01`~`s05`는 발표용 SVG이며, `s03-risk-source.svg`는 `src/risk.py` 실행과 변환 규약을 설명한다.

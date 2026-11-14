@@ -62,7 +62,7 @@ python3 -m json.tool results/step03-guardrail-result.json
 | `src/policy.py` | 정책 규칙 로딩·입력 탐지·위험 등급 계산 |
 | `src/guardrail.py` | 입력 차단·출력 마스킹·결과 JSON 생성 |
 | `policy-rules.json` | 규칙 ID·정규식·사유·위험·판정 설정 |
-| `slides/s00-tech-spec.svg` | 3단계 기술·정책 파일·결과 계약 사양 |
+| `slides/s00-tech-spec.svg` | 3단계 기술·정책 파일·결과 규약 사양 |
 | `slides/s01-policy-filtering.svg` | 정책 차단과 출력 검열 전체 흐름 |
 | `slides/s02-policy-theory.svg` | 판정·마스킹 이론 |
 | `slides/s03-policy-source.svg` | `policy.py`·`guardrail.py` 소스 설명 |

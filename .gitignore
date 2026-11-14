@@ -27,10 +27,9 @@ __pycache__/
 
 # 강사 전용 문서 (수강생 비공개)
 99_ref/docs/plan.md
+100_teacher/
 
 
 # 10 프레임워크 런타임 결과
 10_ai_guardrail_ops_framework/results/
 
-# 포털 생성 템플릿 — 로컬 전용
-templates/

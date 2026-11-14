@@ -46,14 +46,14 @@
 | nemo_guardrails_client.py | NeMo Guardrails 호출 모듈 (dialogue/) |
 | not_responsible_for | 각 기술이 대신하지 않는 책임을 명시하는 필드 |
 | real_integration.py | 실제 모델 호출 파이프라인 (pipeline/) |
-| receives→produces→handoff_to | 어댑터 계약 3요소 — 입력·출력·다음 단계 |
+| receives→produces→handoff_to | 어댑터 규약 3요소 — 입력·출력·다음 단계 |
 | 대화 정책 | 허용된 주제와 응답 경로를 정의하는 규칙 집합 |
 | 대화 흐름 제어 | 대화가 특정 주제·절차를 벗어나지 않도록 하는 제어 |
 | 모델 가중치 | 학습된 파라미터 — Llama Guard 직접 실행 시 추가 관리 대상 |
 | 분류기(classifier) | 위험성을 범주로 판정하는 역할 — 최종 결정은 내리지 않음 |
 | 사람 검토 | 자동 판정이 어려운 사건을 담당자가 확인하는 경로 |
 | 안전성 분류 | 입력/출력이 허용 범주인지 판정하는 분류 작업 |
-| 어댑터 | 외부 기술을 내부 계약으로 연결하는 계층 — src/contracts/adapters.py |
+| 어댑터 | 외부 기술을 내부 규약으로 연결하는 계층 — src/contracts/adapters.py |
 | 오탐 | 정상 입력을 위험으로 잘못 판정하는 오류 |
 | 위험 카테고리 | 폭력·혐오·개인정보 등 Llama Guard의 분류 범주 |
 | 응답 경로 | 모델이 답변을 생성하는 경로 — 정책이 허용 범위를 결정 |
@@ -70,7 +70,7 @@
 | guardrail.py | 입력 차단·출력 검열 실행 엔트리포인트 |
 | policy-rules.json | 규칙 ID·패턴·위험 등급을 정의한 정책 파일 |
 | policy.py | 정책 규칙 로드·판정 모듈 |
-| result_payload | 판정 결과를 JSON 계약으로 변환하는 함수 |
+| result_payload | 판정 결과를 결과 규약으로 변환하는 함수 |
 | step03-guardrail-result.json | 3단계 결과 — 4단계로 전달되는 파일 |
 | 검토 응답 | 자동 판정이 어려울 때 사람 확인을 요청하는 응답 |
 | 경계 사례 | 정상·위험 사이의 애매한 입력 — 테스트에 활용 |
@@ -107,7 +107,7 @@
 | step04-security-event.json | 4단계 결과 — 5단계 API 전달 파일 |
 | write_event_result | 이벤트를 step04-security-event.json으로 저장 |
 | 긴급도 | 대응이 필요한 시간적 급박함 |
-| 대응 계약 | 등급이 올라갈수록 강한 조치를 연결하는 규칙 |
+| 대응 규약 | 등급이 올라갈수록 강한 조치를 연결하는 규칙 |
 | 등급 변경 기록 | 변경자·시각·사유를 별도 기록 — 원본 덮어쓰기 금지 |
 | 민감도 | 노출된 데이터·시스템의 민감 정도 |
 | 사후 분석 | 사건 종료 후 원인·대응을 분석하는 절후 활동 |

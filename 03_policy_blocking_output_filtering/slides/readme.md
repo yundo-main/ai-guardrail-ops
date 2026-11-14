@@ -12,4 +12,4 @@
 
 실제 슬라이드: [s01-policy-filtering.svg](s01-policy-filtering.svg), [s02-policy-theory.svg](s02-policy-theory.svg), [s03-policy-source.svg](s03-policy-source.svg), [s04-policy-checklist.svg](s04-policy-checklist.svg), [s05-summary.svg](s05-summary.svg)
 
-`s00-tech-spec.svg`는 정책 파일·결과 계약을 포함한 기술 사양 참고 자료다. `s01`~`s05`는 발표용 SVG이며, `s03-policy-source.svg`는 `src/policy.py`와 `src/guardrail.py`를 설명한다.
+`s00-tech-spec.svg`는 정책 파일·결과 규약을 포함한 기술 사양 참고 자료다. `s01`~`s05`는 발표용 SVG이며, `s03-policy-source.svg`는 `src/policy.py`와 `src/guardrail.py`를 설명한다.

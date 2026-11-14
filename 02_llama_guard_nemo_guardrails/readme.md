@@ -55,7 +55,7 @@ python3 02_llama_guard_nemo_guardrails/src/main.py            # compare (기본)
 ### 실제 프레임워크 호출
 
 실제 호출 코드는 `src/classifier/llama_guard.py`, `src/dialogue/nemo_guardrails_client.py`,
-`src/pipeline/real_integration.py`에 있고, 모두 `src/main.py`를 진입점으로 실행한다. `adapters.py`는 책임·handoff 계약이고,
+`src/pipeline/real_integration.py`에 있고, 모두 `src/main.py`를 진입점으로 실행한다. `adapters.py`는 책임·handoff 규약이고,
 이 세 파일이 각각 실제 모델과 프레임워크를 호출한다.
 
 Python 3.12 환경에서 선택 의존성을 설치한다.
@@ -104,7 +104,7 @@ python 02_llama_guard_nemo_guardrails/src/main.py real \
 ```text
 src/
 ├── main.py                  # 진입점 (compare | real)
-├── contracts/adapters.py    # 책임·handoff 계약 (의존성 없음)
+├── contracts/adapters.py    # 책임·handoff 규약 (의존성 없음)
 ├── classifier/llama_guard.py        # 분류: Llama Guard 3
 ├── dialogue/nemo_guardrails_client.py  # 대화 정책: NeMo Guardrails
 └── pipeline/real_integration.py     # 두 어댑터 호출 + 결과 JSON 저장
@@ -115,7 +115,7 @@ src/
 | 경로 | 역할 |
 | --- | --- |
 | `src/main.py` | 진입점. `compare`(기본)·`real --prompt` 서브커맨드로 하위 패키지를 호출 |
-| `src/contracts/adapters.py` | 실제 SDK와 독립적인 입력·출력·handoff·비책임 계약 |
+| `src/contracts/adapters.py` | 실제 SDK와 독립적인 입력·출력·handoff·비책임 규약 |
 | `src/classifier/llama_guard.py` | Transformers로 Llama Guard 3를 실제 로드·생성·분류하는 어댑터 |
 | `src/dialogue/nemo_guardrails_client.py` | `RailsConfig`·`LLMRails.generate()`를 호출하는 실제 NeMo 어댑터 |
 | `src/pipeline/real_integration.py` | 두 실제 어댑터를 순서대로 호출하고 JSON 결과를 저장 |
@@ -132,6 +132,6 @@ src/
 | `slides/s05-nemo-guardrails-detail.svg` | NeMo Guardrails의 대화 흐름·주제·응답 경로 상세 |
 | `slides/readme.md` | 슬라이드 순서·제목·산출물 목록 |
 
-`adapters.py` 자체는 역할 비교용 계약으로 유지하지만, 실제 호출은 같은 2단계 폴더의
+`adapters.py` 자체는 역할 비교용 규약으로 유지하지만, 실제 호출은 같은 2단계 폴더의
 세 어댑터 파일에서 수행한다. 따라서 “2단계에서는 방법론만 설명하고 호출은 뒤로
 미룬다”는 구조가 아니라, 2단계에서 실제 호출 경로와 책임 경계를 함께 확인할 수 있다.

@@ -2,7 +2,6 @@
 
 AI 서비스 운영 단계에서 입력·출력 가드레일, 위험 분류, 보안 이벤트 관제, 알림, 운영 리포트를 연결하는 실습 과정의 전체 개요다.
 
-강의 진행 순서와 강사 시연·수강생 실습·결과 확인 기준은 [teaching-guide.md](../99_ref/docs/teaching-guide.md)를 참고한다.
 
 ## SVG 슬라이드 보기
 
@@ -20,7 +19,7 @@ AI 서비스 운영 단계에서 입력·출력 가드레일, 위험 분류, 보
 
 각 단계에 필요한 기술만 정리한 기술 사양 SVG는 각 폴더의 `slides/s00-tech-spec.svg`에서 확인한다.
 
-독립 단계 실습은 기존 01~06단계 폴더에서 진행하고, 점층적인 실제형 통합 실습은 [99_ref/integration/README.md](../99_ref/integration/README.md)를 따른다. 결과 계약과 품질 평가 기준은 [99_ref/contracts/README.md](../99_ref/contracts/README.md)에서 확인한다.
+독립 단계 실습은 기존 01~06단계 폴더에서 진행하고, 점층적인 실제형 통합 실습은 [99_ref/integration/README.md](../99_ref/integration/README.md)를 따른다. 결과 규약과 품질 평가 기준은 [99_ref/contracts/README.md](../99_ref/contracts/README.md)에서 확인한다.
 
 ## 전체 목표
 
@@ -55,6 +54,55 @@ AI 서비스 운영 단계에서 입력·출력 가드레일, 위험 분류, 보
   → 대시보드 집계 및 Critical 알림
   → 주간·월간 운영 리포트
 ```
+
+## 사용 기술 스택
+
+### 실행 환경 (전 단계 공통)
+
+| 기술 | 용도 |
+| --- | --- |
+| Python 3.12+ (3.9 호환) | 전체 학습 코드 언어 |
+| 표준 라이브러리 (`dataclass`·`Enum`·`re`·`json`·`sqlite3`) | 1~4단계 가드레일·정책·위험 등급 — 외부 패키지 없이 동작 |
+
+### AI 안전 모델 (2단계·선택적)
+
+| 기술 | 용도 |
+| --- | --- |
+| Llama Guard 3 (Transformers·PyTorch) | 요청·응답 안전성 범주 분류 — `requirements-llm.txt` 선택 의존성 |
+| NeMo Guardrails | 대화 주제·절차·응답 경로 제어 (RailsConfig·LLMRails) |
+| Ollama (`qwen2.5:3b`, localhost:11434) | 로컬 LLM 응답 생성 — `USE_LLM=1` 시에만 |
+
+### 백엔드
+
+| 기술 | 용도 |
+| --- | --- |
+| `http.server` (stdlib, `BaseHTTPRequestHandler`+`ThreadingHTTPServer`) | 10 프레임워크 `:8000` 서버 — 라우팅·정적 파일·JSON API를 프레임워크 없이 구현 |
+| FastAPI + Uvicorn + `httpx` | 5단계 학습 API — `/events`·`/metrics`·`/alerts`·`/dashboard`·Swagger |
+| SQLite (`sqlite3`) | 보안 이벤트·감사 로그·설정 영속 저장 (양쪽 공통) |
+| JSON 파일 규약 (`results/*.json`, `config/*.json`) | 단계 간 결과 전달·정책 규칙·출력 패턴·알림 로그 |
+| `X-API-Key` 헤더 인증 | `GUARDRAIL_API_KEY` 환경변수 (기본 `dev-only-key`) |
+| 환경변수 (`USE_LLM`·`OLLAMA_*`·`GUARDRAIL_DB_PATH`) | LLM 활성화·모델·DB 경로 설정 |
+
+### 프론트엔드
+
+| 기술 | 용도 |
+| --- | --- |
+| 순수 HTML/CSS/JS (`file://` 동작) | 단계별 학습 포털·통합 용어집·루트 인덱스 |
+| SVG 뷰어 (팝업·‹›/←→ 이동) | 발표 슬라이드 열람 |
+| FastAPI 서빙 정적 페이지 | 10 프레임워크 운영 대시보드·챗봇 (`/ops`·`/chat`) |
+| 다크 모드 (`localStorage` 테마) | 10 프레임워크 페이지 테마 전환 |
+
+### 문서·슬라이드·검증
+
+| 기술 | 용도 |
+| --- | --- |
+| SVG (1280×720, CSS 클래스, 다크 모드, `role`/`aria`) | 단계별 발표 슬라이드 |
+| Markdown | readme·용어집·개발 문서 |
+| `python3 -m unittest` | `99_ref/tests` 공통 테스트 |
+| `xmllint --noout` / `py_compile` / `node --check` | SVG·Python·JS 문법 검증 |
+| `curl` | API 엔드포인트 확인 |
+
+단계 간 연결은 외부 메시지 큐·DB 없이 **JSON 결과 파일 + REST API**로 구성한다.
 
 ## 로컬 구현 예제
 
@@ -131,7 +179,7 @@ curl -H 'X-API-Key: dev-only-key' http://127.0.0.1:8000/alerts/critical
 curl -H 'X-API-Key: dev-only-key' http://127.0.0.1:8000/metrics > 99_ref/results/step05-metrics.json
 ```
 
-각 단계의 실행 목적과 산출물은 해당 폴더의 `readme.md`, 슬라이드 목록은 `slides/readme.md`, 강의 진행표는 [teaching-guide.md](../99_ref/docs/teaching-guide.md), 단계 간 JSON 계약은 `99_ref/results/README.md`에서 확인한다.
+각 단계의 실행 목적과 산출물은 해당 폴더의 `readme.md`, 슬라이드 목록은 `slides/readme.md`, 단계 간 결과 규약은 `99_ref/results/README.md`에서 확인한다.
 
 ### 선택적 로컬 LLM 실행
 
@@ -234,83 +282,6 @@ xmllint --noout slides/00-course-flow.svg ../01_guardrail_concept_architecture/s
 qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg
 ```
 
-## SVG 메타프롬프트
-
-슬라이드·도식 SVG를 만들 때 아래 프롬프트와 검수 기준을 사용한다. 슬라이드 원문이 별도로 있으면 원문을 먼저 제공하고, 결과 SVG는 원문에 없는 수치·사실·명령을 추가하지 않는다.
-
-### 프롬프트
-
-```text
-너는 AI 가드레일 학습 자료의 SVG 슬라이드를 만드는 작성자다. 아래 원문을 슬라이드 {{N}}장으로 옮겨라.
-
-[입력]
-- 챕터: {{0단계 챕터 표시}} / 제목: {{슬라이드 제목}} / 한 줄 요약: {{요약}}
-- 원문(변환 대상): {{readme의 해당 절 본문}}
-- 기준 파일: 기존 슬라이드의 스타일과 공통 배치를 따른다.
-
-[캔버스와 구성]
-- viewBox 0 0 1280 720 (16:9)을 사용한다.
-- 위에서 아래로 챕터 chip(0단계, 빨강), 큰 제목, 한 줄 요약, 본문 도식, 우측 하단 푸터(n / 총장수)를 둔다.
-- 본문 좌우 여백은 60px 이상으로 하고 푸터와 겹치지 않게 한다.
-- <svg>에 role="img", aria-labelledby, <title>, <desc>를 넣는다.
-- 글꼴은 -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif를 사용한다.
-- 외부 폰트·이미지·스크립트·링크는 사용하지 않는다.
-
-[색과 다크 모드]
-- 파랑은 기본, 주황은 핵심·전제, 초록은 방어·통제, 빨강은 챕터 표시와 경고에 사용한다.
-- 색상은 CSS 클래스에서만 지정하고 인라인 fill·stroke는 사용하지 않는다.
-- .bg 배경 사각형을 항상 둔다.
-- 모든 색상 클래스에 prefers-color-scheme: dark 대응을 둔다.
-- 색만으로 의미를 전달하지 말고 라벨·번호·아이콘 문자를 함께 사용한다.
-
-[내용 규칙]
-- 도식은 실제 흐름·구조·관계·판정 기준을 보여 준다.
-- 한 슬라이드에는 한 메시지만 담는다.
-- 원문에 없는 수치·사실·명령을 만들지 않는다.
-- 명령어와 출력은 고정폭 코드 블록으로 표시한다.
-- 용어는 "탈옥(Jailbreak)"처럼 일관되게 표기한다.
-- 공격 예시는 중립적인 더미 문구와 예약 도메인(.invalid)만 사용한다.
-- 실제 자격증명·개인정보·실행 가능한 유해 페이로드는 넣지 않는다.
-
-[글자와 줄바꿈]
-- 본문 16px 이상, 제목 40px 안팎, 요약 20px, 표 17px, 각주 14px 이상을 사용한다.
-- SVG는 자동 줄바꿈을 하지 않으므로 줄마다 <text>를 따로 둔다.
-- 박스 안 텍스트가 넘치면 글자 크기를 줄이지 말고 줄바꿈하거나 슬라이드를 나눈다.
-- 한글 폭을 영문 폭으로 계산하지 않는다.
-
-[파일 이름]
-- 슬라이드는 단계 폴더의 slides/sNN-이름.svg로 저장한다.
-- 이름은 소문자와 하이픈을 사용한다.
-- 장수가 바뀌면 모든 슬라이드의 푸터 n / 총장수와 slides/readme.md를 함께 갱신한다.
-
-[출력 전 자체 점검]
-1) XML이 유효한가
-2) 모든 글자가 박스와 캔버스 안에 있는가
-3) 글자와 박스가 서로 겹치지 않는가
-4) 푸터 번호가 맞는가
-5) 숫자와 명령이 원문과 같은가
-6) 다크 모드에서도 읽을 수 있는가
-```
-
-### 검수 명령
-
-사람이 렌더링 결과를 눈으로 확인한다. XML 검증만으로 글자 잘림과 겹침을 확인할 수 없다.
-
-```bash
-xmllint --noout slides/00-course-flow.svg
-find ../0[1-6]_*/slides -name '*.svg' -print0 | xargs -0 -n1 xmllint --noout
-qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg
-```
-
-검수 항목:
-
-- 글자가 박스·캔버스·푸터를 넘지 않는가
-- 카드와 화살표가 겹치지 않는가
-- 오른쪽·왼쪽 여백이 60px 이상인가
-- 푸터의 `n / 총장수`가 맞는가
-- 원문과 숫자·명령이 같은가
-- 다크 모드에서 텍스트 대비가 충분한가
-
 ## 주의사항
 
 각 단계 폴더의 `src/` 구현은 학습용 휴리스틱이다. 5단계는 SQLite·API Key·웹 대시보드까지 포함하지만, 실제 운영 환경에서는 PostgreSQL 또는 이벤트 스트림, 강한 인증·권한 관리, 감사 로그 보존, 정책 버전 관리, 오탐·미탐 평가를 별도로 검증해야 한다.
@@ -324,7 +295,7 @@ qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg
 | `99_ref/integration/` | 단계별 코드를 침범하지 않는 01→06 점층 통합 실습 |
 | `99_ref/contracts/` | 단계 간 JSON 결과 형식·버전 기준 · 품질 평가 기준 |
 | `99_ref/results/` | 독립 단계 실습의 JSON 결과와 전달 규칙 |
-| `99_ref/tests/` | 공통 회귀·API·계약 테스트 |
+| `99_ref/tests/` | 공통 회귀·API·규약 테스트 |
 | `99_ref/scripts/` | 빠른 파일 기반 파이프라인 보조 실행 |
 | `99_ref/logs/` | 작업·검증·재구성 이력 |
 | `10_ai_guardrail_ops_framework/` | 1~6단계를 하나로 합친 통합 운영 프레임워크 |

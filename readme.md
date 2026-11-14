@@ -22,6 +22,5 @@ LLM 앞뒤에 입력·출력 가드레일을 두고, 정책 판정·위험 등�
 
 ## 참고 문서
 
-- 강의 진행 순서·결과 확인 기준: [99_ref/docs/teaching-guide.md](99_ref/docs/teaching-guide.md)
-- 단계 간 JSON 계약: [99_ref/results/README.md](99_ref/results/README.md)
+- 단계 간 결과 규약: [99_ref/results/README.md](99_ref/results/README.md)
 - 점층 통합 실습: [99_ref/integration/README.md](99_ref/integration/README.md)
