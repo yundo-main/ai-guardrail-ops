@@ -25,17 +25,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,'P
 .hero .sub{margin:0 0 1.2rem;max-width:680px;font-size:.88rem;font-weight:500;line-height:1.6;color:rgba(255,255,255,.92);text-shadow:0 1px 4px rgba(0,0,0,.35)}
 .steps{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.4rem}
 .steps span{font-size:.74rem;font-weight:600;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:.32rem .8rem;border-radius:999px;backdrop-filter:blur(4px)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-bottom:1.7rem}
-.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.35rem 1.2rem;box-shadow:0 1px 3px rgba(15,23,42,.04);transition:transform .18s,box-shadow .18s,border-color .18s;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:opacity .18s}
-.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,23,42,.1);border-color:#c7d2fe}
-.card:hover::before{opacity:1}
-.card .ico{display:inline-flex;align-items:center;justify-content:center;width:2.4rem;height:2.4rem;border-radius:12px;font-size:1.25rem;background:linear-gradient(135deg,#eff6ff,#ede9fe);border:1px solid #dbeafe}
-.card h3{margin:.6rem 0 .3rem;font-size:1.02rem;letter-spacing:-.01em}
-.card p{margin:0;color:var(--muted);font-size:.85rem;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.card-link{cursor:pointer}
-.card-link h3 .go{float:right;font-size:.85rem;color:var(--accent);opacity:0;transform:translateX(-4px);transition:all .18s}
-.card-link:hover h3 .go{opacity:1;transform:none}
 .ltab{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.5rem 1.6rem;margin-bottom:1.2rem;display:none;box-shadow:0 1px 3px rgba(15,23,42,.04)}
 .ltab.on{display:block;animation:fadein .25s ease}
 @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -106,7 +95,7 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <a class="brand" href="#top">📘 06_operations_report_integrated_lab</a>
 <a href="#tab-overview">개요</a><a href="#tab-slides">슬라이드</a><a href="#tab-practice">실습</a><a href="#tab-help">도움말</a>
 </nav>
-<div class="stepidx"><span class="lbl">단계</span><a href="../index.html">⌂</a><a href="../00_intro/slides/00-course-flow.svg">0</a><a href="../01_guardrail_concept_architecture/index.html">1</a><a href="../02_llama_guard_nemo_guardrails/index.html">2</a><a href="../03_policy_blocking_output_filtering/index.html">3</a><a href="../04_risk_rating_system/index.html">4</a><a href="../05_security_dashboard_alerts/index.html">5</a><a href="../06_operations_report_integrated_lab/index.html" class="cur">6</a></div>
+<div class="stepidx"><span class="lbl">단계</span><a href="../index.html">⌂</a><a href="../00_intro/index.html">0</a><a href="../01_guardrail_concept_architecture/index.html">1</a><a href="../02_llama_guard_nemo_guardrails/index.html">2</a><a href="../03_policy_blocking_output_filtering/index.html">3</a><a href="../04_risk_rating_system/index.html">4</a><a href="../05_security_dashboard_alerts/index.html">5</a><a href="../06_operations_report_integrated_lab/index.html" class="cur">6</a></div>
 <div class="hero" id="top">
 <div class="eyebrow">STEP 06 · OPERATIONS REPORT · INTEGRATED LAB</div>
 <h1>운영 리포트와 통합 실습</h1>
@@ -114,12 +103,6 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <div class="steps">
 <span>탐지 건수·차단 건수·검토 건수</span><span>차단율과 위험 등급 분포</span><span>미대응 이슈와 다음 주 개선 과제</span><span>정책 변경 전후 비교와 운영 의사결정</span>
 </div>
-</div>
-<div class="grid">
-<div class="card card-link" onclick="show('tab-overview')"><span class="ico">🧠</span><h3>이론 <span class="go">→</span></h3><p>가드레일과 관제 결과를 주간·월간 운영 리포트로 정리하고 전체 흐름을 통합한다.</p></div>
-<div class="card card-link" onclick="show('tab-practice')"><span class="ico">🛡️</span><h3>실습 <span class="go">→</span></h3><p>선택적으로 `USE_LLM=1`을 지정하면 `src/llm.py`가 로컬 Ollama의 `/api/chat`을 호출한다. 모델 응답은 더미 응답과 동일하게 입력 검사와 출력 검열을 거친다.</p></div>
-<div class="card card-link" onclick="show('tab-overview')"><span class="ico">📊</span><h3>단계 연결 <span class="go">→</span></h3><p>[← 5단계](../05_security_dashboard_alerts/readme.md) · [전체 과정](../readme.md)</p></div>
-<div class="card card-link" onclick="location.href='../10_ai_guardrail_ops_framework/readme.md'"><span class="ico">🧩</span><h3>통합 프레임워크 <span class="go">→</span></h3><p>6단계에서 배운 정책·검열·위험등급·대시보드·리포트를 하나로 합친 운영 프레임워크 (10_ai_guardrail_ops_framework)</p></div>
 </div>
 <section class="ltab on" id="tab-overview">
 <div class="ltitle">개요 — STEP 06 학습 내용</div>
@@ -154,9 +137,9 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <p class="sub" id="copyMsg" style="margin-top:.4rem"></p>
 <h3>실행 결과 예시</h3><pre><code>[1] input=Decision.ALLOW output=Decision.ALLOW: The policy applies for 30 days.
 [2] input=Decision.BLOCK output=Decision.BLOCK: 요청이 보안 정책에 의해 차단되었습니다.
-ALERT {&quot;severity&quot;: &quot;critical&quot;, &quot;title&quot;: &quot;AI 보안 Critical 이벤트&quot;, &quot;event&quot;: {&quot;event_id&quot;: &quot;demo-2&quot;, &quot;decision&quot;: &quot;block&quot;, &quot;risk&quot;: &quot;Critical&quot;, &quot;category&quot;: &quot;prompt injection&quot;, &quot;detail&quot;: &quot;요청이 보안 정책에 의해 차단되었습니다.&quot;, &quot;timestamp&quot;: &quot;2026-11-14T12:34:29.097380+00:00&quot;, &quot;schema_version&quot;: &quot;1.0&quot;, &quot;trace_id&quot;: &quot;demo-trace-2&quot;, &quot;source_stage&quot;: &quot;step05&quot;, &quot;policy_version&quot;: &quot;policy-1&quot;, &quot;model_name&quot;: &quot;deterministic-fixture&quot;, &quot;status&quot;: &quot;open&quot;, &quot;acknowledged_at&quot;: null}}
+ALERT {&quot;severity&quot;: &quot;critical&quot;, &quot;title&quot;: &quot;AI 보안 Critical 이벤트&quot;, &quot;event&quot;: {&quot;event_id&quot;: &quot;demo-2&quot;, &quot;decision&quot;: &quot;block&quot;, &quot;risk&quot;: &quot;Critical&quot;, &quot;category&quot;: &quot;prompt injection&quot;, &quot;detail&quot;: &quot;요청이 보안 정책에 의해 차단되었습니다.&quot;, &quot;timestamp&quot;: &quot;2026-11-14T13:00:53.824459+00:00&quot;, &quot;schema_version&quot;: &quot;1.0&quot;, &quot;trace_id&quot;: &quot;demo-trace-2&quot;, &quot;source_stage&quot;: &quot;step05&quot;, &quot;policy_version&quot;: &quot;policy-1&quot;, &quot;model_name&quot;: &quot;deterministic-fixture&quot;, &quot;status&quot;: &quot;open&quot;, &quot;acknowledged_at&quot;: null}}
 [3] input=Decision.ALLOW output=Decision.REVIEW: Contact [EMAIL_REDACTED]; api_key=[API_KEY_REDACTED].
-ALERT {&quot;severity&quot;: &quot;critical&quot;, &quot;title&quot;: &quot;AI 보안 Critical 이벤트&quot;, &quot;event&quot;: {&quot;event_id&quot;: &quot;demo-3&quot;, &quot;decision&quot;: &quot;review&quot;, &quot;risk&quot;: &quot;Critical&quot;, &quot;category&quot;: &quot;email&quot;, &quot;detail&quot;: &quot;Contact [EMAIL_REDACTED]; api_key=[API_KEY_REDACTED].&quot;, &quot;timestamp&quot;: &quot;2026-11-14T12:34:29.097435+00:00&quot;, &quot;schema_version&quot;: &quot;1.0&quot;, &quot;trace_id&quot;: &quot;demo-trace-3&quot;, &quot;source_stage&quot;: &quot;step05&quot;, &quot;policy_version&quot;: &quot;policy-1&quot;, &quot;model_name&quot;: &quot;deterministic-fixture&quot;, &quot;status&quot;: &quot;open&quot;, &quot;acknowledged_at&quot;: null}}
+ALERT {&quot;severity&quot;: &quot;critical&quot;, &quot;title&quot;: &quot;AI 보안 Critical 이벤트&quot;, &quot;event&quot;: {&quot;event_id&quot;: &quot;demo-3&quot;, &quot;decision&quot;: &quot;review&quot;, &quot;risk&quot;: &quot;Critical&quot;, &quot;category&quot;: &quot;email&quot;, &quot;detail&quot;: &quot;Contact [EMAIL_REDACTED]; api_key=[API_KEY_REDACTED].&quot;, &quot;timestamp&quot;: &quot;2026-11-14T13:00:53.824509+00:00&quot;, &quot;schema_version&quot;: &quot;1.0&quot;, &quot;trace_id&quot;: &quot;demo-trace-3&quot;, &quot;source_stage&quot;: &quot;step05&quot;, &quot;policy_version&quot;: &quot;policy-1&quot;, &quot;model_name&quot;: &quot;deterministic-fixture&quot;, &quot;status&quot;: &quot;open&quot;, &quot;acknowledged_at&quot;: null}}
 {
   &quot;total_events&quot;: 3,
   &quot;blocked_events&quot;: 1,
@@ -261,7 +244,7 @@ window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
 show(location.hash.slice(1));
 
 // ===== 팝업 뷰어 =====
-const MD={ /* TODO: '경로/readme.md':'md-xxx' 등록 */ };
+const MD={'readme.md':'md-readme','slides/readme.md':'md-slides'};
 const $=id=>document.getElementById(id);
 let cur=null;
 function openViewer(href,title){
@@ -317,5 +300,5 @@ document.addEventListener('click',e=>{
 // ===== 명령어 복사 =====
 /* TODO: copy_cmd_js — copyCmd 버튼 핸들러 */
 
-const COPY_CMD='python3 06_operations_report_integrated_lab/src/app.py';$('copyCmd').onclick=()=>{navigator.clipboard.writeText(COPY_CMD).then(()=>{$('copyMsg').textContent='복사됨 — 터미널에 붙여넣기 (⌘V)'}).catch(()=>{$('copyMsg').textContent='복사 실패 — 직접 입력'})};</script>
+const COPY_CMD='python3 06_operations_report_integrated_lab/src/app.py';$('copyCmd').onclick=()=>{navigator.clipboard.writeText(COPY_CMD).then(()=>{$('copyMsg').textContent='복사됨 — 터미널에 붙여넣기 (⌘V)'}).catch(()=>{$('copyMsg').textContent='복사 실패 — 직접 입력'})};const _or=$('openReadme');if(_or)_or.onclick=()=>openViewer('readme.md','readme.md');const _os=$('openSlidesReadme');if(_os)_os.onclick=()=>openViewer('slides/readme.md','slides/readme.md');</script>
 </body></html>

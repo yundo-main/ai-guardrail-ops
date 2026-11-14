@@ -25,17 +25,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,'P
 .hero .sub{margin:0 0 1.2rem;max-width:680px;font-size:.88rem;font-weight:500;line-height:1.6;color:rgba(255,255,255,.92);text-shadow:0 1px 4px rgba(0,0,0,.35)}
 .steps{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.4rem}
 .steps span{font-size:.74rem;font-weight:600;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:.32rem .8rem;border-radius:999px;backdrop-filter:blur(4px)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-bottom:1.7rem}
-.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.35rem 1.2rem;box-shadow:0 1px 3px rgba(15,23,42,.04);transition:transform .18s,box-shadow .18s,border-color .18s;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:opacity .18s}
-.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,23,42,.1);border-color:#c7d2fe}
-.card:hover::before{opacity:1}
-.card .ico{display:inline-flex;align-items:center;justify-content:center;width:2.4rem;height:2.4rem;border-radius:12px;font-size:1.25rem;background:linear-gradient(135deg,#eff6ff,#ede9fe);border:1px solid #dbeafe}
-.card h3{margin:.6rem 0 .3rem;font-size:1.02rem;letter-spacing:-.01em}
-.card p{margin:0;color:var(--muted);font-size:.85rem;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.card-link{cursor:pointer}
-.card-link h3 .go{float:right;font-size:.85rem;color:var(--accent);opacity:0;transform:translateX(-4px);transition:all .18s}
-.card-link:hover h3 .go{opacity:1;transform:none}
 .ltab{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.5rem 1.6rem;margin-bottom:1.2rem;display:none;box-shadow:0 1px 3px rgba(15,23,42,.04)}
 .ltab.on{display:block;animation:fadein .25s ease}
 @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -106,7 +95,7 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <a class="brand" href="#top">📘 01_guardrail_concept_architecture</a>
 <a href="#tab-overview">개요</a><a href="#tab-slides">슬라이드</a><a href="#tab-practice">실습</a><a href="#tab-help">도움말</a>
 </nav>
-<div class="stepidx"><span class="lbl">단계</span><a href="../index.html">⌂</a><a href="../00_intro/slides/00-course-flow.svg">0</a><a href="../01_guardrail_concept_architecture/index.html" class="cur">1</a><a href="../02_llama_guard_nemo_guardrails/index.html">2</a><a href="../03_policy_blocking_output_filtering/index.html">3</a><a href="../04_risk_rating_system/index.html">4</a><a href="../05_security_dashboard_alerts/index.html">5</a><a href="../06_operations_report_integrated_lab/index.html">6</a></div>
+<div class="stepidx"><span class="lbl">단계</span><a href="../index.html">⌂</a><a href="../00_intro/index.html">0</a><a href="../01_guardrail_concept_architecture/index.html" class="cur">1</a><a href="../02_llama_guard_nemo_guardrails/index.html">2</a><a href="../03_policy_blocking_output_filtering/index.html">3</a><a href="../04_risk_rating_system/index.html">4</a><a href="../05_security_dashboard_alerts/index.html">5</a><a href="../06_operations_report_integrated_lab/index.html">6</a></div>
 <div class="hero" id="top">
 <div class="eyebrow">STEP 01 · GUARDRAIL CONCEPT ARCHITECTURE</div>
 <h1>Guardrail 개념과 아키텍처</h1>
@@ -114,12 +103,6 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <div class="steps">
 <span>입력 가드레일과 출력 가드레일의 차이</span><span>모델 호출 전 정책 검사와 모델 호출 후 출력 검열</span><span>프롬프트 인젝션, 유해 요청, PII 노출의 기본 위협</span><span>허용·차단·검토 상태와 보안 이벤트의 관계</span>
 </div>
-</div>
-<div class="grid">
-<div class="card card-link" onclick="show('tab-overview')"><span class="ico">🧠</span><h3>이론 <span class="go">→</span></h3><p>AI 서비스의 입력·출력에 Guardrail을 배치하는 이유와 전체 처리 흐름을 설명한다.</p></div>
-<div class="card card-link" onclick="show('tab-practice')"><span class="ico">🛡️</span><h3>실습 <span class="go">→</span></h3><p>1. 사용자 입력 → 입력 가드레일 → 모델 → 출력 검열 → 관제 흐름을 그린다. 2. 각 단계의 검사 대상과 실패 시 대응을 정의한다. 3. [course-flow.svg](../00_intro/slides/00-course-flow.svg)와 [s01-guardrail-flow.svg](slides/s01-guardrail-flow.svg)를 기준 자료로 확인한다.</p></div>
-<div class="card card-link" onclick="show('tab-overview')"><span class="ico">📊</span><h3>단계 연결 <span class="go">→</span></h3><p>[2단계 →](../02_llama_guard_nemo_guardrails/readme.md) · [전체 과정](../readme.md)</p></div>
-<div class="card card-link" onclick="location.href='../10_ai_guardrail_ops_framework/readme.md'"><span class="ico">🧩</span><h3>통합 프레임워크 <span class="go">→</span></h3><p>6단계에서 배운 정책·검열·위험등급·대시보드·리포트를 하나로 합친 운영 프레임워크 (10_ai_guardrail_ops_framework)</p></div>
 </div>
 <section class="ltab on" id="tab-overview">
 <div class="ltitle">개요 — STEP 01 학습 내용</div>
@@ -243,7 +226,7 @@ window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
 show(location.hash.slice(1));
 
 // ===== 팝업 뷰어 =====
-const MD={ /* TODO: '경로/readme.md':'md-xxx' 등록 */ };
+const MD={'readme.md':'md-readme','slides/readme.md':'md-slides'};
 const $=id=>document.getElementById(id);
 let cur=null;
 function openViewer(href,title){
@@ -299,5 +282,5 @@ document.addEventListener('click',e=>{
 // ===== 명령어 복사 =====
 /* TODO: copy_cmd_js — copyCmd 버튼 핸들러 */
 
-const COPY_CMD='python3 01_guardrail_concept_architecture/src/architecture.py';$('copyCmd').onclick=()=>{navigator.clipboard.writeText(COPY_CMD).then(()=>{$('copyMsg').textContent='복사됨 — 터미널에 붙여넣기 (⌘V)'}).catch(()=>{$('copyMsg').textContent='복사 실패 — 직접 입력'})};</script>
+const COPY_CMD='python3 01_guardrail_concept_architecture/src/architecture.py';$('copyCmd').onclick=()=>{navigator.clipboard.writeText(COPY_CMD).then(()=>{$('copyMsg').textContent='복사됨 — 터미널에 붙여넣기 (⌘V)'}).catch(()=>{$('copyMsg').textContent='복사 실패 — 직접 입력'})};const _or=$('openReadme');if(_or)_or.onclick=()=>openViewer('readme.md','readme.md');const _os=$('openSlidesReadme');if(_os)_os.onclick=()=>openViewer('slides/readme.md','slides/readme.md');</script>
 </body></html>

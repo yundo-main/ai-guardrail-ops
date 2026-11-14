@@ -25,17 +25,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,'P
 .hero .sub{margin:0 0 1.2rem;max-width:680px;font-size:.88rem;font-weight:500;line-height:1.6;color:rgba(255,255,255,.92);text-shadow:0 1px 4px rgba(0,0,0,.35)}
 .steps{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.4rem}
 .steps span{font-size:.74rem;font-weight:600;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:.32rem .8rem;border-radius:999px;backdrop-filter:blur(4px)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-bottom:1.7rem}
-.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.35rem 1.2rem;box-shadow:0 1px 3px rgba(15,23,42,.04);transition:transform .18s,box-shadow .18s,border-color .18s;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:opacity .18s}
-.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,23,42,.1);border-color:#c7d2fe}
-.card:hover::before{opacity:1}
-.card .ico{display:inline-flex;align-items:center;justify-content:center;width:2.4rem;height:2.4rem;border-radius:12px;font-size:1.25rem;background:linear-gradient(135deg,#eff6ff,#ede9fe);border:1px solid #dbeafe}
-.card h3{margin:.6rem 0 .3rem;font-size:1.02rem;letter-spacing:-.01em}
-.card p{margin:0;color:var(--muted);font-size:.85rem;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.card-link{cursor:pointer}
-.card-link h3 .go{float:right;font-size:.85rem;color:var(--accent);opacity:0;transform:translateX(-4px);transition:all .18s}
-.card-link:hover h3 .go{opacity:1;transform:none}
 .ltab{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.5rem 1.6rem;margin-bottom:1.2rem;display:none;box-shadow:0 1px 3px rgba(15,23,42,.04)}
 .ltab.on{display:block;animation:fadein .25s ease}
 @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -111,7 +100,7 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <a class="brand" href="#top">📚 용어 정리</a>
 <a href="../glossary.md">glossary.md</a>
 </nav>
-<div class="stepidx"><span class="lbl">단계</span><a href="../../index.html">⌂</a><a href="../../00_intro/slides/00-course-flow.svg">0</a><a href="../../01_guardrail_concept_architecture/index.html">1</a><a href="../../02_llama_guard_nemo_guardrails/index.html">2</a><a href="../../03_policy_blocking_output_filtering/index.html">3</a><a href="../../04_risk_rating_system/index.html">4</a><a href="../../05_security_dashboard_alerts/index.html">5</a><a href="../../06_operations_report_integrated_lab/index.html">6</a></div>
+<div class="stepidx"><span class="lbl">단계</span><a href="../../index.html">⌂</a><a href="../../00_intro/index.html">0</a><a href="../../01_guardrail_concept_architecture/index.html">1</a><a href="../../02_llama_guard_nemo_guardrails/index.html">2</a><a href="../../03_policy_blocking_output_filtering/index.html">3</a><a href="../../04_risk_rating_system/index.html">4</a><a href="../../05_security_dashboard_alerts/index.html">5</a><a href="../../06_operations_report_integrated_lab/index.html">6</a></div>
 <div class="hero" id="top">
 <div class="eyebrow">GLOSSARY · 통합 용어집</div>
 <h1>용어 정리</h1>
