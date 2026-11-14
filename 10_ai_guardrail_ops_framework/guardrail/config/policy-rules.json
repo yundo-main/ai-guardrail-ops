@@ -1,0 +1,138 @@
+[
+  {
+    "rule_id": "INJ-001",
+    "pattern": "ignore\\s+(?:all\\s+)?previous instructions",
+    "reason": "prompt injection",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE", "NORMALIZE"]
+  },
+  {
+    "rule_id": "INJ-002",
+    "pattern": "(?:do anything now|developer mode|jailbreak|DAN mode|pretend (?:you are|to be) (?:an? )?(?:unrestricted|evil|uncensored))",
+    "reason": "jailbreak attempt",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE", "NORMALIZE"]
+  },
+  {
+    "rule_id": "INJ-003",
+    "pattern": "(?:repeat|echo|output|translate|recite).{0,40}(?:(?:above|previous|prior|earlier).{0,20}(?:text|content|prompt|instructions)|(?:text|content|prompt|instructions).{0,20}(?:above|previous|prior|earlier))",
+    "reason": "prompt extraction attempt",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+  },
+  {
+    "rule_id": "EXF-001",
+    "pattern": "(?:reveal|print|show|dump).{0,40}(?:system prompt|secret|credential|api key)",
+    "reason": "secret exfiltration request",
+    "risk": "Critical",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+  },
+  {
+    "rule_id": "EXF-002",
+    "pattern": "(?:cat|read|print|show|send|upload|exfiltrate).{0,40}(?:/etc/passwd|\\.ssh|\\.env|id_rsa|\\.aws|credentials\\.json|\\.npmrc|\\.netrc)",
+    "reason": "sensitive file access request",
+    "risk": "Critical",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+  },
+  {
+    "rule_id": "EXF-003",
+    "pattern": "(?:environment variables?|env vars?|process\\.env|os\\.environ)",
+    "reason": "environment secret disclosure request",
+    "risk": "Critical",
+    "decision": "block",
+    "flags": ["IGNORECASE", "NORMALIZE"]
+  },
+  {
+    "rule_id": "TOOL-001",
+    "pattern": "(?:delete|drop|rm\\s+-rf|disable).{0,30}(?:database|production|audit|logging)",
+    "reason": "dangerous tool or infrastructure action",
+    "risk": "Critical",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+  },
+  {
+    "rule_id": "TOOL-002",
+    "pattern": "(?:drop\\s+table|truncate\\s+table|format\\s+[a-z]:|mkfs|dd\\s+if=|shutdown|reboot|poweroff)",
+    "reason": "destructive system command",
+    "risk": "Critical",
+    "decision": "block",
+    "flags": ["IGNORECASE", "NORMALIZE"]
+  },
+  {
+    "rule_id": "TOOL-003",
+    "pattern": "(?:grant|give|escalate).{0,30}(?:admin|root|sudo|privilege|full access).{0,30}(?:user|account|role|me|myself)",
+    "reason": "privilege escalation request",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+  },
+  {
+    "rule_id": "ABUSE-001",
+    "pattern": "(?:credential stuffing|ransomware|malware|steal passwords)",
+    "reason": "harmful cyber request",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE", "NORMALIZE"]
+  },
+  {
+    "rule_id": "ABUSE-002",
+    "pattern": "(?:write|create|build|develop).{0,30}(?:keylogger|spyware|botnet|rootkit|trojan)",
+    "reason": "malware development request",
+    "risk": "Critical",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+  },
+  {
+    "rule_id": "ABUSE-003",
+    "pattern": "(?:phishing|spear.?phish|social engineer).{0,30}(?:campaign|email|message|attack|site)",
+    "reason": "social engineering request",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE", "NORMALIZE"]
+  },
+  {
+    "rule_id": "ABUSE-004",
+    "pattern": "(?:bypass|circumvent|evade).{0,30}(?:2fa|two-factor|mfa|captcha|rate limit|authentication)",
+    "reason": "security control bypass request",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+  },
+  {
+    "rule_id": "INJ-004",
+    "pattern": "(?:이전|기존|원래|처음)\\s*(?:의\\s*)?(?:지시|명령|프롬프트|설정)|(?:지시|명령|규칙|프롬프트)\\s*(?:를|을|은|는)?\\s*무시|시스템\\s*프롬프트|탈옥|(?:제한|필터|안전장치)\\s*(?:을|를)?\\s*(?:없애|해제|우회|무시)|개발자\\s*모드",
+    "reason": "prompt injection (korean)",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE", "NORMALIZE"]
+  },
+  {
+    "rule_id": "EXF-004",
+    "pattern": "(?:비밀번호|패스워드|api\\s*키|시크릿|자격증명|접근\\s*토큰|환경변수|시스템\\s*프롬프트).{0,30}(?:보여|알려|출력|말해|공개|줘)|(?:보여|알려|출력|공개|말해).{0,30}(?:비밀번호|시스템\\s*프롬프트|자격증명|api\\s*키)",
+    "reason": "secret exfiltration request (korean)",
+    "risk": "Critical",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+  },
+  {
+    "rule_id": "TOOL-004",
+    "pattern": "(?:데이터베이스|db|서버|로그|백업).{0,20}(?:삭제|지워|초기화|파괴|드롭|truncate)|(?:삭제|지워|초기화|포맷|종료|재부팅).{0,20}(?:데이터베이스|db|서버|로그|백업|전부|모두|모든\\s*데이터)|(?:관리자|root|루트|sudo)\\s*권한|권한\\s*(?:상향|상승|부여|올려)",
+    "reason": "destructive action or privilege escalation (korean)",
+    "risk": "Critical",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+  },
+  {
+    "rule_id": "ABUSE-005",
+    "pattern": "(?:악성코드|랜섬웨어|키로거|스파이웨어|봇넷|트로이목마).{0,30}(?:만들|만드|작성|개발)|(?:피싱|스미싱|보이스피싱).{0,30}(?:이메일|문자|메시지|사이트|캠페인)|(?:2fa|mfa|인증|캡차).{0,30}(?:우회|뚫|해제|무력화)",
+    "reason": "harmful cyber request (korean)",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+  }
+]

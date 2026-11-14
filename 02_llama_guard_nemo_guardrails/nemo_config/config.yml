@@ -1,0 +1,16 @@
+# Minimal real NeMo Guardrails configuration for a local Ollama server.
+# Start Ollama first and pull the model named below, or edit this file.
+models:
+  - type: main
+    engine: ollama
+    model: qwen2.5:3b
+    parameters:
+      base_url: http://localhost:11434/v1
+
+rails:
+  input:
+    flows:
+      - self check input
+  output:
+    flows:
+      - self check output

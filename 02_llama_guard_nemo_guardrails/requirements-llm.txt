@@ -1,0 +1,6 @@
+# Optional dependencies for the real Day 2 integrations.
+# Install with Python 3.12: python3.12 -m pip install -r requirements-llm.txt
+transformers>=4.43,<5
+torch>=2.2
+accelerate>=0.30
+nemoguardrails>=0.24,<1

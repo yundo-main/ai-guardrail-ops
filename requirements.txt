@@ -1,0 +1,5 @@
+# Recommended runtime: Python 3.12+; source remains compatible with Python 3.9+
+fastapi>=0.100,<1
+uvicorn[standard]>=0.23,<1
+# FastAPI TestClient dependency used by tests/test_z_api.py.
+httpx2>=2,<3

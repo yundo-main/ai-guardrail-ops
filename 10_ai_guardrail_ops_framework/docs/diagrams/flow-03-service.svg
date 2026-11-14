@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 780" font-family="-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1769aa"/>
+    </marker>
+    <style>
+      .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+      .boxR{rx:12}
+      .boxS{rx:9}
+      .t{font-size:13px;font-weight:700;fill:#122033}
+      .ts{font-size:11px;font-weight:700;fill:#122033}
+      .s{font-size:10.5px;fill:#516174}
+      .lane{fill:#f8fafc;stroke:#e2e8f0;stroke-width:1.2}
+      .laneR{rx:14}
+      .laneT{font-size:12.5px;font-weight:700;fill:#1769aa}
+      .edge{stroke:#64748b;stroke-width:1.5;fill:none;marker-end:url(#arr)}
+      .edgeB{stroke:#1769aa;stroke-width:2;fill:none;marker-end:url(#arrB)}
+      .dash{stroke-dasharray:5,4}
+      .indep{stroke:#94a3b8;stroke-dasharray:6,4}
+      .chip{fill:#eef4fb;stroke:#bcd3ea;stroke-width:1}
+      .chipT{font-size:10px;font-weight:600;fill:#1e4e79}
+    </style>
+  </defs>
+
+  <!-- ===== Row 1: Browser ===== -->
+  <rect class="box boxR" x="330" y="14" width="380" height="58"/>
+  <text class="t" x="520" y="39" text-anchor="middle">브라우저 (사용자)</text>
+  <text class="s" x="520" y="57" text-anchor="middle">http://127.0.0.1:8000 — GET 페이지 + POST API</text>
+
+  <!-- ===== Row 2: pages ===== -->
+  <!-- / landing -->
+  <rect class="box boxR" x="20" y="140" width="235" height="96"/>
+  <text class="ts" x="137" y="164" text-anchor="middle">/ · 랜딩 페이지</text>
+  <text class="s" x="137" y="183" text-anchor="middle">프로젝트 소개 · 구조 트리</text>
+  <text class="s" x="137" y="199" text-anchor="middle">흐름도 SVG 2종</text>
+  <text class="s" x="137" y="215" text-anchor="middle">주요 기능 · 실행 방법</text>
+  <text class="s" x="137" y="231" text-anchor="middle" style="fill:#1769aa;font-weight:600">API 호출 없음</text>
+
+  <!-- /ops -->
+  <rect class="box boxR" x="275" y="140" width="235" height="96"/>
+  <text class="ts" x="392" y="164" text-anchor="middle">/ops · 운영 GUI</text>
+  <text class="s" x="392" y="183" text-anchor="middle">검사 · 대시보드 · 이벤트</text>
+  <text class="s" x="392" y="199" text-anchor="middle">LLM · 정책 · 리포트 · 도움말</text>
+  <text class="s" x="392" y="215" text-anchor="middle">정책/마스킹 편집기 내장</text>
+  <text class="s" x="392" y="231" text-anchor="middle" style="fill:#1769aa;font-weight:600">전체 API 사용</text>
+
+  <!-- /chat -->
+  <rect class="box boxR" x="530" y="140" width="235" height="96"/>
+  <text class="ts" x="647" y="164" text-anchor="middle">/chat · 가드레일 챗봇</text>
+  <text class="s" x="647" y="183" text-anchor="middle">채팅 UI · 판정 배지</text>
+  <text class="s" x="647" y="199" text-anchor="middle">매칭 규칙 · 단계별 지연</text>
+  <text class="s" x="647" y="215" text-anchor="middle">LLM 설정 · 예문 16종</text>
+  <text class="s" x="647" y="231" text-anchor="middle" style="fill:#1769aa;font-weight:600">check·llm·settings</text>
+
+  <!-- chatbot/ independent -->
+  <rect class="box boxR indep" x="785" y="140" width="235" height="96"/>
+  <text class="ts" x="902" y="164" text-anchor="middle" style="fill:#64748b">chatbot/ · 독립 앱</text>
+  <text class="s" x="902" y="183" text-anchor="middle">Gemini RAG/Agent 8단계</text>
+  <text class="s" x="902" y="199" text-anchor="middle">학습용 · 별도 실행</text>
+  <text class="s" x="902" y="215" text-anchor="middle">가드레일 미연결 상태</text>
+  <text class="s" x="902" y="231" text-anchor="middle" style="fill:#94a3b8;font-weight:600">연동 시 Pipeline(model=…)</text>
+
+  <!-- page edges from browser -->
+  <path class="edge" d="M400,72 C350,100 250,120 160,140"/>
+  <path class="edge" d="M460,72 L420,140"/>
+  <path class="edge" d="M580,72 L620,140"/>
+  <path class="edge dash" d="M640,72 C780,100 880,120 902,140"/>
+  <text class="s" x="760" y="105" text-anchor="middle" style="fill:#94a3b8">(별도 프로세스)</text>
+
+  <!-- ===== Row 3: http gateway ===== -->
+  <rect class="box boxR" x="190" y="290" width="660" height="120" style="stroke:#1769aa;stroke-width:2"/>
+  <text class="t" x="520" y="316" text-anchor="middle">serve/http.py — HTTP API 단일 관문</text>
+
+  <rect class="chip boxS" x="215" y="330" width="185" height="26"/>
+  <text class="chipT" x="307" y="347" text-anchor="middle">GET /health · /metrics · /events</text>
+  <rect class="chip boxS" x="415" y="330" width="185" height="26"/>
+  <text class="chipT" x="507" y="347" text-anchor="middle">GET /alerts · /audit · /llm</text>
+  <rect class="chip boxS" x="615" y="330" width="220" height="26"/>
+  <text class="chipT" x="725" y="347" text-anchor="middle">GET /policy · /report · /diagrams/*</text>
+
+  <rect class="chip boxS" x="215" y="364" width="185" height="26"/>
+  <text class="chipT" x="307" y="381" text-anchor="middle">POST /v1/check (rate limit)</text>
+  <rect class="chip boxS" x="415" y="364" width="185" height="26"/>
+  <text class="chipT" x="507" y="381" text-anchor="middle">POST /ack · /clear · /settings</text>
+  <rect class="chip boxS" x="615" y="364" width="220" height="26"/>
+  <text class="chipT" x="725" y="381" text-anchor="middle">POST /policy (검증 후 저장)</text>
+
+  <text class="s" x="520" y="404" text-anchor="middle">보안: body ≤ 1MB · /v1/check IP당 30회/60s · /clear confirm 필수 · clear는 audit 기록</text>
+
+  <!-- edges pages -> gateway -->
+  <path class="edgeB" d="M392,236 C392,260 400,270 430,290"/>
+  <path class="edgeB" d="M647,236 C647,260 640,270 610,290"/>
+  <path class="edgeB" d="M137,236 C200,260 350,275 480,290"/>
+
+  <!-- ===== Row 4: backend lanes ===== -->
+  <!-- observe lane -->
+  <rect class="lane laneR" x="20" y="460" width="490" height="240"/>
+  <text class="laneT" x="40" y="486">guardrail-ops/observe — 관측·저장·설정</text>
+
+  <rect class="box boxS" x="40" y="502" width="215" height="72"/>
+  <text class="ts" x="147" y="526" text-anchor="middle" style="font-size:12px">store.py</text>
+  <text class="s" x="147" y="544" text-anchor="middle">events.db (SQLite)</text>
+  <text class="s" x="147" y="560" text-anchor="middle">audit 테이블 · ack 기록</text>
+
+  <rect class="box boxS" x="275" y="502" width="215" height="72"/>
+  <text class="ts" x="382" y="526" text-anchor="middle" style="font-size:12px">metrics.py</text>
+  <text class="s" x="382" y="544" text-anchor="middle">집계 지표 · Critical 알림</text>
+  <text class="s" x="382" y="560" text-anchor="middle">alerts.jsonl · stage latency</text>
+
+  <rect class="box boxS" x="40" y="586" width="215" height="72"/>
+  <text class="ts" x="147" y="610" text-anchor="middle" style="font-size:12px">report.py</text>
+  <text class="s" x="147" y="628" text-anchor="middle">주간/월간 운영 리포트</text>
+  <text class="s" x="147" y="644" text-anchor="middle">GET /report?period=</text>
+
+  <rect class="box boxS" x="275" y="586" width="215" height="72"/>
+  <text class="ts" x="382" y="610" text-anchor="middle" style="font-size:12px">runtime.py</text>
+  <text class="s" x="382" y="628" text-anchor="middle">guardrail-ops/.env</text>
+  <text class="s" x="382" y="644" text-anchor="middle">LLM 설정 영속화</text>
+
+  <!-- guardrail lane -->
+  <rect class="lane laneR" x="530" y="460" width="490" height="240"/>
+  <text class="laneT" x="550" y="486">guardrail/ — 판정 엔진 (독립 실행 가능)</text>
+
+  <rect class="box boxR" x="550" y="500" width="450" height="56"/>
+  <text class="ts" x="775" y="522" text-anchor="middle" style="font-size:12px">core/pipeline.py — Pipeline.run()</text>
+  <text class="s" x="775" y="541" text-anchor="middle">입력 정책 → 대화 레일 → LLM → 분류기 → 출력 마스킹 · span 계측</text>
+
+  <rect class="box boxS" x="550" y="570" width="140" height="52"/>
+  <text class="ts" x="620" y="591" text-anchor="middle" style="font-size:11px">guard/</text>
+  <text class="s" x="620" y="608" text-anchor="middle">policy · output</text>
+  <rect class="box boxS" x="700" y="570" width="140" height="52"/>
+  <text class="ts" x="770" y="591" text-anchor="middle" style="font-size:11px">providers/</text>
+  <text class="s" x="770" y="608" text-anchor="middle">model·deepseek·clf·dlg</text>
+  <rect class="box boxS" x="850" y="570" width="150" height="52"/>
+  <text class="ts" x="925" y="591" text-anchor="middle" style="font-size:11px">risk/</text>
+  <text class="s" x="925" y="608" text-anchor="middle">score · classify</text>
+
+  <text class="s" x="775" y="650" text-anchor="middle">config/policy-rules.json 17규칙 · config/output-patterns.json 4종 — GUI/API로 편집·검증 후 반영</text>
+
+  <!-- edges gateway -> lanes -->
+  <path class="edge" d="M380,410 C300,435 200,450 160,502"/>
+  <path class="edge" d="M660,410 C740,435 840,450 900,502"/>
+
+  <!-- pipeline -> observe (RunRecord/SecurityEvent) -->
+  <path class="edge" d="M530,540 C480,540 460,540 510,560" marker-end="url(#arr)"/>
+  <path class="edge" d="M550,600 C400,620 200,610 160,586"/>
+  <text class="s" x="330" y="585" text-anchor="middle">RunRecord → SecurityEvent</text>
+
+  <!-- ===== Row 5: external LLM ===== -->
+  <rect class="box boxR" x="700" y="730" width="240" height="40" style="stroke:#7c3aed;stroke-width:2"/>
+  <text class="ts" x="820" y="755" text-anchor="middle" style="font-size:12px">외부 LLM — Ollama(localhost:11434) · DeepSeek API</text>
+  <path class="edge" d="M925,622 C925,680 880,720 840,730"/>
+  <text class="s" x="895" y="680" text-anchor="middle">model 호출 (실패 시 dummy 폴백)</text>
+
+  <!-- legend -->
+  <text class="s" x="20" y="760">실선 = HTTP/데이터 흐름 · 파란 굵은 선 = 페이지→API · 점선 = 별도 프로세스·미연결 · 회색 lane = 계층 경계</text>
+</svg>

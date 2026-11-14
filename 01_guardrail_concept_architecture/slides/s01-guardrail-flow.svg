@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="guardrail-flow-title guardrail-flow-desc">
+  <title id="guardrail-flow-title">AI 가드레일과 보안 관제 처리 흐름</title>
+  <desc id="guardrail-flow-desc">사용자 입력을 검사하고 모델 응답을 검열한 뒤 보안 이벤트와 Critical 알림으로 연결하는 흐름</desc>
+  <style>
+    :root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#1769aa;--blue-soft:#e8f2fb;--green:#16704a;--green-soft:#e7f6ee;--orange:#b45309;--orange-soft:#fff4df;--red:#c2414b;--line:#9aabba}
+    *{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}.bg{fill:var(--bg)}.chip{fill:var(--red)}.chip-text{fill:#fff;font-size:18px;font-weight:700}.title{fill:var(--ink);font-size:40px;font-weight:700}.summary{fill:var(--muted);font-size:20px}.box{fill:var(--blue-soft);stroke:var(--blue);stroke-width:2}.control{fill:var(--green-soft);stroke:var(--green);stroke-width:2}.alert{fill:var(--orange-soft);stroke:var(--orange);stroke-width:2}.h{fill:var(--ink);font-size:20px;font-weight:700}.p{fill:var(--muted);font-size:16px}.line{stroke:var(--line);stroke-width:3;fill:none}.head{fill:var(--line)}.foot{fill:var(--muted);font-size:14px}
+    @media(prefers-color-scheme:dark){:root{--bg:#0b1220;--ink:#f3f7fb;--muted:#b5c2d1;--blue:#60aef5;--blue-soft:#173b63;--green:#65dfa0;--green-soft:#183d2d;--orange:#ffc267;--orange-soft:#3b2b18;--red:#ff737d;--line:#8fa5bd}}
+  </style>
+  <rect class="bg" width="1280" height="720"/>
+  <rect class="chip" x="60" y="48" width="54" height="34" rx="17"/><text class="chip-text" x="87" y="71" text-anchor="middle">7</text>
+  <text class="title" x="60" y="136">입력·출력 가드레일과 보안 관제</text>
+  <text class="summary" x="60" y="174">모델 호출 전후의 통제를 이벤트·알림·리포트로 연결한다</text>
+  <g text-anchor="middle">
+    <rect class="box" x="60" y="280" width="180" height="120" rx="16"/><text class="h" x="150" y="328">사용자 입력</text><text class="p" x="150" y="360">prompt</text>
+    <rect class="control" x="300" y="280" width="180" height="120" rx="16"/><text class="h" x="390" y="328">입력 가드레일</text><text class="p" x="390" y="360">allow / block / review</text>
+    <rect class="box" x="540" y="280" width="180" height="120" rx="16"/><text class="h" x="630" y="328">LLM</text><text class="p" x="630" y="360">model response</text>
+    <rect class="control" x="780" y="280" width="180" height="120" rx="16"/><text class="h" x="870" y="328">출력 검열</text><text class="p" x="870" y="360">PII / secret mask</text>
+    <rect class="alert" x="1020" y="280" width="180" height="120" rx="16"/><text class="h" x="1110" y="328">관제·알림</text><text class="p" x="1110" y="360">event / Critical alert</text>
+  </g>
+  <g class="line" aria-hidden="true"><path d="M240 340h60"/><path d="M480 340h60"/><path d="M720 340h60"/><path d="M960 340h60"/></g>
+  <g class="head" aria-hidden="true"><path d="m290 333 10 7-10 7z"/><path d="m530 333 10 7-10 7z"/><path d="m770 333 10 7-10 7z"/><path d="m1010 333 10 7-10 7z"/></g>
+  <rect class="alert" x="260" y="490" width="760" height="76" rx="14"/><text class="h" x="640" y="522" text-anchor="middle">Critical 이벤트 → 즉시 알림 → 운영 리포트</text><text class="p" x="640" y="550" text-anchor="middle">위험 등급 · 공격 유형 · 차단 건수 · 미대응 이슈</text>
+  <text class="foot" x="60" y="666">7장 · 공통 처리 흐름 · 1 / 6</text>
+</svg>

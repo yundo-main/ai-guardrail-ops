@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Llama Guard·NeMo Guardrails</title>
+<style>
+:root{--bg:#f1f5f9;--card:#fff;--ink:#111827;--muted:#6b7280;--line:#e2e8f0;--accent:#2563eb;--accent2:#7c3aed}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,'Pretendard','Apple SD Gothic Neo',sans-serif;line-height:1.7}
+.wrap{max-width:1080px;margin:0 auto;padding:1.4rem 1.2rem 3rem}
+.topnav{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin-bottom:.9rem;padding:.55rem .8rem;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+.topnav .brand{font-weight:800;margin-right:.8rem;background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.topnav a{color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600;padding:.35rem .75rem;border-radius:8px;transition:all .15s}
+.topnav a:hover{background:#eff6ff;color:var(--accent)}
+.topnav a.on{background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 2px 6px rgba(37,99,235,.3)}
+.hero{position:relative;overflow:hidden;border-radius:20px;padding:2.6rem 2.2rem;margin-bottom:1.5rem;color:#fff;background:linear-gradient(120deg,#0b1e3a 0%,#144a8a 50%,#6d28d9 100%);box-shadow:0 8px 24px rgba(15,23,42,.18)}
+.hero::before,.hero::after{content:'';position:absolute;border-radius:50%;background:rgba(255,255,255,.09)}
+.hero::before{width:380px;height:380px;right:-100px;top:-140px}
+.hero::after{width:240px;height:240px;left:-70px;bottom:-110px}
+.hero::before,.hero::after{animation:float 9s ease-in-out infinite}
+.hero::after{animation-delay:-4s}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(18px,-14px)}}
+.hero>*{position:relative}
+.eyebrow{font-size:.72rem;letter-spacing:.18em;font-weight:800;opacity:.85;margin-bottom:.55rem;text-transform:uppercase}
+.hero h1{margin:0 0 .65rem;font-size:2.05rem;letter-spacing:-.01em}
+.hero .sub{margin:0 0 1.2rem;max-width:680px;font-size:.88rem;font-weight:500;line-height:1.6;color:rgba(255,255,255,.92);text-shadow:0 1px 4px rgba(0,0,0,.35)}
+.steps{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.4rem}
+.steps span{font-size:.74rem;font-weight:600;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:.32rem .8rem;border-radius:999px;backdrop-filter:blur(4px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-bottom:1.7rem}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.35rem 1.2rem;box-shadow:0 1px 3px rgba(15,23,42,.04);transition:transform .18s,box-shadow .18s,border-color .18s;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:opacity .18s}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,23,42,.1);border-color:#c7d2fe}
+.card:hover::before{opacity:1}
+.card .ico{display:inline-flex;align-items:center;justify-content:center;width:2.4rem;height:2.4rem;border-radius:12px;font-size:1.25rem;background:linear-gradient(135deg,#eff6ff,#ede9fe);border:1px solid #dbeafe}
+.card h3{margin:.6rem 0 .3rem;font-size:1.02rem;letter-spacing:-.01em}
+.card p{margin:0;color:var(--muted);font-size:.85rem;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-link{cursor:pointer}
+.card-link h3 .go{float:right;font-size:.85rem;color:var(--accent);opacity:0;transform:translateX(-4px);transition:all .18s}
+.card-link:hover h3 .go{opacity:1;transform:none}
+.ltab{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.5rem 1.6rem;margin-bottom:1.2rem;display:none;box-shadow:0 1px 3px rgba(15,23,42,.04)}
+.ltab.on{display:block;animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.ltitle{font-size:1.15rem;font-weight:800;margin-bottom:1rem;padding-bottom:.55rem;border-bottom:2px solid var(--accent);display:inline-block;letter-spacing:-.01em}
+h3{font-size:1rem;margin:1.25rem 0 .5rem}
+p{margin:.45rem 0}
+ul,ol{margin:.45rem 0 .65rem;padding-left:1.3rem}
+li{margin:.28rem 0}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:.85rem;margin:.7rem 0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{border-bottom:1px solid var(--line);padding:.5rem .75rem;text-align:left;vertical-align:top}
+th{background:linear-gradient(180deg,#f1f5f9,#e8eef5);font-weight:700;font-size:.8rem;letter-spacing:.02em}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#f8fafc}
+code{background:#eef2f7;padding:.12em .38em;border-radius:5px;font-size:.85em;font-family:ui-monospace,Menlo,monospace;color:#be185d}
+pre{background:linear-gradient(180deg,#f8fafc,#f1f5f9);border:1px solid var(--line);border-radius:10px;padding:.95rem 1.05rem;overflow:auto;font-size:.82rem;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+.sub{color:var(--muted);font-size:.85rem}
+.dtree{font-family:ui-monospace,Menlo,monospace;font-size:.8rem;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:.95rem 1.15rem;overflow:auto}
+.dtn{font-weight:700;margin-bottom:.3rem;color:var(--ink)}
+.dt{margin:.15rem 0}
+.dt summary{cursor:pointer;color:var(--accent);font-weight:600}
+.dt-kids{margin-left:1.1rem;border-left:2px solid var(--line);padding-left:.9rem}
+.dtl{color:var(--muted);padding:.1rem 0}
+.dt-note{color:var(--muted);font-weight:400;font-size:.75rem}
+.dgi{border:1px solid var(--line);border-radius:14px;padding:.9rem;margin-bottom:1.1rem;background:#fff;box-shadow:0 1px 3px rgba(15,23,42,.04);transition:box-shadow .2s}
+.dgi:hover{box-shadow:0 4px 14px rgba(15,23,42,.08)}
+.dgi-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;font-size:.85rem;font-weight:700}
+.dgi-head .badge{font-size:.68rem;font-weight:800;color:#fff;background:linear-gradient(120deg,var(--accent),var(--accent2));padding:.18rem .6rem;border-radius:999px;letter-spacing:.03em}
+.dgi img{width:100%;border:1px solid var(--line);border-radius:10px;cursor:zoom-in;background:#fff;transition:transform .2s}
+.dgi img:hover{transform:scale(1.005)}
+.codebox{position:relative;margin:.6rem 0}
+.codebox pre{margin:0;padding-right:4.5rem}
+.copybtn{position:absolute;top:.5rem;right:.5rem;font-size:.72rem;font-weight:700;color:var(--accent);background:#fff;border:1px solid var(--line);border-radius:6px;padding:.28rem .65rem;cursor:pointer;transition:all .15s}
+.copybtn:hover{border-color:var(--accent);background:#eff6ff;box-shadow:0 1px 4px rgba(37,99,235,.15)}
+.dgbtn{display:inline-block;font-size:.85rem;font-weight:700;color:#fff;background:linear-gradient(120deg,var(--accent),var(--accent2));border:none;border-radius:9px;padding:.55rem 1.1rem;cursor:pointer;text-decoration:none;box-shadow:0 2px 8px rgba(37,99,235,.3);transition:transform .15s,box-shadow .15s}
+.dgbtn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.4)}
+footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
+#viewer{position:fixed;inset:0;background:rgba(15,23,42,.72);display:flex;align-items:center;justify-content:center;z-index:50}
+#viewer[hidden]{display:none}
+.vbox{background:#fff;border-radius:14px;width:94vw;height:92vh;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.vhead{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1.1rem;border-bottom:1px solid var(--line);font-weight:600;font-size:.9rem}
+.vhead a{color:var(--accent);font-size:.78rem;text-decoration:none}
+.vhead button{font-size:.8rem}
+.vbody{flex:1;overflow:auto;padding:1.2rem;display:flex;align-items:flex-start;justify-content:center}
+.vbody img{max-width:100%;max-height:100%;object-fit:contain}
+.vbody .mdview{width:100%;max-width:860px;margin:0 auto;font-size:.9rem}
+.vbody .mdview h1{font-size:1.4rem}.vbody .mdview h2{font-size:1.15rem}.vbody .mdview h3{font-size:1rem}
+.vbody .mdview table{font-size:.82rem}
+.vside{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:72px;border:none;border-radius:10px;background:rgba(15,23,42,.55);color:#fff;font-size:1.8rem;cursor:pointer;z-index:5}
+.vside:hover{background:var(--accent)}
+#vsprev{left:12px}#vsnext{right:12px}
+.vside[hidden]{display:none}
+.gidx{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:1rem;position:sticky;top:0;background:var(--card);padding:.5rem 0;z-index:10;border-bottom:1px solid var(--line)}
+.gidx a{display:inline-block;min-width:1.7rem;text-align:center;font-size:.78rem;font-weight:700;color:var(--muted);text-decoration:none;padding:.25rem .4rem;border-radius:6px}
+.gidx a:hover{background:#eff6ff;color:var(--accent)}
+.gidx a.on{background:var(--accent);color:#fff}
+.gidx-off{display:inline-block;min-width:1.7rem;text-align:center;font-size:.78rem;font-weight:700;color:#d1d5db;padding:.25rem .4rem;border-radius:6px}
+.stepidx{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem}
+.stepidx .lbl{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-right:.2rem}
+.stepidx a{display:inline-block;min-width:2rem;text-align:center;font-size:.8rem;font-weight:700;color:var(--muted);text-decoration:none;padding:.35rem .55rem;border-radius:8px;border:1px solid var(--line);background:#fff}
+.stepidx a:hover{border-color:var(--accent);color:var(--accent)}
+.stepidx a.cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.ggroup{margin:1rem 0 .4rem;font-size:.95rem;font-weight:700;color:var(--accent)}
+[hidden]{display:none!important}
+</style></head><body>
+<div class="wrap">
+<nav class="topnav">
+<a class="brand" href="#top">📘 02_llama_guard_nemo_guardrails</a>
+<a href="#tab-overview">개요</a><a href="#tab-gloss">용어</a><a href="#tab-slides">슬라이드</a><a href="#tab-practice">실습</a><a href="#tab-help">도움말</a>
+</nav>
+<div class="stepidx"><span class="lbl">단계</span><a href="../index.html">⌂</a><a href="../01_guardrail_concept_architecture/index.html">1</a><a href="../02_llama_guard_nemo_guardrails/index.html" class="cur">2</a><a href="../03_policy_blocking_output_filtering/index.html">3</a><a href="../04_risk_rating_system/index.html">4</a><a href="../05_security_dashboard_alerts/index.html">5</a><a href="../06_operations_report_integrated_lab/index.html">6</a></div>
+<div class="hero" id="top">
+<div class="eyebrow">STEP 02 · LLAMA GUARD · NEMO GUARDRAILS</div>
+<h1>Llama Guard·NeMo Guardrails</h1>
+<p class="sub">위험 요청 분류와 대화 흐름 제어 기술의 역할을 비교하고 적용 위치를 정한다.</p>
+<div class="steps">
+<span>Llama Guard의 안전성 분류 미들웨어 개념</span><span>위험 카테고리와 입력 프롬프트 판정</span><span>NeMo Guardrails의 대화 정책과 주제 이탈 통제</span><span>모델 호출 전 분류기와 대화 정책의 조합</span>
+</div>
+</div>
+<div class="grid">
+<div class="card card-link" onclick="show('tab-overview')"><span class="ico">🧠</span><h3>이론 <span class="go">→</span></h3><p>위험 요청 분류와 대화 흐름 제어 기술의 역할을 비교하고 적용 위치를 정한다.</p></div>
+<div class="card card-link" onclick="show('tab-practice')"><span class="ico">🛡️</span><h3>실습 <span class="go">→</span></h3><p>1. 입력 분류, 대화 정책, 모델 호출의 관계를 비교표로 작성한다. 2. 허용·차단·사람 검토가 필요한 예시를 정의한다. 3. 운영 환경에서 모델·정책·로그를 검증할 항목을 정리한다.</p></div>
+<div class="card card-link" onclick="show('tab-overview')"><span class="ico">📊</span><h3>단계 연결 <span class="go">→</span></h3><p>[← 1단계](../01_guardrail_concept_architecture/readme.md) · [3단계 →](../03_policy_blocking_output_filtering/readme.md) · [전체 과정](../readme.md)</p></div>
+</div>
+<section class="ltab on" id="tab-overview">
+<div class="ltitle">개요 — STEP 02 학습 내용</div>
+<h3>이론적 배경</h3><p>가드레일을 직접 구현할 때 모든 위험 판단과 대화 흐름을 하나의 규칙 집합으로 관리하면 정책이 복잡해지고 변경 영향도 커진다. 위험성 분류와 대화 흐름 제어를 서로 다른 책임으로 나누면 시스템을 더 쉽게 설명하고 교체할 수 있다.</p>
+<p>2단계에서는 분류 모델과 대화 정책 프레임워크가 각각 어떤 문제를 해결하는지 살펴본다. 이 구분은 3단계의 정책 엔진을 설계할 때 “탐지 결과”와 “최종 결정”을 분리하는 근거가 된다.</p>
+<h3>학습 목표</h3><p>위험 요청 분류와 대화 흐름 제어 기술의 역할을 비교하고 적용 위치를 정한다.</p>
+<h3>핵심 내용</h3><ul><li>Llama Guard의 안전성 분류 미들웨어 개념</li><li>위험 카테고리와 입력 프롬프트 판정</li><li>NeMo Guardrails의 대화 정책과 주제 이탈 통제</li><li>모델 호출 전 분류기와 대화 정책의 조합</li></ul>
+<h3>이론 보강</h3><p>Llama Guard 계열은 요청 또는 응답을 안전성 범주로 분류하는 분류기 역할에 가깝다. 분류 결과는 서비스 정책의 입력값이며, 실제 차단·검토·허용 결정은 애플리케이션 정책 계층에서 명시적으로 내려야 한다.</p>
+<p>NeMo Guardrails는 대화가 특정 주제와 절차를 벗어나지 않도록 대화 흐름을 제어한다. 분류기가 위험성을 판정하는 축이라면, 대화 정책은 허용된 주제 안에서 어떤 응답 경로를 탈지 결정하는 축이다.</p>
+<p>두 기술을 함께 사용할 때는 중복 차단으로 정상 사용을 막지 않도록 적용 순서, 정책 우선순위, 오탐 처리, 사람 검토 경로를 문서화해야 한다.</p>
+<h3>실행 백엔드 선택: Ollama와 Transformers</h3><p>학습용 기본 경로는 Ollama로 통일한다. NeMo Guardrails가 Ollama의 일반 LLM을 호출하고, 3단계 Python 정책 엔진이 허용·차단·검토를 결정하도록 하면 학습자는 호출·정책·관제의 관계에 집중할 수 있다.</p>
+<p>Transformers는 필수 실행 경로가 아니다. Llama Guard 전용 모델을 직접 로드해 일반 LLM과 안전성 분류 모델을 분리하고 싶을 때 사용하는 심화 경로다. 이 경우 PyTorch·모델 가중치·GPU 메모리·NeMo custom adapter를 추가로 관리해야 한다.</p>
+<pre><code>기본: NeMo Guardrails → Ollama → Python 정책 엔진
+심화: 일반 LLM → Transformers Llama Guard → Python 정책 엔진</code></pre>
+<p>따라서 “Transformers가 더 단순해서 사용한다”가 아니라, “전용 안전성 분류 모델을 직접 실행하기 위해 선택한다”로 이해한다. 시각 설명은 <a href="slides/s06-runtime-choice.svg"><code>slides/s06-runtime-choice.svg</code></a>에서 확인한다.</p>
+<p><code>src/contracts/adapters.py</code>에서는 이 관계를 <code>receives → produces → handoff_to</code>로 표현한다. Llama Guard의 분류 결과는 애플리케이션 정책 엔진으로 전달되고, NeMo Guardrails의 대화 전환 결과는 LLM 호출 또는 출력 Guardrail로 전달된다. 두 어댑터의 <code>not_responsible_for</code> 필드는 각 기술이 대신하지 않는 책임을 명시해 역할 중복을 방지한다.</p>
+<h3>산출물 · 완료 기준</h3><ul><li>Llama Guard·NeMo Guardrails 비교표</li><li>위험 카테고리 적용표</li><li>정책 적용 위치 결정안</li></ul><p>두 기술의 목적과 적용 시점을 설명하고, 서비스 요구사항에 맞는 선택 기준을 제시할 수 있다.</p>
+<h3>프로젝트 구조</h3>
+<div class="dtree"><div class="dtn">02_llama_guard_nemo_guardrails/</div><div class="dtl">index.html</div><div class="dtl">readme.md</div><div class="dtl">requirements-llm.txt</div><details class="dt" open><summary>nemo_config/</summary><div class="dt-kids"><div class="dtl">config.yml</div></div></details><details class="dt" open><summary>slides/</summary><div class="dt-kids"><div class="dtl">readme.md</div><div class="dtl">s00-tech-spec.svg</div><div class="dtl">s01-guard-models.svg</div><div class="dtl">s02-guardrail-theory.svg</div><div class="dtl">s03-adapters-source.svg</div><div class="dtl">s04-llama-guard-detail.svg</div><div class="dtl">s05-nemo-guardrails-detail.svg</div><div class="dtl">s06-runtime-choice.svg</div><div class="dtl">s07-guardrail-checklist.svg</div><div class="dtl">s08-summary.svg</div></div></details><details class="dt" open><summary>src/</summary><div class="dt-kids"><div class="dtl">main.py</div><details class="dt"><summary>classifier/</summary><div class="dt-kids"><div class="dtl">__init__.py</div><div class="dtl">llama_guard.py</div></div></details><details class="dt"><summary>contracts/</summary><div class="dt-kids"><div class="dtl">__init__.py</div><div class="dtl">adapters.py</div></div></details><details class="dt"><summary>dialogue/</summary><div class="dt-kids"><div class="dtl">__init__.py</div><div class="dtl">nemo_guardrails_client.py</div></div></details><details class="dt"><summary>pipeline/</summary><div class="dt-kids"><div class="dtl">__init__.py</div><div class="dtl">real_integration.py</div></div></details></div></details></div>
+<p class="sub" style="margin-top:.8rem">단계 간 연결: [← 1단계](../01_guardrail_concept_architecture/readme.md) · [3단계 →](../03_policy_blocking_output_filtering/readme.md) · [전체 과정](../readme.md)</p>
+<p class="sub" style="margin-top:.4rem">상위 프로젝트: <a href="../10_ai_guardrail_ops_framework/readme.md">10 통합 프레임워크 readme →</a> (도움말 탭에서 뷰어로도 열람 가능)</p>
+</section>
+<section class="ltab" id="tab-gloss" hidden>
+<div class="ltitle">용어 정리 — STEP 02 핵심 개념</div>
+<div class="gidx"><a href="#gloss-top" style="min-width:2.2rem">전체</a><span class="gidx-off">ㄱ</span><span class="gidx-off">ㄲ</span><span class="gidx-off">ㄴ</span><a href="#g-ㄷ">ㄷ</a><span class="gidx-off">ㄸ</span><span class="gidx-off">ㄹ</span><a href="#g-ㅁ">ㅁ</a><a href="#g-ㅂ">ㅂ</a><span class="gidx-off">ㅃ</span><a href="#g-ㅅ">ㅅ</a><span class="gidx-off">ㅆ</span><a href="#g-ㅇ">ㅇ</a><a href="#g-ㅈ">ㅈ</a><span class="gidx-off">ㅉ</span><a href="#g-ㅊ">ㅊ</a><span class="gidx-off">ㅋ</span><a href="#g-ㅌ">ㅌ</a><span class="gidx-off">ㅍ</span><span class="gidx-off">ㅎ</span><a href="#g-#">#</a></div><div id="gloss-top"></div><h3 class="ggroup" id="g-ㄷ">ㄷ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>대화 정책</b></td><td>허용된 주제와 응답 경로를 정의하는 규칙 집합</td></tr><tr><td style="width:180px"><b>대화 흐름 제어</b></td><td>대화가 특정 주제·절차를 벗어나지 않도록 하는 제어</td></tr></table><h3 class="ggroup" id="g-ㅁ">ㅁ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>모델 가중치</b></td><td>학습된 파라미터 — Llama Guard 직접 실행 시 추가 관리 대상</td></tr></table><h3 class="ggroup" id="g-ㅂ">ㅂ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>분류기(classifier)</b></td><td>위험성을 범주로 판정하는 역할 — 최종 결정은 내리지 않음</td></tr></table><h3 class="ggroup" id="g-ㅅ">ㅅ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>사람 검토</b></td><td>자동 판정이 어려운 사건을 담당자가 확인하는 경로</td></tr></table><h3 class="ggroup" id="g-ㅇ">ㅇ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>안전성 분류</b></td><td>입력/출력이 허용 범주인지 판정하는 분류 작업</td></tr><tr><td style="width:180px"><b>어댑터</b></td><td>외부 기술을 내부 계약으로 연결하는 계층 — src/contracts/adapters.py</td></tr><tr><td style="width:180px"><b>오탐</b></td><td>정상 입력을 위험으로 잘못 판정하는 오류</td></tr><tr><td style="width:180px"><b>위험 카테고리</b></td><td>폭력·혐오·개인정보 등 Llama Guard의 분류 범주</td></tr><tr><td style="width:180px"><b>응답 경로</b></td><td>모델이 답변을 생성하는 경로 — 정책이 허용 범위를 결정</td></tr></table><h3 class="ggroup" id="g-ㅈ">ㅈ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>정책 우선순위</b></td><td>중복 차단 방지를 위한 적용 순서 규칙</td></tr><tr><td style="width:180px"><b>주제 이탈</b></td><td>허용된 주제를 벗어난 발화 — NeMo가 복귀·검토로 전환</td></tr></table><h3 class="ggroup" id="g-ㅊ">ㅊ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>최종 결정</b></td><td>차단·검토·허용의 실제 판정 — 애플리케이션 정책 계층의 역할</td></tr></table><h3 class="ggroup" id="g-ㅌ">ㅌ</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>탐지 결과</b></td><td>분류기가 산출하는 위험 판정값 — 정책 엔진의 입력값</td></tr></table><h3 class="ggroup" id="g-#">#</h3><table><tr><th style="width:180px">용어</th><th>설명</th></tr><tr><td style="width:180px"><b>GPU 메모리</b></td><td>Transformers 경로에서 모델 로드에 필요한 자원</td></tr><tr><td style="width:180px"><b>Llama Guard</b></td><td>요청·응답의 안전성 범주를 분류하는 안전성 판정 모델</td></tr><tr><td style="width:180px"><b>NeMo Guardrails</b></td><td>대화 주제·절차·응답 경로를 정책으로 제어하는 대화 흐름 프레임워크</td></tr><tr><td style="width:180px"><b>Ollama</b></td><td>로컬 LLM 실행 백엔드 — 학습용 기본 경로</td></tr><tr><td style="width:180px"><b>PyTorch</b></td><td>Transformers 경로의 딥러닝 런타임</td></tr><tr><td style="width:180px"><b>Transformers</b></td><td>HuggingFace 모델 직접 로드 경로 — 심화 옵션</td></tr><tr><td style="width:180px"><b>custom adapter</b></td><td>NeMo에서 전용 분류 모델을 연결하는 어댑터</td></tr><tr><td style="width:180px"><b>llama_guard.py</b></td><td>Llama Guard 실제 호출 모듈 (classifier/)</td></tr><tr><td style="width:180px"><b>nemo_guardrails_client.py</b></td><td>NeMo Guardrails 호출 모듈 (dialogue/)</td></tr><tr><td style="width:180px"><b>not_responsible_for</b></td><td>각 기술이 대신하지 않는 책임을 명시하는 필드</td></tr><tr><td style="width:180px"><b>real_integration.py</b></td><td>실제 모델 호출 파이프라인 (pipeline/)</td></tr><tr><td style="width:180px"><b>receives→produces→handoff_to</b></td><td>어댑터 계약 3요소 — 입력·출력·다음 단계</td></tr></table>
+</section>
+<section class="ltab" id="tab-slides" hidden>
+<div class="ltitle">슬라이드 — 발표 자료 (SVG)</div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s00-tech-spec · 기술 사양 (참고용)</span><span class="badge">SVG</span></div><img src="slides/s00-tech-spec.svg" alt="기술 사양 (참고용)" loading="lazy"></div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s01-guard-models · Llama Guard·NeMo Guardrails 적용</span><span class="badge">SVG</span></div><img src="slides/s01-guard-models.svg" alt="Llama Guard·NeMo Guardrails 적용" loading="lazy"></div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s02-guardrail-theory · 두 Guardrails의 역할 이론</span><span class="badge">SVG</span></div><img src="slides/s02-guardrail-theory.svg" alt="두 Guardrails의 역할 이론" loading="lazy"></div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s03-adapters-source · 2단계 소스코드 관계도</span><span class="badge">SVG</span></div><img src="slides/s03-adapters-source.svg" alt="2단계 소스코드 관계도" loading="lazy"></div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s04-llama-guard-detail · Llama Guard 역할 상세</span><span class="badge">SVG</span></div><img src="slides/s04-llama-guard-detail.svg" alt="Llama Guard 역할 상세" loading="lazy"></div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s05-nemo-guardrails-detail · NeMo Guardrails 역할 상세</span><span class="badge">SVG</span></div><img src="slides/s05-nemo-guardrails-detail.svg" alt="NeMo Guardrails 역할 상세" loading="lazy"></div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s06-runtime-choice · 실행 백엔드 선택</span><span class="badge">SVG</span></div><img src="slides/s06-runtime-choice.svg" alt="실행 백엔드 선택" loading="lazy"></div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s07-guardrail-checklist · 복습 체크리스트</span><span class="badge">SVG</span></div><img src="slides/s07-guardrail-checklist.svg" alt="복습 체크리스트" loading="lazy"></div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s08-summary · 핵심 요약과 실습 질문</span><span class="badge">SVG</span></div><img src="slides/s08-summary.svg" alt="핵심 요약과 실습 질문" loading="lazy"></div>
+</section>
+<section class="ltab" id="tab-practice" hidden>
+<div class="ltitle">실습 — STEP 02 실행</div>
+<p>아래 명령은 <b>터미널</b>에서 프로젝트 루트(<code>ai-guardrails-ops/</code>) 기준으로 실행합니다.</p>
+<h3>실행 방법</h3>
+<p class="sub">복사 버튼으로 명령을 가져간 뒤 터미널에 붙여넣기 (⌘V) 하세요.</p>
+<div class="codebox"><pre><code>python3 02_llama_guard_nemo_guardrails/src/main.py</code></pre><button class="copybtn" id="copyCmd">복사</button></div>
+<p class="sub" id="copyMsg" style="margin-top:.4rem"></p>
+<h3>실행 결과 예시</h3><pre><code>Llama Guard: 위험 요청·응답의 안전성 범주 분류 / 입력=프롬프트 또는 모델 응답 / 출력=분류 결과·위험 카테고리 / 다음=애플리케이션 정책 엔진
+NeMo Guardrails: 대화 주제·절차·응답 경로 제어 / 입력=사용자 발화·대화 상태·허용 흐름 / 출력=허용 응답·주제 복귀·사람 검토 전환 / 다음=LLM 호출 또는 출력 Guardrail</code></pre>
+<h3>실습 단계</h3><ol><li>입력 분류, 대화 정책, 모델 호출의 관계를 비교표로 작성한다.</li><li>허용·차단·사람 검토가 필요한 예시를 정의한다.</li><li>운영 환경에서 모델·정책·로그를 검증할 항목을 정리한다.</li></ol>
+<h3>추가 명령</h3><div class="codebox"><pre><code>기본: NeMo Guardrails → Ollama → Python 정책 엔진
+심화: 일반 LLM → Transformers Llama Guard → Python 정책 엔진</code></pre></div>
+<div class="codebox"><pre><code>python3 02_llama_guard_nemo_guardrails/src/main.py            # compare (기본)</code></pre></div>
+<div class="codebox"><pre><code>python3.12 -m venv .venv-guardrails
+source .venv-guardrails/bin/activate
+python -m pip install -r 02_llama_guard_nemo_guardrails/requirements-llm.txt</code></pre></div>
+<div class="codebox"><pre><code>ollama pull qwen2.5:3b
+python 02_llama_guard_nemo_guardrails/src/main.py real \
+  --prompt &quot;회사 비밀번호 재설정 절차를 요약해줘&quot; \
+  --output results/step02-real-guardrails.json</code></pre></div>
+<div class="codebox"><pre><code>src/
+├── main.py                  # 진입점 (compare | real)
+├── contracts/adapters.py    # 책임·handoff 계약 (의존성 없음)
+├── classifier/llama_guard.py        # 분류: Llama Guard 3
+├── dialogue/nemo_guardrails_client.py  # 대화 정책: NeMo Guardrails
+└── pipeline/real_integration.py     # 두 어댑터 호출 + 결과 JSON 저장</code></pre></div>
+<h3>소스 구조</h3>
+<div class="codebox"><pre><code>src/
+├── main.py                  # 진입점 (compare | real)
+├── contracts/adapters.py    # 책임·handoff 계약 (의존성 없음)
+├── classifier/llama_guard.py        # 분류: Llama Guard 3
+├── dialogue/nemo_guardrails_client.py  # 대화 정책: NeMo Guardrails
+└── pipeline/real_integration.py     # 두 어댑터 호출 + 결과 JSON 저장</code></pre></div><h3>파일·디렉터리 역할</h3><table><tr><th>경로</th><th>역할</th></tr><tr><td><code>src/main.py</code></td><td>진입점. <code>compare</code>(기본)·<code>real --prompt</code> 서브커맨드로 하위 패키지를 호출</td></tr><tr><td><code>src/contracts/adapters.py</code></td><td>실제 SDK와 독립적인 입력·출력·handoff·비책임 계약</td></tr><tr><td><code>src/classifier/llama_guard.py</code></td><td>Transformers로 Llama Guard 3를 실제 로드·생성·분류하는 어댑터</td></tr><tr><td><code>src/dialogue/nemo_guardrails_client.py</code></td><td><code>RailsConfig</code>·<code>LLMRails.generate()</code>를 호출하는 실제 NeMo 어댑터</td></tr><tr><td><code>src/pipeline/real_integration.py</code></td><td>두 실제 어댑터를 순서대로 호출하고 JSON 결과를 저장</td></tr><tr><td><code>nemo_config/config.yml</code></td><td>Ollama 기반 NeMo Guardrails 모델·입출력 레일 설정</td></tr><tr><td><code>requirements-llm.txt</code></td><td>Python 3.12용 선택적 Transformers·Torch·NeMo 의존성</td></tr><tr><td><code>slides/s00-tech-spec.svg</code></td><td>2단계 필수 기술과 선택적 실제 모델 연동 범위</td></tr><tr><td><code>slides/s01-guard-models.svg</code></td><td>두 Guardrails 적용 흐름 개요</td></tr><tr><td><code>slides/s02-guardrail-theory.svg</code></td><td>안전성 분류와 대화 정책의 이론 비교</td></tr><tr><td><code>slides/s03-adapters-source.svg</code></td><td><code>adapters.py</code> 소스와 선택 기준</td></tr><tr><td><code>slides/s06-runtime-choice.svg</code></td><td>기본 Ollama·심화 Transformers 실행 경로 선택</td></tr><tr><td><code>slides/s07-guardrail-checklist.svg</code></td><td>기술 적용 복습 체크리스트</td></tr><tr><td><code>slides/s08-summary.svg</code></td><td>2단계 핵심 요약과 질문</td></tr><tr><td><code>slides/s04-llama-guard-detail.svg</code></td><td>Llama Guard의 분류 책임·입력·출력·정책 변환 상세</td></tr><tr><td><code>slides/s05-nemo-guardrails-detail.svg</code></td><td>NeMo Guardrails의 대화 흐름·주제·응답 경로 상세</td></tr><tr><td><code>slides/readme.md</code></td><td>슬라이드 순서·제목·산출물 목록</td></tr></table>
+<p><code>adapters.py</code> 자체는 역할 비교용 계약으로 유지하지만, 실제 호출은 같은 2단계 폴더의</p>
+<p>세 어댑터 파일에서 수행한다. 따라서 “2단계에서는 방법론만 설명하고 호출은 뒤로</p>
+<p>미룬다”는 구조가 아니라, 2단계에서 실제 호출 경로와 책임 경계를 함께 확인할 수 있다.</p>
+<p class="sub" style="margin-top:.8rem">※ 브라우저에서는 실행할 수 없습니다 — 명령을 복사해 터미널에 붙여넣으세요.</p>
+</section>
+<section class="ltab" id="tab-help" hidden>
+<div class="ltitle">도움말 — 페이지 사용법</div>
+<h3>탭 전환</h3>
+<p>상단 내비게이션을 클릭하면 해당 패널이 표시됩니다. 주소창 해시(<code>#tab-slides</code> 등)로 특정 탭에 바로 이동할 수 있습니다.</p>
+<h3>SVG 뷰어</h3>
+<ul>
+<li>슬라이드 탭의 <b>SVG 이미지를 클릭</b>하면 팝업 뷰어로 확대 표시됩니다</li>
+<li>뷰어에서 <code>‹</code> <code>›</code> 버튼 또는 <code>←</code> <code>→</code> 키로 이동합니다</li>
+<li><code>ESC</code> · <code>✕ 닫기</code> · 어두운 배경 클릭으로 닫습니다</li>
+</ul>
+<h3>readme 문서</h3>
+<p>아래 버튼으로 마크다운 문서를 뷰어 팝업으로 확인할 수 있습니다.</p>
+<p><button class="dgbtn" id="openReadme" style="font-size:.85rem;padding:.45rem 1rem">readme.md 열기</button>
+<button class="dgbtn" id="openSlidesReadme" style="font-size:.85rem;padding:.45rem 1rem;margin-left:.5rem">slides/readme.md 열기</button></p>
+<h3>단축키</h3>
+<table>
+<tr><th>키</th><th>동작</th></tr>
+<tr><td><code>←</code> <code>→</code></td><td>뷰어에서 이전/다음 슬라이드</td></tr>
+<tr><td><code>ESC</code></td><td>뷰어 닫기</td></tr>
+</table>
+<h3>참고</h3>
+<ul>
+<li>이 페이지는 <b>서버 없이</b> 동작합니다 — <code>index.html</code>을 브라우저로 바로 열면 됩니다</li>
+<li>뷰어의 readme 내용은 페이지 생성 시점의 스냅샷입니다 — 원본이 수정되면 페이지 재생성이 필요합니다</li>
+</ul>
+</section>
+<footer>
+<span>02_llama_guard_nemo_guardrails · STEP 02 학습 자료</span>
+</footer>
+</div>
+<div id="md-readme" hidden><h2>2단계 · Llama Guard·NeMo Guardrails 적용</h2>
+<h3>이론적 배경</h3>
+<p>가드레일을 직접 구현할 때 모든 위험 판단과 대화 흐름을 하나의 규칙 집합으로 관리하면 정책이 복잡해지고 변경 영향도 커진다. 위험성 분류와 대화 흐름 제어를 서로 다른 책임으로 나누면 시스템을 더 쉽게 설명하고 교체할 수 있다.</p>
+<p>2단계에서는 분류 모델과 대화 정책 프레임워크가 각각 어떤 문제를 해결하는지 살펴본다. 이 구분은 3단계의 정책 엔진을 설계할 때 “탐지 결과”와 “최종 결정”을 분리하는 근거가 된다.</p>
+<h3>학습 목표</h3>
+<p>위험 요청 분류와 대화 흐름 제어 기술의 역할을 비교하고 적용 위치를 정한다.</p>
+<h3>핵심 내용</h3>
+<ul><li>Llama Guard의 안전성 분류 미들웨어 개념</li><li>위험 카테고리와 입력 프롬프트 판정</li><li>NeMo Guardrails의 대화 정책과 주제 이탈 통제</li><li>모델 호출 전 분류기와 대화 정책의 조합</li></ul>
+<h3>이론 보강</h3>
+<p>Llama Guard 계열은 요청 또는 응답을 안전성 범주로 분류하는 분류기 역할에 가깝다. 분류 결과는 서비스 정책의 입력값이며, 실제 차단·검토·허용 결정은 애플리케이션 정책 계층에서 명시적으로 내려야 한다.</p>
+<p>NeMo Guardrails는 대화가 특정 주제와 절차를 벗어나지 않도록 대화 흐름을 제어한다. 분류기가 위험성을 판정하는 축이라면, 대화 정책은 허용된 주제 안에서 어떤 응답 경로를 탈지 결정하는 축이다.</p>
+<p>두 기술을 함께 사용할 때는 중복 차단으로 정상 사용을 막지 않도록 적용 순서, 정책 우선순위, 오탐 처리, 사람 검토 경로를 문서화해야 한다.</p>
+<h3>실행 백엔드 선택: Ollama와 Transformers</h3>
+<p>학습용 기본 경로는 Ollama로 통일한다. NeMo Guardrails가 Ollama의 일반 LLM을 호출하고, 3단계 Python 정책 엔진이 허용·차단·검토를 결정하도록 하면 학습자는 호출·정책·관제의 관계에 집중할 수 있다.</p>
+<p>Transformers는 필수 실행 경로가 아니다. Llama Guard 전용 모델을 직접 로드해 일반 LLM과 안전성 분류 모델을 분리하고 싶을 때 사용하는 심화 경로다. 이 경우 PyTorch·모델 가중치·GPU 메모리·NeMo custom adapter를 추가로 관리해야 한다.</p>
+<pre><code>기본: NeMo Guardrails → Ollama → Python 정책 엔진
+심화: 일반 LLM → Transformers Llama Guard → Python 정책 엔진</code></pre>
+<p>따라서 “Transformers가 더 단순해서 사용한다”가 아니라, “전용 안전성 분류 모델을 직접 실행하기 위해 선택한다”로 이해한다. 시각 설명은 <a href="slides/s06-runtime-choice.svg"><code>slides/s06-runtime-choice.svg</code></a>에서 확인한다.</p>
+<p><code>src/contracts/adapters.py</code>에서는 이 관계를 <code>receives → produces → handoff_to</code>로 표현한다. Llama Guard의 분류 결과는 애플리케이션 정책 엔진으로 전달되고, NeMo Guardrails의 대화 전환 결과는 LLM 호출 또는 출력 Guardrail로 전달된다. 두 어댑터의 <code>not_responsible_for</code> 필드는 각 기술이 대신하지 않는 책임을 명시해 역할 중복을 방지한다.</p>
+<h3>실습</h3>
+<ol><li>입력 분류, 대화 정책, 모델 호출의 관계를 비교표로 작성한다.</li><li>허용·차단·사람 검토가 필요한 예시를 정의한다.</li><li>운영 환경에서 모델·정책·로그를 검증할 항목을 정리한다.</li></ol>
+<p>역할 비교만 확인할 때는 다음 명령을 실행한다.</p>
+<pre><code>python3 02_llama_guard_nemo_guardrails/src/main.py            # compare (기본)</code></pre>
+<h4>실제 프레임워크 호출</h4>
+<p>실제 호출 코드는 <code>src/classifier/llama_guard.py</code>, <code>src/dialogue/nemo_guardrails_client.py</code>,</p>
+<p><code>src/pipeline/real_integration.py</code>에 있고, 모두 <code>src/main.py</code>를 진입점으로 실행한다. <code>adapters.py</code>는 책임·handoff 계약이고,</p>
+<p>이 세 파일이 각각 실제 모델과 프레임워크를 호출한다.</p>
+<p>Python 3.12 환경에서 선택 의존성을 설치한다.</p>
+<pre><code>python3.12 -m venv .venv-guardrails
+source .venv-guardrails/bin/activate
+python -m pip install -r 02_llama_guard_nemo_guardrails/requirements-llm.txt</code></pre>
+<p>Llama Guard 3는 Hugging Face에서 Meta 라이선스를 승인하고 모델 접근 권한을</p>
+<p>받아야 하며, NeMo Guardrails는 기본 예제 설정에서 로컬 Ollama의 OpenAI 호환</p>
+<p>엔드포인트를 사용한다. Ollama를 실행하고 모델을 받은 뒤 다음처럼 호출한다.</p>
+<pre><code>ollama pull qwen2.5:3b
+python 02_llama_guard_nemo_guardrails/src/main.py real \
+  --prompt &quot;회사 비밀번호 재설정 절차를 요약해줘&quot; \
+  --output results/step02-real-guardrails.json</code></pre>
+<p>실행 결과는 <code>results/step02-real-guardrails.json</code>에 저장된다. <code>llama_guard</code>는</p>
+<p><code>safe/unsafe</code>와 위험 범주를 반환하고, <code>nemo_guardrails</code>는 대화 레일을 통과한</p>
+<p>응답 객체를 반환한다. 최종 허용·차단 결정은 여전히 3단계 정책 엔진의 책임이다.</p>
+<p>모델 가중치·Ollama가 없는 환경에서는 이 명령을 실행할 수 없지만, 역할 비교와</p>
+<p>단위 테스트는 선택 의존성 없이 실행된다.</p>
+<h3>산출물</h3>
+<ul><li>Llama Guard·NeMo Guardrails 비교표</li><li>위험 카테고리 적용표</li><li>정책 적용 위치 결정안</li></ul>
+<h3>단계 간 연결</h3>
+<p><a href="../01_guardrail_concept_architecture/readme.md">← 1단계</a> · <a href="../03_policy_blocking_output_filtering/readme.md">3단계 →</a> · <a href="../readme.md">전체 과정</a></p>
+<p>1단계의 통제 지점 정의를 입력으로 받아 적용 전략을 정하고, 3단계 정책 규칙이 사용할 분류·대화 정책 기준을 산출한다.</p>
+<h3>완료 기준</h3>
+<p>두 기술의 목적과 적용 시점을 설명하고, 서비스 요구사항에 맞는 선택 기준을 제시할 수 있다.</p>
+<h3>소스 구조</h3>
+<pre><code>src/
+├── main.py                  # 진입점 (compare | real)
+├── contracts/adapters.py    # 책임·handoff 계약 (의존성 없음)
+├── classifier/llama_guard.py        # 분류: Llama Guard 3
+├── dialogue/nemo_guardrails_client.py  # 대화 정책: NeMo Guardrails
+└── pipeline/real_integration.py     # 두 어댑터 호출 + 결과 JSON 저장</code></pre>
+<h3>파일·디렉터리 역할</h3>
+<table><tr><th>경로</th><th>역할</th></tr><tr><td><code>src/main.py</code></td><td>진입점. <code>compare</code>(기본)·<code>real --prompt</code> 서브커맨드로 하위 패키지를 호출</td></tr><tr><td><code>src/contracts/adapters.py</code></td><td>실제 SDK와 독립적인 입력·출력·handoff·비책임 계약</td></tr><tr><td><code>src/classifier/llama_guard.py</code></td><td>Transformers로 Llama Guard 3를 실제 로드·생성·분류하는 어댑터</td></tr><tr><td><code>src/dialogue/nemo_guardrails_client.py</code></td><td><code>RailsConfig</code>·<code>LLMRails.generate()</code>를 호출하는 실제 NeMo 어댑터</td></tr><tr><td><code>src/pipeline/real_integration.py</code></td><td>두 실제 어댑터를 순서대로 호출하고 JSON 결과를 저장</td></tr><tr><td><code>nemo_config/config.yml</code></td><td>Ollama 기반 NeMo Guardrails 모델·입출력 레일 설정</td></tr><tr><td><code>requirements-llm.txt</code></td><td>Python 3.12용 선택적 Transformers·Torch·NeMo 의존성</td></tr><tr><td><code>slides/s00-tech-spec.svg</code></td><td>2단계 필수 기술과 선택적 실제 모델 연동 범위</td></tr><tr><td><code>slides/s01-guard-models.svg</code></td><td>두 Guardrails 적용 흐름 개요</td></tr><tr><td><code>slides/s02-guardrail-theory.svg</code></td><td>안전성 분류와 대화 정책의 이론 비교</td></tr><tr><td><code>slides/s03-adapters-source.svg</code></td><td><code>adapters.py</code> 소스와 선택 기준</td></tr><tr><td><code>slides/s06-runtime-choice.svg</code></td><td>기본 Ollama·심화 Transformers 실행 경로 선택</td></tr><tr><td><code>slides/s07-guardrail-checklist.svg</code></td><td>기술 적용 복습 체크리스트</td></tr><tr><td><code>slides/s08-summary.svg</code></td><td>2단계 핵심 요약과 질문</td></tr><tr><td><code>slides/s04-llama-guard-detail.svg</code></td><td>Llama Guard의 분류 책임·입력·출력·정책 변환 상세</td></tr><tr><td><code>slides/s05-nemo-guardrails-detail.svg</code></td><td>NeMo Guardrails의 대화 흐름·주제·응답 경로 상세</td></tr><tr><td><code>slides/readme.md</code></td><td>슬라이드 순서·제목·산출물 목록</td></tr></table>
+<p><code>adapters.py</code> 자체는 역할 비교용 계약으로 유지하지만, 실제 호출은 같은 2단계 폴더의</p>
+<p>세 어댑터 파일에서 수행한다. 따라서 “2단계에서는 방법론만 설명하고 호출은 뒤로</p>
+<p>미룬다”는 구조가 아니라, 2단계에서 실제 호출 경로와 책임 경계를 함께 확인할 수 있다.</p></div><div id="md-slides" hidden><h2>2단계 슬라이드</h2>
+<table><tr><th>순서</th><th>슬라이드 주제</th><th>산출물</th></tr><tr><td>s01</td><td>Llama Guard·NeMo Guardrails 적용</td><td>위험 분류와 대화 정책 흐름</td></tr><tr><td>s02</td><td>두 Guardrails의 역할 이론</td><td>안전성 분류와 대화 흐름 제어</td></tr><tr><td>s03</td><td>2단계 소스코드 관계도</td><td>계약·실행 진입점·provider·설정·결과 연결</td></tr><tr><td>s04</td><td>Llama Guard 역할 상세</td><td>분류·범주·정책 변환</td></tr><tr><td>s05</td><td>NeMo Guardrails 역할 상세</td><td>대화 흐름·주제·응답 경로</td></tr><tr><td>s06</td><td>실행 백엔드 선택</td><td>기본 Ollama·심화 Transformers 경로</td></tr><tr><td>s07</td><td>복습 체크리스트</td><td>분류·대화 정책·적용 확인</td></tr><tr><td>s08</td><td>핵심 요약과 실습 질문</td><td>학습 내용과 완료 확인</td></tr></table>
+<p>기술 사양: <a href="s00-tech-spec.svg">s00-tech-spec.svg</a></p>
+<p>실제 슬라이드: <a href="s01-guard-models.svg">s01-guard-models.svg</a>, <a href="s02-guardrail-theory.svg">s02-guardrail-theory.svg</a>, <a href="s03-adapters-source.svg">s03-adapters-source.svg</a>, <a href="s04-llama-guard-detail.svg">s04-llama-guard-detail.svg</a>, <a href="s05-nemo-guardrails-detail.svg">s05-nemo-guardrails-detail.svg</a>, <a href="s06-runtime-choice.svg">s06-runtime-choice.svg</a>, <a href="s07-guardrail-checklist.svg">s07-guardrail-checklist.svg</a>, <a href="s08-summary.svg">s08-summary.svg</a></p>
+<p><code>s00-tech-spec.svg</code>는 2단계 필수 기술과 실제 모델 연동 범위를 설명하는 참고 슬라이드다. <code>s01</code>~<code>s08</code>은 발표용 SVG이며, <code>s03-adapters-source.svg</code>는 2단계 소스 전체의 호출 방향과 설정·결과 관계를 보여준다. <code>s04</code>와 <code>s05</code>에서는 두 가드레일의 역할을 각각 분리해 설명한다.</p>
+<p>실제 호출 실습은 <code>python3.12 src/main.py real --prompt &quot;...&quot;</code>로 수행하고, 결과는 <code>results/step02-real-guardrails.json</code>에서 확인한다.</p></div>
+<div id="viewer" hidden><div class="vbox"><div class="vhead"><span id="vtitle"></span><span style="display:flex;gap:.8rem;align-items:center"><a id="vopen" href="#" target="_blank">새 탭에서 열기</a><button class="dgbtn" id="vclose">✕ 닫기</button></span></div><div class="vbody" id="vbody"></div><button class="vside" id="vsprev" hidden title="이전 슬라이드">‹</button><button class="vside" id="vsnext" hidden title="다음 슬라이드">›</button></div></div>
+<script>
+// ===== 탭 전환 (해시 동기화 + 활성 표시) =====
+const tabs=[...document.querySelectorAll('.ltab')];
+const navs=[...document.querySelectorAll('.topnav a[href^="#tab-"]')];
+function show(id){
+  const t=id&&document.getElementById(id)?id:'tab-overview';
+  tabs.forEach(x=>{x.classList.toggle('on',x.id===t);x.hidden=x.id!==t;});
+  navs.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+t));
+  if(location.hash!=='#'+t)history.replaceState(null,'','#'+t);
+}
+navs.forEach(a=>a.onclick=e=>{e.preventDefault();show(a.getAttribute('href').slice(1))});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+show(location.hash.slice(1));
+
+// ===== 팝업 뷰어 =====
+const MD={ /* TODO: '경로/readme.md':'md-xxx' 등록 */ };
+const $=id=>document.getElementById(id);
+let cur=null;
+function openViewer(href,title){
+  cur=href;
+  $('vtitle').textContent=title||href.split('/').pop();
+  $('vopen').href=href;
+  const body=$('vbody');body.innerHTML='';
+  const key=Object.keys(MD).find(k=>href.endsWith(k)||href===k);
+  if(key){body.innerHTML='<div class="mdview">'+document.getElementById(MD[key]).innerHTML+'</div>';}
+  else{const im=new Image();im.src=href;im.style.maxWidth='100%';body.appendChild(im);}
+  // 슬라이드 목록 내 이전/다음
+  const slides=[...document.querySelectorAll('.dgi img')].map(i=>i.getAttribute('src'));
+  const idx=slides.indexOf(href);
+  $('vsprev').hidden=$('vsnext').hidden=idx<0;
+  if(idx>=0){
+    $('vsprev').onclick=()=>go(idx-1);$('vsnext').onclick=()=>go(idx+1);
+    window._slideIdx=idx;
+  }
+  $('viewer').hidden=false;
+}
+function go(i){
+  const slides=[...document.querySelectorAll('.dgi img')].map(x=>x.getAttribute('src'));
+  if(!slides.length)return;
+  const idx=((i%slides.length)+slides.length)%slides.length;
+  const src=slides[idx];
+  openViewer(src,src.split('/').pop());
+  window._slideIdx=idx;
+}
+function closeViewer(){$('viewer').hidden=true;cur=null}
+$('vclose').onclick=closeViewer;
+$('viewer').onclick=e=>{if(e.target===$('viewer'))closeViewer()};
+document.addEventListener('keydown',e=>{
+  if($('viewer').hidden)return;
+  if(e.key==='Escape')closeViewer();
+  if(e.key==='ArrowLeft')go((window._slideIdx||0)-1);
+  if(e.key==='ArrowRight')go((window._slideIdx||0)+1);
+});
+// SVG 이미지/링크 클릭 → 뷰어
+document.querySelectorAll('.dgi img').forEach(im=>im.onclick=()=>openViewer(im.getAttribute('src'),im.closest('.dgi').querySelector('.dgi-t')?.textContent||im.getAttribute('src').split('/').pop()));
+document.querySelectorAll('a[href$=".svg"],a[href$=".md"]').forEach(a=>a.onclick=e=>{
+  const href=a.getAttribute('href');
+  if(href.startsWith('http'))return;
+  e.preventDefault();openViewer(href,href.split('/').pop());
+});
+// 뷰어 내부 링크도 재귀 처리
+document.addEventListener('click',e=>{
+  const a=e.target.closest&&e.target.closest('#vbody a');
+  if(!a)return;
+  const href=a.getAttribute('href');
+  if(!href||href.startsWith('http')||href.startsWith('#'))return;
+  e.preventDefault();openViewer(href,href.split('/').pop());
+});
+// ===== 명령어 복사 =====
+/* TODO: copy_cmd_js — copyCmd 버튼 핸들러 */
+
+const COPY_CMD='python3 02_llama_guard_nemo_guardrails/src/main.py';$('copyCmd').onclick=()=>{navigator.clipboard.writeText(COPY_CMD).then(()=>{$('copyMsg').textContent='복사됨 — 터미널에 붙여넣기 (⌘V)'}).catch(()=>{$('copyMsg').textContent='복사 실패 — 직접 입력'})};</script>
+</body></html>

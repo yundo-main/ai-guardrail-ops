@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="course-flow-title course-flow-desc">
+  <title id="course-flow-title">AI 가드레일과 보안 관제 운영 학습 순서도</title>
+  <desc id="course-flow-desc">Guardrail 개념부터 Llama Guard와 NeMo Guardrails, 정책 차단, 위험 등급, 대시보드와 운영 리포트까지 6개 학습 단계의 흐름을 보여 준다.</desc>
+  <style>
+    :root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#1769aa;--blue-soft:#e8f2fb;--orange:#b45309;--orange-soft:#fff4df;--green:#16704a;--green-soft:#e7f6ee;--red:#c2414b;--line:#9aabba}
+    *{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+    .bg{fill:var(--bg)}.chip{fill:var(--red)}.chip-text{fill:#fff;font-size:16px;font-weight:700}
+    .title{fill:var(--ink);font-size:38px;font-weight:700}.summary{fill:var(--muted);font-size:19px}
+    .cb{fill:var(--blue-soft);stroke:var(--blue);stroke-width:2}
+    .co{fill:var(--orange-soft);stroke:var(--orange);stroke-width:2}
+    .cg{fill:var(--green-soft);stroke:var(--green);stroke-width:2}
+    .ch{fill:var(--red);font-size:15px;font-weight:700}
+    .ct{fill:var(--ink);font-size:15px;font-weight:700}.cb2{fill:var(--muted);font-size:14px}
+    .arrow{stroke:var(--line);stroke-width:2.5;fill:none}.arrowh{fill:var(--line)}
+    .note{fill:var(--orange-soft);stroke:var(--orange);stroke-width:2}
+    .nt{fill:var(--orange);font-size:16px;font-weight:700}.nb{fill:var(--muted);font-size:15px}
+    .foot{fill:var(--muted);font-size:14px}}
+  </style>
+  <rect class="bg" width="1280" height="720"/>
+  <!-- 헤더 -->
+  <rect class="chip" x="60" y="44" width="46" height="30" rx="15"/>
+  <text class="chip-text" x="83" y="65" text-anchor="middle">7</text>
+  <text class="title" x="60" y="128">AI 가드레일과 보안 관제 운영</text>
+  <text class="summary" x="60" y="162">개념과 아키텍처부터 정책 통제, 관제, 운영 리포트까지 연결한다</text>
+  <!-- 카드 6개: x=60,255,450,645,840,1035  너비=180  간격=15(화살표) -->
+  <g aria-label="7장 학습 흐름">
+    <!-- 1단계 -->
+    <rect class="cb" x="60"   y="230" width="180" height="190" rx="12"/>
+    <text class="ch" x="78"  y="260">1단계</text>
+    <text class="ct" x="78"  y="291">Guardrail 개념과</text>
+    <text class="ct" x="78"  y="311">아키텍처</text>
+    <text class="cb2" x="78" y="345">입력·출력 통제</text>
+    <text class="cb2" x="78" y="366">구조 이해</text>
+    <!-- 2단계 -->
+    <rect class="cb" x="255"  y="230" width="180" height="190" rx="12"/>
+    <text class="ch" x="273" y="260">2단계</text>
+    <text class="ct" x="273" y="291">Llama Guard·</text>
+    <text class="ct" x="273" y="311">NeMo Guardrails</text>
+    <text class="cb2" x="273" y="345">위험 분류와</text>
+    <text class="cb2" x="273" y="366">대화 정책 적용</text>
+    <!-- 3단계 -->
+    <rect class="co" x="450"  y="230" width="180" height="190" rx="12"/>
+    <text class="ch" x="468" y="260">3단계</text>
+    <text class="ct" x="468" y="291">정책 기반 차단</text>
+    <text class="ct" x="468" y="311">및 출력 검열</text>
+    <text class="cb2" x="468" y="345">허용·거부 규칙과</text>
+    <text class="cb2" x="468" y="366">PII 마스킹 구현</text>
+    <!-- 4단계 -->
+    <rect class="co" x="645"  y="230" width="180" height="190" rx="12"/>
+    <text class="ch" x="663" y="260">4단계</text>
+    <text class="ct" x="663" y="291">위험 등급</text>
+    <text class="ct" x="663" y="311">체계 설계</text>
+    <text class="cb2" x="663" y="345">Critical·High·</text>
+    <text class="cb2" x="663" y="366">Medium·Low</text>
+    <!-- 5단계 -->
+    <rect class="cg" x="840"  y="230" width="180" height="190" rx="12"/>
+    <text class="ch" x="858" y="260">5단계</text>
+    <text class="ct" x="858" y="291">보안 대시보드</text>
+    <text class="ct" x="858" y="311">및 알림 구축</text>
+    <text class="cb2" x="858" y="345">지표 시각화와</text>
+    <text class="cb2" x="858" y="366">Critical 알림</text>
+    <!-- 6단계 -->
+    <rect class="cg" x="1035" y="230" width="180" height="190" rx="12"/>
+    <text class="ch" x="1053" y="260">6단계</text>
+    <text class="ct" x="1053" y="291">운영 리포트</text>
+    <text class="ct" x="1053" y="311">및 통합 실습</text>
+    <text class="cb2" x="1053" y="345">주간·월간 리포트</text>
+    <text class="cb2" x="1053" y="366">전체 흐름 통합</text>
+  </g>
+  <!-- 화살표: 카드 우측 끝 ~ 다음 카드 좌측 -->
+  <g class="arrow" aria-hidden="true">
+    <path d="M240 325h15"/><path d="M435 325h15"/>
+    <path d="M630 325h15"/><path d="M825 325h15"/><path d="M1020 325h15"/>
+  </g>
+  <g class="arrowh" aria-hidden="true">
+    <path d="m249 319 8 6-8 6z"/><path d="m444 319 8 6-8 6z"/>
+    <path d="m639 319 8 6-8 6z"/><path d="m834 319 8 6-8 6z"/><path d="m1029 319 8 6-8 6z"/>
+  </g>
+  <!-- 하단 통합 산출물 배너 -->
+  <rect class="note" x="60" y="470" width="1160" height="66" rx="12"/>
+  <text class="nt" x="84" y="498">통합 산출물</text>
+  <text class="nb" x="84" y="521">정책 코드 → 보안 이벤트 → 대시보드·알림 → 주간·월간 운영 리포트</text>
+  <!-- 푸터 -->
+  <text class="foot" x="60"   y="668">7장 · AI 가드레일과 보안 관제 운영</text>
+  <text class="foot" x="1220" y="668" text-anchor="end">1 / 1</text>
+</svg>

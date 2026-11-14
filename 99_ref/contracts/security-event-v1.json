@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "event_id": "step03-guardrail-result",
+  "trace_id": "step03-guardrail-result",
+  "decision": "review",
+  "risk": "Critical",
+  "category": "guardrail",
+  "source_stage": "step04",
+  "status": "open",
+  "next": "05_security_dashboard_alerts"
+}

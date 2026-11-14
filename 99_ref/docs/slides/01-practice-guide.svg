@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="practice-guide-title practice-guide-desc">
+  <title id="practice-guide-title">단계별 실습 진행</title>
+  <desc id="practice-guide-desc">각 단계를 독립적으로 실행하고 마지막에 점층 통합하는 실습 진행 순서와 명령</desc>
+  <style>
+    :root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#1769aa;--blue-soft:#e8f2fb;--green:#16704a;--green-soft:#e7f6ee;--orange:#b45309;--orange-soft:#fff4df;--line:#9aabba;--code:#1a2f45}
+    *{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+    .bg{fill:var(--bg)}.title{fill:var(--ink);font-size:38px;font-weight:700}.sub{fill:var(--muted);font-size:19px}
+    .ci{fill:var(--green-soft);stroke:var(--green);stroke-width:2}
+    .ca{fill:var(--blue-soft);stroke:var(--blue);stroke-width:2}
+    .cint{fill:var(--orange-soft);stroke:var(--orange);stroke-width:2}
+    .h{fill:var(--ink);font-size:18px;font-weight:700}.p{fill:var(--muted);font-size:15px}
+    .code{fill:var(--code);font-family:'Menlo','Courier New',monospace;font-size:13px}
+    .line{stroke:var(--line);stroke-width:2;fill:none}
+    .foot{fill:var(--muted);font-size:14px}}
+  </style>
+  <rect class="bg" width="1280" height="720"/>
+  <text class="title" x="60" y="90">단계별 실습 진행</text>
+  <text class="sub"   x="60" y="126">각 단계는 독립 실행하고, 마지막에 integration 트랙으로 점층 통합한다</text>
+  <!-- 상단 3개 카드: 너비 360, 간격 20 → 60+360+20+360+20+360=1180≤1220 -->
+  <!-- 1~2단계 -->
+  <rect class="ci" x="60"  y="168" width="360" height="175" rx="12"/>
+  <text class="h"    x="84"  y="204">1~2단계 · 개념·설계</text>
+  <text class="p"    x="84"  y="234">01 architecture.py 파이프라인 실행</text>
+  <text class="code" x="84"  y="265">python3 01_.../src/architecture.py</text>
+  <text class="p"    x="84"  y="295">02 adapters.py로 역할 비교</text>
+  <text class="code" x="84"  y="325">python3 02_.../src/adapters.py</text>
+  <!-- 3~4단계 -->
+  <rect class="ci" x="440" y="168" width="360" height="175" rx="12"/>
+  <text class="h"    x="464" y="204">3~4단계 · 판정·이벤트</text>
+  <text class="p"    x="464" y="234">정책 차단·출력 검열 실행</text>
+  <text class="code" x="464" y="265">python3 03_.../src/guardrail.py</text>
+  <text class="p"    x="464" y="295">JSON → 위험 등급 이벤트 생성</text>
+  <text class="code" x="464" y="325">python3 04_.../src/risk.py</text>
+  <!-- 5단계 -->
+  <rect class="ca" x="820" y="168" width="400" height="175" rx="12"/>
+  <text class="h"    x="844" y="204">5단계 · API·관제</text>
+  <text class="code" x="844" y="240">uvicorn api:app \</text>
+  <text class="code" x="844" y="260">  --app-dir 05_.../src --port 8000</text>
+  <text class="p"    x="844" y="292">X-API-Key 헤더로 이벤트 등록</text>
+  <text class="p"    x="844" y="318">/metrics · /dashboard 확인</text>
+  <!-- 화살표 세로선 -->
+  <line class="line" x1="240"  y1="343" x2="240"  y2="388"/>
+  <line class="line" x1="620"  y1="343" x2="620"  y2="388"/>
+  <line class="line" x1="1020" y1="343" x2="1020" y2="388"/>
+  <!-- 6단계 통합 박스 -->
+  <rect class="cint" x="60" y="400" width="1160" height="175" rx="14"/>
+  <text class="h"    x="90" y="438">6단계 · 통합 실습</text>
+  <text class="p"    x="90" y="470">선택: USE_LLM=1 → Ollama 응답 → 입력·출력 Guardrail → 이벤트 → 리포트</text>
+  <text class="code" x="90" y="506">python3 06_.../src/app.py</text>
+  <text class="p"    x="90" y="536">또는 integration 트랙 전체 실행:</text>
+  <text class="code" x="90" y="562">python3 integration/run.py --all</text>
+  <text class="p"    x="600" y="562">결과: integration/results/step06-report.json</text>
+  <!-- 푸터 -->
+  <text class="foot" x="60"   y="668">실습 목적: 실행하고 기록하기 · 결과 검증은 별도 result-check.svg에서 진행</text>
+  <text class="foot" x="1220" y="668" text-anchor="end">1 / 1</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="title desc">
+  <title id="title">Ollama와 Transformers 선택 기준</title>
+  <desc id="desc">기본 학습 경로는 Ollama로 단순화하고 Transformers는 Llama Guard 전용 모델을 다루는 심화 경로로 분리한다</desc>
+  <style>:root{--bg:#0b1220;--ink:#f8fafc;--muted:#b5c2d1;--blue:#173b63;--green:#183d2d;--orange:#3b2b18;--line:#8fa5bd;--accent:#60aef5;--good:#65dfa0;--warn:#ffc267}*{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}.bg{fill:var(--bg)}.title{fill:var(--ink);font-size:38px;font-weight:700}.sub{fill:var(--muted);font-size:20px}.h{fill:var(--ink);font-size:22px;font-weight:700}.p{fill:var(--muted);font-size:17px}.label{fill:var(--ink);font-size:18px;font-weight:700}.box{fill:var(--blue);stroke:var(--accent);stroke-width:2}.basic{fill:var(--green);stroke:var(--good);stroke-width:2}.advanced{fill:var(--orange);stroke:var(--warn);stroke-width:2}.line{stroke:var(--line);stroke-width:3;fill:none}.foot{fill:var(--muted);font-size:14px}@media(prefers-color-scheme:light){:root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#e8f2fb;--green:#e7f6ee;--orange:#fff4df;--line:#9aabba;--accent:#1769aa;--good:#16704a;--warn:#b45309}}</style>
+  <rect class="bg" width="1280" height="720"/>
+  <text class="title" x="60" y="90">2단계 · Ollama와 Transformers 선택 기준</text>
+  <text class="sub" x="60" y="130">기술을 통일하는 것보다 학습 목적과 계층의 책임을 먼저 구분한다</text>
+  <rect class="basic" x="70" y="220" width="510" height="285" rx="16"/>
+  <text class="h" x="105" y="265">기본 학습 경로 · Ollama</text><text class="p" x="105" y="310">NeMo Guardrails → Ollama 일반 LLM</text><text class="p" x="105" y="350">Python 정책 엔진 → 허용·차단·검토</text><text class="p" x="105" y="390">장점: 설치·실행·설명이 단순함</text><text class="p" x="105" y="430">학습 초점: 호출 → 정책 → 관제</text><text class="label" x="105" y="475">필수 경로</text>
+  <rect class="advanced" x="700" y="220" width="510" height="285" rx="16"/>
+  <text class="h" x="735" y="265">심화 경로 · Transformers</text><text class="p" x="735" y="310">Llama Guard 전용 모델 직접 실행</text><text class="p" x="735" y="350">safe / unsafe + 위험 범주 분류</text><text class="p" x="735" y="390">장점: 안전성 분류 모델과 일반 LLM 분리</text><text class="p" x="735" y="430">주의: 모델·GPU·NeMo adapter 관리 필요</text><text class="label" x="735" y="475">선택 심화</text>
+  <path class="line" d="M580 360h120"/><text class="label" x="570" y="335">역할은 동일하지 않음</text>
+  <text class="p" x="70" y="580">Ollama는 일반 응답 생성 경로를 단순화한다. Transformers는 Llama Guard를 전용 안전성 분류기로 직접 실행할 때 필요하다.</text>
+  <text class="p" x="70" y="615">수업에서는 Ollama 경로를 먼저 완성하고, Transformers는 별도 심화 실습으로 비교한다.</text>
+  <text class="foot" x="60" y="675">2단계 · 2단계 · 보충 페이지 · 실행 백엔드 선택 기준</text>
+</svg>

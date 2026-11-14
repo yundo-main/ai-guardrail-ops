@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="title desc">
+  <title id="title">2단계 소스코드 관계도</title>
+  <desc id="desc">main.py 진입점과 contracts·classifier·dialogue·pipeline 하위 패키지의 호출 관계도</desc>
+  <style>
+    :root{--bg:#0b1220;--ink:#f8fafc;--muted:#b5c2d1;--blue:#173b63;--green:#183d2d;--orange:#3b2b18;--purple:#30204d;--line:#8fa5bd;--accent:#60aef5;--good:#65dfa0;--warn:#ffc267;--violet:#c4a7ff}
+    *{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}.bg{fill:var(--bg)}.title{fill:var(--ink);font-size:38px;font-weight:700}.sub{fill:var(--muted);font-size:19px}.h{fill:var(--ink);font-size:20px;font-weight:700}.p{fill:var(--muted);font-size:15px}.code{fill:var(--ink);font-family:monospace;font-size:14px}.label{fill:var(--ink);font-size:14px;font-weight:700}.contract{fill:var(--blue);stroke:var(--accent);stroke-width:2}.runtime{fill:var(--green);stroke:var(--good);stroke-width:2}.config{fill:var(--purple);stroke:var(--violet);stroke-width:2}.entry{fill:var(--orange);stroke:var(--warn);stroke-width:2}.line{stroke:var(--line);stroke-width:3;fill:none;marker-end:url(#arrow)}.dashed{stroke:var(--violet);stroke-width:2;fill:none;stroke-dasharray:8 6;marker-end:url(#arrowV)}.foot{fill:var(--muted);font-size:14px}
+    @media(prefers-color-scheme:light){:root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#e8f2fb;--green:#e7f6ee;--orange:#fff4df;--purple:#f0eaff;--line:#9aabba;--accent:#1769aa;--good:#16704a;--warn:#b45309;--violet:#7048b8}}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="var(--line)"/></marker>
+    <marker id="arrowV" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="var(--violet)"/></marker>
+  </defs>
+  <rect class="bg" width="1280" height="720"/>
+  <text class="title" x="60" y="78">2단계 · 소스코드 관계도</text>
+  <text class="sub" x="60" y="113">main.py 하나가 책임별 하위 패키지를 호출한다</text>
+
+  <text class="label" x="60" y="165">① 진입점 → 하위 패키지</text>
+  <rect class="entry" x="470" y="185" width="340" height="105" rx="16"/>
+  <text class="h" x="495" y="222">src/main.py</text>
+  <text class="p" x="495" y="250">compare (기본) · real --prompt</text><text class="p" x="495" y="272">서브커맨드로 분기</text>
+
+  <rect class="contract" x="60" y="345" width="270" height="120" rx="16"/>
+  <text class="h" x="80" y="378">contracts/</text><text class="code" x="80" y="404">adapters.py</text>
+  <text class="p" x="80" y="430">receives · produces</text><text class="p" x="80" y="450">handoff_to (의존성 없음)</text>
+
+  <rect class="runtime" x="360" y="345" width="270" height="120" rx="16"/>
+  <text class="h" x="380" y="378">classifier/</text><text class="code" x="380" y="404">llama_guard.py</text>
+  <text class="p" x="380" y="430">Transformers 분류</text><text class="p" x="380" y="450">safe / unsafe + category</text>
+
+  <rect class="runtime" x="660" y="345" width="270" height="120" rx="16"/>
+  <text class="h" x="680" y="378">dialogue/</text><text class="code" x="680" y="404" font-size="13">nemo_guardrails_client.py</text>
+  <text class="p" x="680" y="430">RailsConfig + LLMRails</text><text class="p" x="680" y="450">대화 레일 응답</text>
+
+  <rect class="entry" x="960" y="345" width="260" height="120" rx="16"/>
+  <text class="h" x="980" y="378">pipeline/</text><text class="code" x="980" y="404" font-size="13">real_integration.py</text>
+  <text class="p" x="980" y="430">두 어댑터 순차 호출</text><text class="p" x="980" y="450">결과 JSON 저장</text>
+
+  <path class="line" d="M640 290v25H195v30"/><text class="label" x="215" y="312">compare</text>
+  <path class="line" d="M810 255h270v90"/><text class="label" x="905" y="245">real</text>
+
+  <text class="label" x="60" y="520">② pipeline의 후속 흐름</text>
+  <rect class="config" x="60" y="540" width="350" height="70" rx="16"/>
+  <text class="code" x="80" y="570">nemo_config/config.yml</text><text class="p" x="80" y="594">Ollama endpoint · 모델 · 레일</text>
+  <rect class="runtime" x="870" y="540" width="350" height="70" rx="16"/>
+  <text class="code" x="890" y="570" font-size="13">99_ref/results/step02-real-guardrails.json</text><text class="p" x="890" y="594">다음 정책 계층의 입력</text>
+  <path class="dashed" d="M795 465v35H235v40" /><path class="line" d="M1090 465v75"/>
+  <text class="label" x="420" y="520">설정 로드</text><text class="label" x="1105" y="510">결과 저장</text>
+
+  <text class="foot" x="60" y="645">읽는 순서: main.py → contracts → classifier / dialogue → pipeline → results JSON</text>
+  <text class="foot" x="60" y="670">실행: python3.12 src/main.py real --prompt "..."</text>
+  <text class="foot" x="60" y="700">2단계 · 2단계 · 3 / 8 · 소스코드 관계와 호출 방향</text>
+</svg>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Guardrail Security Dashboard</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+    body { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+    header { display: flex; justify-content: space-between; gap: 1rem; align-items: end; }
+    input, button { padding: .6rem; border-radius: .4rem; border: 1px solid #889; }
+    button { cursor: pointer; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .card { padding: 1rem; border: 1px solid #889; border-radius: .6rem; }
+    .value { display: block; font-size: 2rem; font-weight: 700; margin-top: .4rem; }
+    pre { white-space: pre-wrap; overflow: auto; padding: 1rem; border: 1px solid #889; border-radius: .6rem; }
+    .error { color: #e66; }
+  </style>
+</head>
+<body>
+  <header>
+    <div><h1>AI Guardrail Security Dashboard</h1><p>5단계 API 실습용 운영 화면</p></div>
+    <label>API Key <input id="key" type="password" value="dev-only-key"></label>
+  </header>
+  <button id="refresh">새로고침</button>
+  <p id="error" class="error"></p>
+  <section class="grid" aria-label="보안 지표">
+    <div class="card">전체 이벤트<span id="total" class="value">-</span></div>
+    <div class="card">차단<span id="blocked" class="value">-</span></div>
+    <div class="card">검토<span id="review" class="value">-</span></div>
+    <div class="card">Critical<span id="critical" class="value">-</span></div>
+    <div class="card">미대응<span id="open" class="value">-</span></div>
+  </section>
+  <h2>Critical 알림</h2>
+  <pre id="alerts">불러오는 중...</pre>
+  <script>
+    async function load() {
+      const key = document.getElementById('key').value;
+      const headers = {'X-API-Key': key};
+      const error = document.getElementById('error');
+      error.textContent = '';
+      try {
+        const [metrics, alerts] = await Promise.all([
+          fetch('/metrics', {headers}).then(r => r.json()),
+          fetch('/alerts/critical', {headers}).then(r => r.json())
+        ]);
+        if (metrics.detail) throw new Error(metrics.detail);
+        document.getElementById('total').textContent = metrics.total_events;
+        document.getElementById('blocked').textContent = metrics.blocked_events;
+        document.getElementById('review').textContent = metrics.review_events;
+        document.getElementById('critical').textContent = metrics.by_risk?.Critical || 0;
+        document.getElementById('open').textContent = metrics.open_events;
+        document.getElementById('alerts').textContent = JSON.stringify(alerts, null, 2);
+      } catch (e) { error.textContent = '조회 실패: ' + e.message; }
+    }
+    document.getElementById('refresh').addEventListener('click', load);
+    load();
+  </script>
+</body>
+</html>

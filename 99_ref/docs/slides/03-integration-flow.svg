@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="integration-flow-title integration-flow-desc">
+  <title id="integration-flow-title">독립 학습 트랙과 점층 통합 트랙</title>
+  <desc id="integration-flow-desc">1단계부터 6단계까지 독립적으로 실습한 뒤 integration 트랙에서 JSON 계약과 API로 점층 통합하는 구조</desc>
+  <style>
+    :root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#1769aa;--blue-soft:#e8f2fb;--green:#16704a;--green-soft:#e7f6ee;--orange:#b45309;--orange-soft:#fff4df;--line:#9aabba}
+    *{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+    .bg{fill:var(--bg)}.title{fill:var(--ink);font-size:36px;font-weight:700}.sub{fill:var(--muted);font-size:18px}
+    .ci{fill:var(--green-soft);stroke:var(--green);stroke-width:2}
+    .cd{fill:var(--blue-soft);stroke:var(--blue);stroke-width:2}
+    .co{fill:var(--orange-soft);stroke:var(--orange);stroke-width:2}
+    .h{fill:var(--ink);font-size:19px;font-weight:700;text-anchor:middle}
+    .p{fill:var(--muted);font-size:14px;text-anchor:middle}
+    .label{fill:var(--ink);font-size:16px;font-weight:700}
+    .small{fill:var(--muted);font-size:13px}
+    .line{stroke:var(--line);stroke-width:2;fill:none}
+    .foot{fill:var(--muted);font-size:14px}}
+  </style>
+  <rect class="bg" width="1280" height="720"/>
+  <text class="title" x="60" y="90">독립 학습 트랙과 점층 통합 트랙</text>
+  <text class="sub"   x="60" y="124">단계별 코드는 서로 격리하고, integration은 결과 계약으로 단계적으로 연결한다</text>
+
+  <!-- A. 독립 단계 실습 -->
+  <text class="label" x="60" y="168">A. 독립 단계 실습 — 각 폴더만 복사해도 실행 가능</text>
+  <!-- 카드 6개 1행: 너비=175, 간격=13 → 60+6×175+5×13=60+1050+65=1175 ≤ 1280 -->
+  <g>
+    <rect class="ci" x="60"  y="185" width="175" height="100" rx="12"/>
+    <text class="h"  x="148" y="228">01</text>
+    <text class="p"  x="148" y="254">아키텍처</text>
+
+    <rect class="ci" x="248" y="185" width="175" height="100" rx="12"/>
+    <text class="h"  x="336" y="228">02</text>
+    <text class="p"  x="336" y="254">모델·정책</text>
+
+    <rect class="ci" x="436" y="185" width="175" height="100" rx="12"/>
+    <text class="h"  x="524" y="228">03</text>
+    <text class="p"  x="524" y="254">차단·검열</text>
+
+    <rect class="ci" x="624" y="185" width="175" height="100" rx="12"/>
+    <text class="h"  x="712" y="228">04</text>
+    <text class="p"  x="712" y="254">위험 이벤트</text>
+
+    <rect class="ci" x="812" y="185" width="175" height="100" rx="12"/>
+    <text class="h"  x="900" y="228">05</text>
+    <text class="p"  x="900" y="254">API·관제</text>
+
+    <rect class="ci" x="1000" y="185" width="175" height="100" rx="12"/>
+    <text class="h"  x="1088" y="228">06</text>
+    <text class="p"  x="1088" y="254">LLM·리포트</text>
+  </g>
+  <text class="small" x="60" y="308">독립성: 각 단계 src/는 자기 폴더 안의 모듈만 참조하며 다른 단계 import에 의존하지 않는다.</text>
+
+  <!-- 세로 연결선 (B 트랙으로) -->
+  <line class="line" x1="148"  y1="330" x2="148"  y2="368"/>
+  <line class="line" x1="336"  y1="330" x2="336"  y2="368"/>
+  <line class="line" x1="524"  y1="330" x2="524"  y2="368"/>
+  <line class="line" x1="712"  y1="330" x2="712"  y2="368"/>
+  <line class="line" x1="900"  y1="330" x2="900"  y2="368"/>
+  <line class="line" x1="1088" y1="330" x2="1088" y2="368"/>
+
+  <!-- B. integration 점층 트랙 -->
+  <text class="label" x="60" y="395">B. integration 점층 트랙 — JSON 계약과 운영 경계를 검증</text>
+  <!-- 카드 4개: 너비=265, 간격=20 → 60+4×265+3×20=60+1060+60=1180 ≤ 1280 -->
+  <g>
+    <rect class="cd" x="60"  y="415" width="265" height="90" rx="12"/>
+    <text class="h"  x="193" y="453">01 → 02</text>
+    <text class="p"  x="193" y="478">구조·분류 책임 합의</text>
+
+    <rect class="cd" x="345" y="415" width="265" height="90" rx="12"/>
+    <text class="h"  x="478" y="453">03 → 04</text>
+    <text class="p"  x="478" y="478">Guardrail 결과 → 위험 이벤트</text>
+
+    <rect class="cd" x="630" y="415" width="265" height="90" rx="12"/>
+    <text class="h"  x="763" y="453">04 → 05</text>
+    <text class="p"  x="763" y="478">이벤트 → SQLite · API · 지표</text>
+
+    <rect class="co" x="915" y="415" width="265" height="90" rx="12"/>
+    <text class="h"  x="1048" y="453">05 → 06</text>
+    <text class="p"  x="1048" y="478">지표 → LLM · 운영 리포트</text>
+  </g>
+
+  <!-- 계약 필드 배너 -->
+  <rect class="cd" x="60" y="535" width="1160" height="48" rx="10"/>
+  <text class="label" x="640" y="565" text-anchor="middle">계약 필드: schema_version · event_id · trace_id · decision · risk · status · source_stage</text>
+
+  <!-- 푸터 -->
+  <text class="foot" x="60"   y="668">7장 · 독립 트랙과 점층 통합</text>
+  <text class="foot" x="1220" y="668" text-anchor="end">1 / 1</text>
+</svg>

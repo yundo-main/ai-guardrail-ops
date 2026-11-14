@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="technology-stack-title technology-stack-desc">
+  <title id="technology-stack-title">AI 가드레일 학습 기술 스택</title>
+  <desc id="technology-stack-desc">6단계 학습에 필요한 Python, 정책 코드, FastAPI, Ollama, SVG, 테스트 도구와 선택 조건을 보여 준다.</desc>
+  <style>
+    :root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#1769aa;--blue-soft:#e8f2fb;--green:#16704a;--green-soft:#e7f6ee;--orange:#b45309;--orange-soft:#fff4df;--red:#c2414b;--line:#9aabba}
+    *{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+    .bg{fill:var(--bg)}.chip{fill:var(--red)}.chip-text{fill:#fff;font-size:16px;font-weight:700}
+    .title{fill:var(--ink);font-size:36px;font-weight:700}.summary{fill:var(--muted);font-size:18px}
+    .cb{fill:var(--blue-soft);stroke:var(--blue);stroke-width:2}
+    .cg{fill:var(--green-soft);stroke:var(--green);stroke-width:2}
+    .co{fill:var(--orange-soft);stroke:var(--orange);stroke-width:2}
+    .h{fill:var(--ink);font-size:17px;font-weight:700}.p{fill:var(--muted);font-size:14px}
+    .code{fill:var(--ink);font-family:'Menlo','Courier New',monospace;font-size:13px}
+    .banner{fill:var(--blue-soft);stroke:var(--blue);stroke-width:2}
+    .bh{fill:var(--ink);font-size:17px;font-weight:700}
+    .foot{fill:var(--muted);font-size:14px}}
+  </style>
+  <rect class="bg" width="1280" height="720"/>
+  <!-- 헤더 -->
+  <rect class="chip" x="60" y="40" width="46" height="30" rx="15"/>
+  <text class="chip-text" x="83" y="61" text-anchor="middle">7</text>
+  <text class="title"   x="60" y="118">학습 기술 스택과 준비물</text>
+  <text class="summary" x="60" y="150">1단계부터 6단계까지 어떤 기술이 필요하고 무엇이 선택 사항인지 한눈에 확인한다</text>
+  <!-- 카드 3×2 그리드: 너비=360, 간격=20 → 60+360+20+360+20+360=1180 ≤ 1280 -->
+  <!-- 1행 -->
+  <rect class="cb" x="60"  y="185" width="360" height="145" rx="12"/>
+  <text class="h"   x="84"  y="218">① 실행 환경 · 1~6단계</text>
+  <text class="p"   x="84"  y="248">Python 3.12+ 권장 · 3.9 호환</text>
+  <text class="code" x="84" y="278">python3 -m unittest discover -s tests -v</text>
+  <text class="p"   x="84"  y="308">pip install -r requirements.txt</text>
+
+  <rect class="cg" x="440" y="185" width="360" height="145" rx="12"/>
+  <text class="h"   x="464" y="218">② 가드레일 코드 · 1~4단계</text>
+  <text class="p"   x="464" y="248">dataclass · Enum · re · 정책 규칙</text>
+  <text class="p"   x="464" y="278">입력 차단 · 출력 마스킹 · 위험 등급</text>
+  <text class="p"   x="464" y="308">표준 라이브러리만 사용 (외부 패키지 없음)</text>
+
+  <rect class="co" x="820" y="185" width="400" height="145" rx="12"/>
+  <text class="h"   x="844" y="218">③ API 관제 · 5단계</text>
+  <text class="p"   x="844" y="248">FastAPI · Uvicorn · SQLite · OpenAPI</text>
+  <text class="code" x="844" y="278">GET /metrics    POST /events</text>
+  <text class="code" x="844" y="308">curl /health    GET /dashboard</text>
+
+  <!-- 2행 -->
+  <rect class="co" x="60"  y="352" width="360" height="145" rx="12"/>
+  <text class="h"   x="84"  y="385">④ 선택적 LLM · 6단계</text>
+  <text class="p"   x="84"  y="415">Ollama · qwen2.5:3b · localhost</text>
+  <text class="code" x="84" y="445">USE_LLM=1</text>
+  <text class="code" x="84" y="470">OLLAMA_BASE_URL=http://localhost:11434</text>
+
+  <rect class="cb" x="440" y="352" width="360" height="145" rx="12"/>
+  <text class="h"   x="464" y="385">⑤ SVG 산출물 · 전 단계</text>
+  <text class="p"   x="464" y="415">1280×720 · CSS 클래스 · 다크 모드</text>
+  <text class="p"   x="464" y="445">role · title · desc · aria-labelledby</text>
+  <text class="p"   x="464" y="475">preserveAspectRatio="xMidYMid meet"</text>
+
+  <rect class="cg" x="820" y="352" width="400" height="145" rx="12"/>
+  <text class="h"   x="844" y="385">⑥ 검증 도구 · 제출 전</text>
+  <text class="code" x="844" y="415">xmllint --noout *.svg</text>
+  <text class="code" x="844" y="445">python3 -m py_compile src/*.py</text>
+  <text class="code" x="844" y="475">curl http://127.0.0.1:8000/health</text>
+
+  <!-- 하단 배너 -->
+  <rect class="banner" x="60" y="525" width="1160" height="52" rx="12"/>
+  <text class="bh" x="640" y="558" text-anchor="middle">JSON 결과 전달: 차단 → 이벤트 → API 지표 → 운영 리포트</text>
+
+  <!-- 푸터 -->
+  <text class="foot" x="60"   y="668">7장 · 학습 기술 스택</text>
+  <text class="foot" x="1220" y="668" text-anchor="end">1 / 1</text>
+</svg>

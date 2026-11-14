@@ -1,0 +1,34 @@
+[
+  {
+    "rule_id": "INJ-001",
+    "pattern": "ignore\\s+(?:all\\s+)?previous instructions",
+    "reason": "prompt injection",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE"]
+  },
+  {
+    "rule_id": "EXF-001",
+    "pattern": "(?:reveal|print|show|dump).{0,40}(?:system prompt|secret|credential|api key)",
+    "reason": "secret exfiltration request",
+    "risk": "Critical",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL"]
+  },
+  {
+    "rule_id": "TOOL-001",
+    "pattern": "(?:delete|drop|rm\\s+-rf|disable).{0,30}(?:database|production|audit|logging)",
+    "reason": "dangerous tool or infrastructure action",
+    "risk": "Critical",
+    "decision": "block",
+    "flags": ["IGNORECASE", "DOTALL"]
+  },
+  {
+    "rule_id": "ABUSE-001",
+    "pattern": "(?:credential stuffing|ransomware|malware|steal passwords)",
+    "reason": "harmful cyber request",
+    "risk": "High",
+    "decision": "block",
+    "flags": ["IGNORECASE"]
+  }
+]

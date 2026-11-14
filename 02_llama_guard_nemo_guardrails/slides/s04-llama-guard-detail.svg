@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="title desc">
+  <title id="title">Llama Guard 역할 상세</title>
+  <desc id="desc">Llama Guard가 요청과 응답의 안전성 범주를 분류하고 애플리케이션 정책에 결과를 전달하는 과정</desc>
+  <style>
+    :root{--bg:#0b1220;--ink:#f8fafc;--muted:#b5c2d1;--blue:#173b63;--green:#183d2d;--orange:#3b2b18;--line:#8fa5bd;--accent:#60aef5;--good:#65dfa0;--warn:#ffc267}
+    *{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}.bg{fill:var(--bg)}.title{fill:var(--ink);font-size:38px;font-weight:700}.sub{fill:var(--muted);font-size:20px}.panel{fill:var(--blue);stroke:var(--accent);stroke-width:2}.control{fill:var(--green);stroke:var(--good);stroke-width:2}.warn{fill:var(--orange);stroke:var(--warn);stroke-width:2}.h{fill:var(--ink);font-size:22px;font-weight:700}.p{fill:var(--muted);font-size:17px}.label{fill:var(--ink);font-size:18px;font-weight:700}.line{stroke:var(--line);stroke-width:3;fill:none}.foot{fill:var(--muted);font-size:14px}@media(prefers-color-scheme:light){:root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#e8f2fb;--green:#e7f6ee;--orange:#fff4df;--accent:#1769aa;--line:#9aabba;--good:#16704a;--warn:#b45309}}
+  </style>
+  <rect class="bg" width="1280" height="720"/>
+  <text class="title" x="60" y="105">2단계 · Llama Guard 역할 상세</text>
+  <text class="sub" x="60" y="145">Llama Guard는 요청·응답의 안전성 범주를 분류하는 안전성 판정 계층이다</text>
+  <text class="sub" x="60" y="182">핵심: 분류 결과를 제공하지만 최종 차단·검토 결정은 애플리케이션 정책이 담당한다</text>
+
+  <rect class="panel" x="60" y="235" width="300" height="250" rx="16"/>
+  <text class="h" x="90" y="280">입력</text>
+  <text class="p" x="90" y="325">사용자 프롬프트</text>
+  <text class="p" x="90" y="360">대화 맥락</text>
+  <text class="p" x="90" y="395">도구 호출 의도</text>
+  <text class="p" x="90" y="440">모델 호출 전 검사</text>
+
+  <rect class="control" x="490" y="235" width="300" height="250" rx="16"/>
+  <text class="h" x="520" y="280">Llama Guard</text>
+  <text class="p" x="520" y="325">안전성 범주 분류</text>
+  <text class="p" x="520" y="360">위험 여부·카테고리</text>
+  <text class="p" x="520" y="395">분류 근거·신뢰도</text>
+  <text class="p" x="520" y="440">입력·출력 모두 적용 가능</text>
+
+  <rect class="warn" x="920" y="235" width="300" height="250" rx="16"/>
+  <text class="h" x="950" y="280">애플리케이션 정책</text>
+  <text class="p" x="950" y="325">허용·차단·검토 변환</text>
+  <text class="p" x="950" y="360">사용자 권한 확인</text>
+  <text class="p" x="950" y="395">이벤트·trace_id 기록</text>
+  <text class="p" x="950" y="440">최종 응답 경로 결정</text>
+
+  <path class="line" d="M360 360h130M790 360h130"/>
+  <text class="label" x="60" y="555">적용 시 주의</text>
+  <text class="p" x="60" y="590">분류기를 정책 엔진과 동일시하지 않는다. 오탐·미탐, 카테고리 정의, 사람 검토 경로를 별도로 평가한다.</text>
+  <text class="foot" x="60" y="666">2단계 · 2단계 · 4 / 8 · 실제 호출: src/classifier/llama_guard.py → Transformers</text>
+</svg>

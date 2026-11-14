@@ -1,0 +1,25 @@
+# ch01/dxx-app 실행에 필요한 서드파티 패키지
+#
+# 대상 Python: 3.14 (venv 는 리포지터리 루트의 venv 를 사용한다)
+#   source venv/bin/activate
+#   pip install -r ch01/dxx-app/requirements.txt
+#
+# 버전은 2026-09-05 이 환경에 설치해 전 단계 실행으로 확인한 조합이다.
+# 설치 후 현재 환경 기준으로 다시 고정하려면:
+#   pip freeze > requirements.txt
+
+# 2단계(임베딩) / 3-1단계(생성) — Gemini API 클라이언트
+# 주의: 이 패키지는 지원 종료(EOL) 상태로 임포트 시 FutureWarning 을 낸다.
+#       후속 패키지는 google-genai 이며, 이전 시 2단계·3-1단계 호출부를 함께 고쳐야 한다.
+google-generativeai==0.8.6
+
+# 5단계(HTTP API) / 7단계(GUI) — 웹 프레임워크와 ASGI 서버
+fastapi==0.141.1
+uvicorn==0.52.3
+
+# 5단계·7단계의 요청 스키마 검증 (fastapi 의존성이지만 직접 임포트하므로 명시)
+pydantic==2.13.4
+
+# 아래는 의도적으로 넣지 않았다.
+#   requests / httpx : 3-3단계 Brave 검색은 표준 라이브러리 urllib 만 사용한다
+#   python-dotenv    : ch01 은 .env 를 읽지 않고 환경 변수만 사용한다

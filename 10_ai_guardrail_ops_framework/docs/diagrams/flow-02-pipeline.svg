@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 400" font-family="-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/>
+    </marker>
+    <style>
+      .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+      .boxR{rx:12}
+      .t{font-size:13px;font-weight:700;fill:#122033}
+      .s{font-size:10.5px;fill:#516174}
+      .edge{stroke:#64748b;stroke-width:1.8;fill:none;marker-end:url(#arr)}
+      .edgeR{stroke:#ef4444;stroke-width:1.6;fill:none;marker-end:url(#arrR)}
+      .edgeD{stroke:#64748b;stroke-width:1.4;fill:none;stroke-dasharray:5,4;marker-end:url(#arr)}
+      .num{font-size:15px;font-weight:800}
+      .n1{fill:#1e3a8a}.n2{fill:#6d28d9}.n3{fill:#0f766e}.n4{fill:#b45309}.n5{fill:#be123c}
+      .out{fill:#f8fafc;stroke:#e2e8f0;stroke-width:1}
+      .outT{font-size:9.5px;font-weight:700}
+      .og{fill:#166534}.oy{fill:#92400e}.or{fill:#991b1b}.ob{fill:#1e3a8a}
+    </style>
+  </defs>
+
+  <!-- input -->
+  <rect class="box boxR" x="15" y="140" width="105" height="70"/>
+  <text class="t" x="67" y="170" text-anchor="middle" style="font-size:12px">프롬프트</text>
+  <text class="s" x="67" y="188" text-anchor="middle">user input</text>
+
+  <!-- stage 1 -->
+  <rect class="box boxR" x="160" y="60" width="170" height="240"/>
+  <text class="num n1" x="245" y="88" text-anchor="middle">①</text>
+  <text class="t" x="245" y="110" text-anchor="middle">입력 정책</text>
+  <text class="s" x="245" y="128" text-anchor="middle">guard/policy.py</text>
+  <text class="s" x="245" y="144" text-anchor="middle">규칙 17개 · 한/영</text>
+  <text class="s" x="245" y="160" text-anchor="middle">NORMALIZE 적용</text>
+  <rect class="out" x="172" y="178" width="146" height="22" rx="6"/>
+  <text class="outT or" x="245" y="193" text-anchor="middle">block 규칙 → BLOCK</text>
+  <rect class="out" x="172" y="206" width="146" height="22" rx="6"/>
+  <text class="outT oy" x="245" y="221" text-anchor="middle">review 규칙 → 계속·REVIEW 보장</text>
+  <rect class="out" x="172" y="234" width="146" height="22" rx="6"/>
+  <text class="outT og" x="245" y="249" text-anchor="middle">매칭 없음 → 다음 단계</text>
+  <rect class="out" x="172" y="262" width="146" height="22" rx="6"/>
+  <text class="outT ob" x="245" y="277" text-anchor="middle">규칙 오류 → fail closed</text>
+
+  <!-- stage 2 -->
+  <rect class="box boxR" x="370" y="60" width="170" height="240"/>
+  <text class="num n2" x="455" y="88" text-anchor="middle">②</text>
+  <text class="t" x="455" y="110" text-anchor="middle">대화 레일</text>
+  <text class="s" x="455" y="128" text-anchor="middle">providers/dialogue.py</text>
+  <text class="s" x="455" y="144" text-anchor="middle">--rail keywords|nemo</text>
+  <text class="s" x="455" y="160" text-anchor="middle">토픽 게이트 (선택)</text>
+  <rect class="out" x="382" y="178" width="146" height="22" rx="6"/>
+  <text class="outT oy" x="455" y="193" text-anchor="middle">주제 이탈 → REVIEW</text>
+  <rect class="out" x="382" y="206" width="146" height="22" rx="6"/>
+  <text class="outT ob" x="455" y="221" text-anchor="middle">모델 호출 없이 종료</text>
+  <rect class="out" x="382" y="234" width="146" height="22" rx="6"/>
+  <text class="outT og" x="455" y="249" text-anchor="middle">on_topic → 다음 단계</text>
+  <rect class="out" x="382" y="262" width="146" height="22" rx="6"/>
+  <text class="outT ob" x="455" y="277" text-anchor="middle">레일 오류 → fail closed</text>
+
+  <!-- stage 3 -->
+  <rect class="box boxR" x="580" y="60" width="170" height="240"/>
+  <text class="num n3" x="665" y="88" text-anchor="middle">③</text>
+  <text class="t" x="665" y="110" text-anchor="middle">LLM 모델</text>
+  <text class="s" x="665" y="128" text-anchor="middle">providers/model.py</text>
+  <text class="s" x="665" y="144" text-anchor="middle">Ollama · DeepSeek</text>
+  <text class="s" x="665" y="160" text-anchor="middle">· dummy</text>
+  <rect class="out" x="592" y="178" width="146" height="22" rx="6"/>
+  <text class="outT og" x="665" y="193" text-anchor="middle">응답 생성</text>
+  <rect class="out" x="592" y="206" width="146" height="22" rx="6"/>
+  <text class="outT ob" x="665" y="221" text-anchor="middle">호출 실패 → dummy 폴백</text>
+  <rect class="out" x="592" y="234" width="146" height="22" rx="6"/>
+  <text class="outT og" x="665" y="249" text-anchor="middle">USE_LLM=0 → 더미 응답</text>
+  <rect class="out" x="592" y="262" width="146" height="22" rx="6"/>
+  <text class="outT ob" x="665" y="277" text-anchor="middle">span: model/ok·error</text>
+
+  <!-- stage 4 -->
+  <rect class="box boxR" x="790" y="60" width="170" height="240"/>
+  <text class="num n4" x="875" y="88" text-anchor="middle">④</text>
+  <text class="t" x="875" y="110" text-anchor="middle">안전 분류기</text>
+  <text class="s" x="875" y="128" text-anchor="middle">providers/classifier.py</text>
+  <text class="s" x="875" y="144" text-anchor="middle">Llama Guard 3</text>
+  <text class="s" x="875" y="160" text-anchor="middle">--classifier (선택)</text>
+  <rect class="out" x="802" y="178" width="146" height="22" rx="6"/>
+  <text class="outT or" x="875" y="193" text-anchor="middle">unsafe → BLOCK</text>
+  <rect class="out" x="802" y="206" width="146" height="22" rx="6"/>
+  <text class="outT ob" x="875" y="221" text-anchor="middle">분류 실패 → fail closed</text>
+  <rect class="out" x="802" y="234" width="146" height="22" rx="6"/>
+  <text class="outT og" x="875" y="249" text-anchor="middle">safe → 다음 단계</text>
+  <rect class="out" x="802" y="262" width="146" height="22" rx="6"/>
+  <text class="outT ob" x="875" y="277" text-anchor="middle">미사용 시 skipped</text>
+
+  <!-- stage 5 -->
+  <rect class="box boxR" x="1000" y="60" width="105" height="240"/>
+  <text class="num n5" x="1052" y="88" text-anchor="middle">⑤</text>
+  <text class="t" x="1052" y="110" text-anchor="middle">출력 마스킹</text>
+  <text class="s" x="1052" y="128" text-anchor="middle">guard/output.py</text>
+  <text class="s" x="1052" y="144" text-anchor="middle">config/output-</text>
+  <text class="s" x="1052" y="158" text-anchor="middle">patterns.json</text>
+  <rect class="out" x="1012" y="178" width="81" height="52" rx="6"/>
+  <text class="outT og" x="1052" y="200" text-anchor="middle">이메일·전화·</text>
+  <text class="outT og" x="1052" y="216" text-anchor="middle">API키·비밀번호</text>
+  <rect class="out" x="1012" y="240" width="81" height="44" rx="6"/>
+  <text class="outT ob" x="1052" y="258" text-anchor="middle">패턴 오류 →</text>
+  <text class="outT ob" x="1052" y="272" text-anchor="middle">fail closed</text>
+
+  <!-- main edges -->
+  <path class="edge" d="M120,175 L160,175"/>
+  <path class="edge" d="M330,175 L370,175"/>
+  <path class="edge" d="M540,175 L580,175"/>
+  <path class="edge" d="M750,175 L790,175"/>
+  <path class="edge" d="M960,175 L1000,175"/>
+
+  <!-- result -->
+  <rect class="box boxR" x="780" y="340" width="330" height="46" style="stroke:#22c55e;stroke-width:2"/>
+  <text class="t" x="945" y="360" text-anchor="middle" style="font-size:12px">RunRecord → guardrail-ops/results/events.db 저장</text>
+  <text class="s" x="945" y="378" text-anchor="middle">decision: allow / review(마스킹) / block · risk: Low~Critical · span별 지연</text>
+  <path class="edge" d="M1052,300 L1052,340 L960,340"/>
+
+  <!-- early exits -->
+  <path class="edgeR" d="M245,300 L245,330 L700,330 L700,340" stroke-dasharray="5,4"/>
+  <path class="edgeR" d="M455,300 L455,318 L720,318" stroke-dasharray="5,4"/>
+  <path class="edgeR" d="M875,300 L875,306 L740,306" stroke-dasharray="5,4"/>
+  <text class="s" x="480" y="326" text-anchor="middle" style="fill:#991b1b">block/review 조기 종료 → 이후 단계 스킵 · 이벤트는 그대로 기록</text>
+</svg>
