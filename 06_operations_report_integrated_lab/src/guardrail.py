@@ -100,7 +100,6 @@ def write_result(result: GuardrailResult, path: str | Path) -> None:
 if __name__ == "__main__":
     # 파일을 직접 실행했을 때도 학습자가 입력 차단과 출력 마스킹을 한 번에 확인하도록 한다.
     # 실제 모델 호출은 포함하지 않고, 안전한 더미 응답만 사용해 재현 가능한 결과를 만든다.
-    # 복사된 위치의 단계 폴더(src/의 부모)에 results/를 만든다.
     project_root = Path(__file__).resolve().parents[1]
     result_path = project_root / "results" / "step03-guardrail-result.json"
     input_result, output_result = safe_response(
@@ -109,4 +108,9 @@ if __name__ == "__main__":
     )
     result = output_result if input_result.decision is Decision.ALLOW else input_result
     write_result(result, result_path)
+    # step03_report.py는 __main__ 실행 시에만 필요하므로 지연 import로 테스트 격리 로드를 유지한다.
+    # 05/06 src/의 report.py는 각 단계 결과 리포트이므로 이름이 다른 복사본을 사용한다.
+    from step03_report import write_report
+
+    write_report(result_payload(result), result_path.with_suffix(".html"))
     print(json.dumps(result_payload(result), ensure_ascii=False, indent=2))

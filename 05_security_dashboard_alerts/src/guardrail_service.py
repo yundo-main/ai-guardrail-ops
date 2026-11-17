@@ -19,7 +19,7 @@ from typing import Any
 from uuid import uuid4
 
 
-# 같은 src/ 폴더 — step03-policy.py, step03-guardrail.py, llama_guard.py, nemo_guardrails_client.py가 있다.
+# 같은 src/ 폴더 — step03_policy.py, step03_guardrail.py, llama_guard.py, nemo_guardrails_client.py가 있다.
 SRC = Path(__file__).resolve().parent
 
 
@@ -59,33 +59,33 @@ class GuardrailService:
         # Step 05 also has a module named ``policy.py``.  Step 03's guardrail.py
         # uses an absolute import, so temporarily bind the intended policy
         # module while loading it and then restore the API's module binding.
-        # 05/src/ 안의 step03-policy.py·step03-guardrail.py를 사용한다.
+        # 05/src/ 안의 step03_policy.py·step03_guardrail.py를 사용한다.
         # policy 모듈명이 05/src/policy.py와 충돌하므로 로드 시 임시로 대체하고 복원한다.
         policy_name = "policy"
         previous_policy = sys.modules.get(policy_name)
-        day3_policy = _load(
-            "day3_policy_definition",
-            SRC / "step03-policy.py",
+        step03_policy = _load(
+            "step03_policy_definition",
+            SRC / "step03_policy.py",
         )
-        sys.modules[policy_name] = day3_policy
+        sys.modules[policy_name] = step03_policy
         try:
-            day3 = _load("day3_policy_for_service", SRC / "step03-guardrail.py")
+            step03 = _load("step03_guardrail_for_service", SRC / "step03_guardrail.py")
         finally:
             if previous_policy is None:
                 sys.modules.pop(policy_name, None)
             else:
                 sys.modules[policy_name] = previous_policy
-        llama = _load("day2_llama_for_service", SRC / "llama_guard.py")
-        nemo = _load("day2_nemo_for_service", SRC / "nemo_guardrails_client.py")
-        self.day3 = day3
+        llama = _load("step02_llama_for_service", SRC / "llama_guard.py")
+        nemo = _load("step02_nemo_for_service", SRC / "nemo_guardrails_client.py")
+        self.step03 = step03
         self.llama = llama.LlamaGuardClient()
         self.nemo = nemo.NemoGuardrailsClient()
 
     def chat(self, prompt: str) -> dict[str, Any]:
         trace_id = f"trace-{uuid4().hex}"
         started = time.perf_counter()
-        input_result = self.day3.check_input(prompt)
-        if input_result.decision is self.day3.Decision.BLOCK:
+        input_result = self.step03.check_input(prompt)
+        if input_result.decision is self.step03.Decision.BLOCK:
             return self._result(
                 trace_id, started, "block", input_result.risk.value,
                 "policy", input_result.text, input_result.matches,
@@ -105,7 +105,7 @@ class GuardrailService:
                 "안전성 분류 결과가 unsafe입니다.", (), llama=llama_result.as_dict(), nemo=nemo_raw,
             )
 
-        output_result = self.day3.redact_output(response)
+        output_result = self.step03.redact_output(response)
         return self._result(
             trace_id, started, output_result.decision.value, output_result.risk.value,
             "output_redaction" if output_result.masked_fields else "safe",

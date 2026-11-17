@@ -27,20 +27,20 @@
 
 ## 실습
 
+> 저장소 루트에서 실행한다. LLM 없이도 동작하고, `USE_LLM=1`이면 로컬 Ollama를 선택적으로 사용한다.
+
 ```bash
-python3 -m unittest discover -s tests -v
+# 1) 6단계 통합 실행 — 정책·가드레일·이벤트·지표·리포트를 한 번에 수행
+#    → 06_operations_report_integrated_lab/results/ 에 step06-report.json 생성
 python3 06_operations_report_integrated_lab/src/app.py
+
+# 2) 결과 확인
+python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json
 ```
 
 선택적으로 `USE_LLM=1`을 지정하면 `src/llm.py`가 로컬 Ollama의 `/api/chat`을 호출한다. 모델 응답은 더미 응답과 동일하게 입력 검사와 출력 검열을 거친다.
 
 실행 결과에서 입력 판정, 출력 검열, 이벤트 생성, Critical 알림, 리포트 지표를 차례로 확인한다.
-
-실행이 끝나면 최종 JSON은 `results/step06-report.json`에 저장된다.
-
-```bash
-python3 -m json.tool results/step06-report.json
-```
 
 ## 산출물
 
@@ -48,13 +48,13 @@ python3 -m json.tool results/step06-report.json
 - 월간 지표 요약
 - 정책·탐지·알림 개선안
 - 통합 실습 실행 결과
-- `results/step06-report.json` 최종 통합 결과
+- `results/step06-report.json` + `step06-report.html` 최종 통합 결과·운영 리포트
 
 ## 단계 간 연결
 
 [← 5단계](../05_security_dashboard_alerts/readme.md) · [전체 과정](../readme.md)
 
-5단계의 `step05-metrics.json`을 읽고 선택적 Ollama 응답의 결과와 함께 `step06-report.json`으로 기록한다. 각 단계의 소스는 중복 유지하지만 결과 파일을 통해 점층적인 학습 흐름을 확인한다.
+5단계의 `05_security_dashboard_alerts/results/step05-metrics.json`(5단계 `src/report.py` 실행으로 생성)을 읽고 선택적 Ollama 응답의 결과와 함께 `step06-report.json` + `.html`로 기록한다. 각 단계의 소스는 중복 유지하지만 결과 파일을 통해 점층적인 학습 흐름을 확인한다.
 
 ## 완료 기준
 
@@ -65,7 +65,9 @@ python3 -m json.tool results/step06-report.json
 | 경로 | 역할 |
 | --- | --- |
 | `src/llm.py` | `USE_LLM=1`일 때 Ollama `/api/chat`을 호출하는 선택적 LLM 어댑터 |
-| `src/app.py` | 정상·차단·민감 출력 사례를 Guardrail·이벤트·지표·리포트로 통합 실행 |
+| `src/app.py` | 정상·차단·민감 출력 사례를 Guardrail·이벤트·지표·리포트로 통합 실행, JSON+HTML 저장 |
+| `src/report.py` | `step06-report.json` 페이로드를 독립 HTML 운영 리포트로 렌더링 |
+| `src/step03_report.py` | 3단계 결과 HTML 렌더러의 로컬 복사본 — `report.py`와 이름 충돌 방지용 |
 | `slides/s00-tech-spec.svg` | 통합 실습과 선택적 Ollama 기술 사양 |
 | `slides/s01-integrated-report.svg` | 운영 리포트·통합 실습 전체 흐름 |
 | `slides/s02-report-theory.svg` | 주간·월간 운영 리포트 이론 |

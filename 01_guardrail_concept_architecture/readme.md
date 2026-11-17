@@ -37,6 +37,9 @@ Guardrail은 모델 자체를 바꾸는 기능이 아니라 모델 앞뒤에 정
 
 ```bash
 python3 01_guardrail_concept_architecture/src/architecture.py
+
+# 단위 테스트 (선택, 오프라인)
+python3 -m unittest discover -s 01_guardrail_concept_architecture/tests -v
 ```
 
 ## 산출물

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+from dataclasses import asdict
 from pathlib import Path
 
 # 06단계 폴더 루트 — results/ 경로 계산에만 사용하며 다른 단계 src/는 참조하지 않는다.
@@ -54,18 +55,27 @@ def main() -> None:
             print("ALERT", json.dumps(alert, ensure_ascii=False))
     metrics = dashboard_metrics(events)
     upstream_metrics = None
-    upstream_path = ROOT / "results" / "step05-metrics.json"
+    upstream_path = Path(__file__).resolve().parents[2] / "05_security_dashboard_alerts" / "results" / "step05-metrics.json"
     # 5단계가 남긴 JSON을 읽어 파일 기반 단계 연결도 함께 검증한다.
     if upstream_path.exists():
         upstream_metrics = json.loads(upstream_path.read_text(encoding="utf-8"))
     # 이전 단계 결과가 없더라도 현재 통합 실습은 실행되며, 누락은 리포트에서 확인할 수 있다.
-    # 최종 결과를 파일로 남겨 다음 운영 검토와 제출 증거로 사용한다.
+    # 최종 결과를 JSON + HTML 보고서로 남겨 다음 운영 검토와 제출 증거로 사용한다.
+    payload = {
+        "schema_version": "1.0",
+        "step": "06",
+        "source_stage": "step06",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "events": [asdict(event) for event in events],
+        "metrics": metrics,
+        "upstream_metrics": upstream_metrics,
+        "llm_mode": "optional-local-ollama",
+    }
     result_path = ROOT / "results" / "step06-report.json"
     result_path.parent.mkdir(parents=True, exist_ok=True)
-    result_path.write_text(
-        json.dumps({"day": "06", "events": len(events), "metrics": metrics, "upstream_metrics": upstream_metrics, "llm_mode": "optional-local-ollama"}, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
+    result_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    import report
+    report.write_report(payload, result_path.with_suffix(".html"))
     print(json.dumps(metrics, ensure_ascii=False, indent=2))
 
 

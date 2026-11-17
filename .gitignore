@@ -13,9 +13,7 @@ __pycache__/
 
 # 런타임 생성 결과물 — 실행 후 자동 생성되므로 추적 불필요
 results/*
-99_ref/results/
-99_ref/integration/results/
-99_ref/logs/*.md
+
 
 # 데이터베이스
 *.db
@@ -29,7 +27,6 @@ results/*
 .idea/
 
 # 강사 전용 문서 (수강생 비공개)
-99_ref/docs/plan.md
 100_teacher/
 
 

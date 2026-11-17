@@ -33,16 +33,22 @@
 
 점수 기반 분류 예제는 `src/risk.py`에서 실행한다.
 
+> 저장소 루트에서 실행한다. LLM·Ollama 없이 동작한다. **3단계 결과 파일이 먼저 필요하다.**
+
 ```bash
+# 1) 3단계 결과 생성 (아직 없다면 먼저 실행)
+python3 03_policy_blocking_output_filtering/src/guardrail.py
+
+# 2) 4단계 실행 — 03 결과를 읽어 이벤트로 변환
+#    → 04_risk_rating_system/results/ 에 JSON + HTML 생성
 PYTHONPATH=04_risk_rating_system/src python3 04_risk_rating_system/src/risk.py
+
+# 3) 결과 확인
+python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
+open 04_risk_rating_system/results/step04-security-event.html
 ```
 
-3단계 결과 파일이 있으면 위 명령이 이를 읽어 `results/step04-security-event.json`과 같은 이름의 `.html` 보고서를 생성한다. 결과는 다음처럼 확인한다.
-
-```bash
-python3 -m json.tool results/step04-security-event.json
-open results/step04-security-event.html
-```
+3단계 결과 파일(`03_policy_blocking_output_filtering/results/step03-guardrail-result.json`)이 있으면 위 명령이 이를 읽어 `results/step04-security-event.json`과 같은 이름의 `.html` 보고서를 생성한다. 파일이 없으면 점수 분류 예시만 출력된다.
 
 ## 산출물
 

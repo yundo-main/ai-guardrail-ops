@@ -19,7 +19,7 @@ AI 서비스 운영 단계에서 입력·출력 가드레일, 위험 분류, 보
 
 각 단계에 필요한 기술만 정리한 기술 사양 SVG는 각 폴더의 `slides/s00-tech-spec.svg`에서 확인한다.
 
-독립 단계 실습은 기존 01~06단계 폴더에서 진행하고, 점층적인 실제형 통합 실습은 [99_ref/integration/README.md](../99_ref/integration/README.md)를 따른다. 결과 규약과 품질 평가 기준은 [99_ref/contracts/README.md](../99_ref/contracts/README.md)에서 확인한다.
+독립 단계 실습은 기존 01~06단계 폴더에서 진행한다. 단계 간 연결은 각 단계 `results/`의 JSON 결과 파일과 5단계 API로 이루어지며, 결과 규약과 품질 평가 기준은 [contracts/README.md](contracts/README.md)에서 확인한다.
 
 ## 전체 목표
 
@@ -98,7 +98,7 @@ AI 서비스 운영 단계에서 입력·출력 가드레일, 위험 분류, 보
 | --- | --- |
 | SVG (1280×720, CSS 클래스, 다크 모드, `role`/`aria`) | 단계별 발표 슬라이드 |
 | Markdown | readme·용어집·개발 문서 |
-| `python3 -m unittest` | `99_ref/tests` 공통 테스트 |
+| `python3 -m unittest` | 각 단계 `tests/` 단위 테스트 |
 | `xmllint --noout` / `py_compile` / `node --check` | SVG·Python·JS 문법 검증 |
 | `curl` | API 엔드포인트 확인 |
 
@@ -117,10 +117,11 @@ AI 서비스 운영 단계에서 입력·출력 가드레일, 위험 분류, 보
 | `05_security_dashboard_alerts/src/` | 지표 집계와 Critical 알림 |
 | `06_operations_report_integrated_lab/src/app.py` | 정상·위험·민감 출력 통합 실행 |
 | `06_operations_report_integrated_lab/src/llm.py` | 선택적 로컬 Ollama 호출 어댑터 |
-| `99_ref/results/` | 단계 간 JSON 결과 전달과 실습 증거 |
+| `results.md` | 단계 간 JSON 결과 파일 전달 규칙 — [results.md](results.md) |
 | `01_guardrail_concept_architecture/src/` | Guardrail 파이프라인 단계 정의 |
 | `02_llama_guard_nemo_guardrails/src/main.py` | 2단계 진입점 — `contracts/`·`classifier/`·`dialogue/`·`pipeline/` 하위 구조 |
-| `99_ref/tests/test_guardrail.py` | 핵심 동작 단위 테스트 |
+| `03_policy_blocking_output_filtering/tests/test_guardrail.py` | 3단계 입력 차단·출력 마스킹 단위 테스트 (단계별 `tests/`는 각 단계 폴더에 위치) |
+| `glossary/` · `glossary.md` | 1~6단계 핵심 용어 통합 용어집 — [용어 포털](glossary/index.html) · [glossary.md](glossary.md) |
 
 단계별 슬라이드 구성표는 각 단계 폴더의 `slides/readme.md`에 분리했다.
 
@@ -132,8 +133,11 @@ python3 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install -r requirements.txt
 
-# 전체 테스트
-python3 -m unittest discover -s tests -v
+# 전체 테스트 — 단계별 tests/ 디렉터리에서 실행
+python3 -m unittest discover -s 01_guardrail_concept_architecture/tests -v
+python3 -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v
+python3 -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
+python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v
 
 # 1~4단계 단독 실행 및 결과 생성
 python3 01_guardrail_concept_architecture/src/architecture.py
@@ -147,21 +151,18 @@ uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 
 # 5단계 API를 종료한 뒤 새 터미널에서 6단계 실행
 python3 06_operations_report_integrated_lab/src/app.py
-
-# 3~4~6단계 파일 흐름 자동 실행
-python3 99_ref/scripts/run_pipeline.py
 ```
 
 ### 실행 결과 확인
 
-1~2단계는 터미널에 구조 요약을 출력한다. 3~4단계와 6단계는 실행 후 `99_ref/results/`에 JSON 결과를 저장한다.
+1~2단계는 터미널에 구조 요약을 출력한다. 3~4·6단계는 실행 후 각 단계 폴더의 `results/`에 JSON 결과를 저장한다(5단계는 API `/metrics`로 조회).
 
 ```bash
 # JSON을 사람이 읽기 좋은 형식으로 확인
-python3 -m json.tool 99_ref/results/step03-guardrail-result.json
-python3 -m json.tool 99_ref/results/step04-security-event.json
-python3 -m json.tool 99_ref/results/step05-metrics.json
-python3 -m json.tool 99_ref/results/step06-report.json
+python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
+python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
+python3 -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
+python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json
 ```
 
 5단계 API는 서버를 켠 별도 터미널에서 다음처럼 확인한다.
@@ -173,13 +174,13 @@ curl -H 'X-API-Key: dev-only-key' http://127.0.0.1:8000/metrics
 curl -H 'X-API-Key: dev-only-key' http://127.0.0.1:8000/alerts/critical
 ```
 
-브라우저에서 `http://127.0.0.1:8000/docs`를 열면 Swagger UI로 요청을 직접 실행할 수 있다. 5단계 지표를 파일로 보관하려면 `/metrics` 응답을 `99_ref/results/step05-metrics.json`으로 저장한다.
+브라우저에서 `http://127.0.0.1:8000/docs`를 열면 Swagger UI로 요청을 직접 실행할 수 있다. 5단계 지표를 파일로 보관하려면 `/metrics` 응답을 `05_security_dashboard_alerts/results/step05-metrics.json`으로 저장한다.
 
 ```bash
-curl -H 'X-API-Key: dev-only-key' http://127.0.0.1:8000/metrics > 99_ref/results/step05-metrics.json
+curl -H 'X-API-Key: dev-only-key' http://127.0.0.1:8000/metrics > 05_security_dashboard_alerts/results/step05-metrics.json
 ```
 
-각 단계의 실행 목적과 산출물은 해당 폴더의 `readme.md`, 슬라이드 목록은 `slides/readme.md`, 단계 간 결과 규약은 `99_ref/results/README.md`에서 확인한다.
+각 단계의 실행 목적과 산출물은 해당 폴더의 `readme.md`, 슬라이드 목록은 `slides/readme.md`, 단계 간 결과 규약은 [results.md](results.md)에서 확인한다.
 
 ### 선택적 로컬 LLM 실행
 
@@ -202,7 +203,7 @@ uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 
 - Swagger: `http://127.0.0.1:8000/docs`
 - 웹 대시보드: `http://127.0.0.1:8000/dashboard`
-- 저장소: 기본 `99_ref/results/security_events.db` SQLite
+- 저장소: 기본 `05_security_dashboard_alerts/results/security_events.db` SQLite
 
 대시보드 화면의 API Key 입력란에 동일한 키를 입력한다. 이벤트 등록 시에는 `X-API-Key` 헤더를 사용한다.
 
@@ -210,7 +211,7 @@ uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 curl -X POST http://127.0.0.1:8000/events \
   -H 'Content-Type: application/json' \
   -H 'X-API-Key: dev-only-key' \
-  --data @99_ref/results/step04-security-event.json
+  --data @04_risk_rating_system/results/step04-security-event.json
 ```
 
 `OLLAMA_BASE_URL`로 다른 로컬 Ollama 주소를 지정할 수 있다. 서버가 없거나 호출에 실패하면 더미 응답으로 자동 대체되며, 모델 응답도 동일하게 `safe_response()`의 입력·출력 가드레일을 통과한다.
@@ -229,9 +230,8 @@ curl -X POST http://127.0.0.1:8000/events \
 
 각 단계 README는 학습 목표보다 먼저 해당 주제를 배우는 이유와 앞뒤 단계와의 연결을 설명하는 `이론적 배경`으로 시작한다.
 
-단계별 소스코드는 독립·중복 유지하고, 단계 간 연결은 [99_ref/results/README.md](../99_ref/results/README.md)의 JSON 결과 파일과 5단계 API를 사용한다.
+단계별 소스코드는 독립·중복 유지하고, 단계 간 연결은 각 단계 `results/`의 JSON 결과 파일과 5단계 API를 사용한다. 결과 파일 규약은 [results.md](results.md)와 [contracts/](contracts/README.md)에서 확인한다.
 
-실제형 통합 트랙도 독립 트랙을 수정하지 않는다. `99_ref/integration/`은 단계별 실행 결과를 별도 저장해 01→06 점층 구조를 재현한다.
 
 각 단계의 상세 안내는 다음 폴더에 분리했다.
 
@@ -290,14 +290,12 @@ qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg
 
 | 경로 | 역할 |
 | --- | --- |
-| `00_intro/` | 과정 개요·전체 흐름·기술 스택 SVG |
+| `00_intro/` | 과정 개요·전체 흐름·기술 스택 SVG — 내부에 `contracts/`(결과 규약)·`glossary/`(용어집) 포함 |
 | `01_...` ~ `06_...` | 서로 독립적인 단계별 학습 코드·문서·SVG |
-| `99_ref/integration/` | 단계별 코드를 침범하지 않는 01→06 점층 통합 실습 |
-| `99_ref/contracts/` | 단계 간 JSON 결과 형식·버전 기준 · 품질 평가 기준 |
-| `99_ref/results/` | 독립 단계 실습의 JSON 결과와 전달 규칙 |
-| `99_ref/tests/` | 공통 회귀·API·규약 테스트 |
-| `99_ref/scripts/` | 빠른 파일 기반 파이프라인 보조 실행 |
-| `99_ref/logs/` | 작업·검증·재구성 이력 |
+| `results.md` | 각 단계 `results/`의 JSON 결과 파일 전달 규칙 |
+| `tests/` (각 단계) | 단계별 단위 테스트 — `01`·`02`·`03`·`05` 단계 폴더에 위치 |
+
+| `100_teacher/logs/` | 작업·검증·재구성 이력 (로컬 전용, git 제외) |
 | `10_ai_guardrail_ops_framework/` | 1~6단계를 하나로 합친 통합 운영 프레임워크 |
 | `readme.md` | 저장소 진입점 — 포털·단계별 문서 링크 |
 | `requirements.txt` | 루트 공통 실행 의존성 |

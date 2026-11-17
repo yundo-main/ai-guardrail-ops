@@ -16,10 +16,11 @@ from pydantic import BaseModel, Field
 from event_model import SecurityEvent
 from monitoring import critical_alert, dashboard_metrics
 from policy import Decision, RiskLevel
+import discord
 import store
 
 # 05/src/ 안에 번들된 로컬 guardrail_service를 사용한다.
-# 외부 integration/ 폴더를 참조하지 않으므로 이 디렉터리만 복사해도 독립 실행이 가능하다.
+# 다른 단계 디렉터리를 참조하지 않으므로 이 디렉터리만 복사해도 독립 실행이 가능하다.
 from guardrail_service import GuardrailService, GuardrailServiceError
 
 
@@ -104,6 +105,8 @@ def guardrail_chat(payload: ChatRequest) -> dict[str, object]:
         model_name="llama-guard-3 + nemo-guardrails",
     )
     store.save(event)
+    if alert := critical_alert(event):
+        discord.notify_async(alert)
     result["event_id"] = event.event_id
     result["conversation_id"] = payload.conversation_id
     return result
@@ -135,6 +138,8 @@ def create_event(payload: EventRequest) -> dict[str, object]:
         status=payload.status,
     )
     store.save(event)
+    if alert := critical_alert(event):
+        discord.notify_async(alert)
     logger.info("security event stored", extra={"event_id": event.event_id, "risk": event.risk.value, "trace_id": event.trace_id})
     return asdict(event)
 

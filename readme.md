@@ -22,5 +22,4 @@ LLM 앞뒤에 입력·출력 가드레일을 두고, 정책 판정·위험 등�
 
 ## 참고 문서
 
-- 단계 간 결과 규약: [99_ref/results/README.md](99_ref/results/README.md)
-- 점층 통합 실습: [99_ref/integration/README.md](99_ref/integration/README.md)
+- 단계 간 결과 규약: [00_intro/results.md](00_intro/results.md) · [00_intro/contracts/](00_intro/contracts/README.md)

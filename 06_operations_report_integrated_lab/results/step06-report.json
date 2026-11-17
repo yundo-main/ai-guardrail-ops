@@ -1,6 +1,55 @@
 {
-  "day": "06",
-  "events": 3,
+  "schema_version": "1.0",
+  "step": "06",
+  "source_stage": "step06",
+  "generated_at": "2026-11-17T23:27:52.022664+00:00",
+  "events": [
+    {
+      "event_id": "demo-1",
+      "decision": "allow",
+      "risk": "Low",
+      "category": "normal",
+      "detail": "The policy applies for 30 days.",
+      "timestamp": "2026-11-17T23:27:52.022171+00:00",
+      "schema_version": "1.0",
+      "trace_id": "demo-trace-1",
+      "source_stage": "step05",
+      "policy_version": "policy-1",
+      "model_name": "deterministic-fixture",
+      "status": "open",
+      "acknowledged_at": null
+    },
+    {
+      "event_id": "demo-2",
+      "decision": "block",
+      "risk": "Critical",
+      "category": "prompt injection",
+      "detail": "요청이 보안 정책에 의해 차단되었습니다.",
+      "timestamp": "2026-11-17T23:27:52.022383+00:00",
+      "schema_version": "1.0",
+      "trace_id": "demo-trace-2",
+      "source_stage": "step05",
+      "policy_version": "policy-1",
+      "model_name": "deterministic-fixture",
+      "status": "open",
+      "acknowledged_at": null
+    },
+    {
+      "event_id": "demo-3",
+      "decision": "review",
+      "risk": "Critical",
+      "category": "email",
+      "detail": "Contact [EMAIL_REDACTED]; api_key=[API_KEY_REDACTED].",
+      "timestamp": "2026-11-17T23:27:52.022433+00:00",
+      "schema_version": "1.0",
+      "trace_id": "demo-trace-3",
+      "source_stage": "step05",
+      "policy_version": "policy-1",
+      "model_name": "deterministic-fixture",
+      "status": "open",
+      "acknowledged_at": null
+    }
+  ],
   "metrics": {
     "total_events": 3,
     "blocked_events": 1,
@@ -19,6 +68,21 @@
     "open_events": 3,
     "acknowledged_events": 0
   },
-  "upstream_metrics": null,
+  "upstream_metrics": {
+    "schema_version": "1.0",
+    "source_stage": "step05",
+    "next": "06_operations_report_integrated_lab",
+    "generated_at": "2026-11-17T23:20:36.226975+00:00",
+    "total_events": 0,
+    "blocked_events": 0,
+    "review_events": 0,
+    "block_rate": 0.0,
+    "review_rate": 0.0,
+    "by_category": {},
+    "by_risk": {},
+    "open_events": 0,
+    "acknowledged_events": 0,
+    "critical_alerts": []
+  },
   "llm_mode": "optional-local-ollama"
 }

@@ -4,7 +4,7 @@
 
 ## 필수: 작업 로그 기록
 
-**모든 작업은 완료 시 `99_ref/logs/YYYY-MM-DD.md`에 기록한다.** 로그를 남기지 않은 작업은 미완료로 간주한다.
+**모든 작업은 완료 시 `100_teacher/logs/YYYY-MM-DD.md`에 기록한다.** 로그를 남기지 않은 작업은 미완료로 간주한다.
 
 - 파일이 없으면 새로 생성하고, 있으면 같은 날짜 파일에 `## 주제` 섹션을 추가한다.
 - 기록 항목: 변경 내용(파일 경로 포함), 이유, 검증 결과(테스트·명령 실행 여부), 미처리/남은 과제.
@@ -25,7 +25,7 @@
 ## 명명 규칙
 
 - 학습 단계 표기는 **`N단계`**(한글) / **`step0N`**(파일·식별자) — `일차`, `day`, `7-N` 표기 사용 금지
-- `00_intro/`는 과정 개요(0단계), `01_`~`06_`은 각 학습 단계, `10_ai_guardrail_ops_framework/`는 통합 프레임워크, `99_ref/`는 공통 참조 자료
+- `00_intro/`는 과정 개요(0단계)·결과 규약·용어집, `01_`~`06_`은 각 학습 단계, `10_ai_guardrail_ops_framework/`는 통합 프레임워크 — `99_ref/`는 폐기됨(과거 공통 참조 영역)
 - 결과 JSON은 `stepNN-*.json` 명명, `source_stage` 값도 `stepNN`
 
 ## 포털 페이지 규칙
@@ -33,15 +33,15 @@
 - 단계 포털(`0N_*/index.html`)은 `100_teacher/templates/gen_portal.py`로 생성 — **직접 편집 금지**, `PROJECTS` 설정 수정 후 `python3 100_teacher/templates/gen_portal.py` 재실행
 - 루트 `index.html`은 `100_teacher/templates/gen_index.py`로 생성 — **직접 편집 금지**, `STEPS` 설정 수정 후 `python3 100_teacher/templates/gen_index.py` 재실행
 - `00_intro/index.html`은 `100_teacher/templates/gen_intro.py`로 생성 — `python3 100_teacher/templates/gen_intro.py` 재실행
-- `99_ref/glossary/index.html` + `99_ref/glossary.md`는 `100_teacher/templates/gen_glossary.py`로 생성 — `python3 100_teacher/templates/gen_glossary.py` 재실행 (용어 소스: `gen_portal.py`의 `PROJECTS.gloss`)
-- `10_ai_guardrail_ops_framework/index.html`, `99_ref/index.html`은 `100_teacher/templates/gen_docs.py`로 생성 — `python3 100_teacher/templates/gen_docs.py` 재실행
+- `00_intro/glossary/index.html` + `00_intro/glossary.md`는 `100_teacher/templates/gen_glossary.py`로 생성 — `python3 100_teacher/templates/gen_glossary.py` 재실행 (용어 소스: `gen_portal.py`의 `PROJECTS.gloss`)
+- `10_ai_guardrail_ops_framework/index.html`은 `100_teacher/templates/gen_docs.py`로 생성 — `python3 100_teacher/templates/gen_docs.py` 재실행
 - 템플릿 변경은 `100_teacher/templates/project-portal.html`(단계·인트로 포털 공용 CSS/JS), `100_teacher/templates/index-portal.html`(루트 인덱스)에 반영
 - `100_teacher/`는 `.gitignore`로 git 추적 제외 — 강사 전용(템플릿·교사용 가이드 포함, 로컬 전용)
 - 포털은 `file://`로 서버 없이 동작해야 한다
 
 ## 검증
 
-- 변경 후 관련 검증 실행: `python3 -m unittest discover -s 99_ref/tests -v` (공통 테스트), `python3 -m compileall` 또는 직접 실행으로 문법 확인
+- 변경 후 관련 검증 실행: 단계별 `tests/` 디렉터리가 있으면 `python3 -m unittest discover -s <단계>/tests -v` 실행, `python3 -m compileall` 또는 직접 실행으로 문법 확인
 - SVG 변경 시 `xmllint --noout <file>.svg` 검증
 - 포털 재생성 후 JS 문법 `node --check` 확인 권장
 
@@ -53,4 +53,4 @@
 ## 기타
 
 - `.env` 등 비밀 파일 커밋 금지 (`.gitignore` 준수)
-- 단계별 `src/`는 독립·중복 유지 — 단계 간 연결은 `99_ref/results/` JSON과 5단계 API로만
+- 단계별 `src/`는 독립·중복 유지 — 단계 간 연결은 각 단계 `results/` JSON과 5단계 API로만 (규약 문서는 `00_intro/results.md`·`00_intro/contracts/`)

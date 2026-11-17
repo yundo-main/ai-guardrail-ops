@@ -163,6 +163,18 @@ LLAMA_GUARD_BACKEND=transformers python 02_llama_guard_nemo_guardrails/src/main.
 모델·Ollama가 없는 환경에서는 `real`을 실행할 수 없지만, 역할 비교(`compare`)와
 단위 테스트는 선택 의존성 없이 실행된다.
 
+### 6) 단위 테스트 (선택, 오프라인)
+
+어댑터 경계 동작만 검증한다. 저장소 루트에서 실행한다.
+
+```bash
+python3 -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v
+```
+
+- `tests/test_real_guard_adapters.py` — Llama Guard 출력 파서의 fail-closed 동작
+  (safe/unsafe/알 수 없는 출력)과 `nemo_config/config.yml`의 Ollama 엔진 설정을 검증한다.
+- 이 테스트는 모델 호출 없이 `src/` 경계만 검증한다.
+
 ## 산출물
 
 - Llama Guard·NeMo Guardrails 비교표
@@ -208,6 +220,7 @@ nemo_config/
 | `nemo_config/config.yml` | Ollama 기반 NeMo Guardrails 모델·입출력 레일 설정 |
 | `nemo_config/prompts.yml` | `self check input`/`self check output` 레일이 사용하는 프롬프트 정의 |
 | `requirements-llm.txt` | Python 3.12용 선택 의존성 — 기본은 NeMo·langchain·pyyaml, Transformers·Torch는 주석 처리된 심화 옵션 |
+| `tests/test_real_guard_adapters.py` | Llama Guard 파서·NeMo 설정 경계 단위 테스트 (오프라인) |
 | `slides/s00-tech-spec.svg` | 2단계 필수 기술과 선택적 실제 모델 연동 범위 |
 | `slides/s01-guard-models.svg` | 두 Guardrails 적용 흐름 개요 |
 | `slides/s02-guardrail-theory.svg` | 안전성 분류와 대화 정책의 이론 비교 |

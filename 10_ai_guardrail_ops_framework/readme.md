@@ -1,6 +1,6 @@
 # AI Guardrail 관측(Observability) 프레임워크
 
-01~06단계의 기능을 하나로 합친 **독립 프레임워크**다. 단계 폴더(01~06, 99_ref)를 import하거나 참조하지 않으며, 표준 라이브러리만으로 동작한다. 무거운 의존성(Llama Guard·NeMo Guardrails·Ollama)은 선택 사항이다.
+01~06단계의 기능을 하나로 합친 **독립 프레임워크**다. 단계 폴더(01~06)를 import하거나 참조하지 않으며, 표준 라이브러리만으로 동작한다. 무거운 의존성(Llama Guard·NeMo Guardrails·Ollama)은 선택 사항이다.
 
 내부 구조·정책 스키마·설계 원칙은 [docs/development.md](docs/development.md)를 참고한다.
 

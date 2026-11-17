@@ -27,17 +27,22 @@
 
 ## 실습
 
+> 저장소 루트에서 실행한다. LLM·Ollama 없이 동작한다.
+
 ```bash
-python3 -m unittest discover -s tests -v
+# 1) 3단계 단위 테스트 (선택)
+python3 -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
+
+# 2) 3단계 실행 — 입력 차단·출력 검열 데모
+#    → 03_policy_blocking_output_filtering/results/ 에 JSON + HTML 생성
 python3 03_policy_blocking_output_filtering/src/guardrail.py
+
+# 3) 결과 확인
+python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
+open 03_policy_blocking_output_filtering/results/step03-guardrail-result.html
 ```
 
-`src/policy.py`와 `src/guardrail.py`의 입력 차단·출력 검열 흐름을 실행한다. 직접 실행하면 `results/step03-guardrail-result.json`과 같은 이름의 `.html` 보고서가 함께 생성되고, 다음 명령으로 결과를 확인할 수 있다.
-
-```bash
-python3 -m json.tool results/step03-guardrail-result.json
-open results/step03-guardrail-result.html
-```
+`src/policy.py`와 `src/guardrail.py`의 입력 차단·출력 검열 흐름을 실행한다. 직접 실행하면 `results/step03-guardrail-result.json`과 같은 이름의 `.html` 보고서가 함께 생성되고, 위 명령으로 결과를 확인할 수 있다.
 
 ## 산출물
 

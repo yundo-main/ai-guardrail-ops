@@ -52,9 +52,17 @@
 ```bash
 python3 -m pip install -r 05_security_dashboard_alerts/requirements.txt
 uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
+
+# 단위 테스트 (선택)
+python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v
+
+# 결과 리포트 생성 — DB 이벤트를 step05-metrics.json + .html로 저장
+python3 05_security_dashboard_alerts/src/report.py
 ```
 
 기본 API 키는 `dev-only-key`이며 요청 헤더에 `X-API-Key`를 넣는다. 배포 전에는 `GUARDRAIL_API_KEY`를 변경한다. API 문서는 서버 실행 후 `http://127.0.0.1:8000/docs`, 웹 화면은 `http://127.0.0.1:8000/dashboard`에서 확인한다. 이벤트는 기본적으로 `results/security_events.db`에 저장된다.
+
+Critical 이벤트가 등록되면 `critical_alert()` payload가 생성되고, `DISCORD_WEBHOOK_URL` 환경변수가 설정된 경우 `src/discord.py`가 Discord 웹훅으로 알림을 발송한다. 미설정 시 발송은 건너뛰고 API는 그대로 동작한다.
 
 ### 실제 Guardrail 서비스 호출
 
@@ -99,12 +107,14 @@ curl -X POST http://127.0.0.1:8000/events/step03-guardrail-result/acknowledge \
 | 경로 | 역할 |
 | --- | --- |
 | `src/api.py` | 인증된 이벤트 등록·조회·지표·알림·확인 API와 `/dashboard` 제공 |
-| `integration/guardrail_service.py` | 2단계 실제 provider 호출, 3단계 정책, 출력 마스킹을 연결하는 서비스 계층 |
+| `src/guardrail_service.py` | 2단계 실제 provider 호출, 3단계 정책, 출력 마스킹을 연결하는 서비스 계층 |
 | `src/store.py` | SQLite 초기화·저장·조회·초기화·acknowledgement 처리 |
 | `src/event_model.py` | API·저장소·알림이 공유하는 이벤트 데이터 모델 |
 | `src/policy.py` | API 입력의 `Decision`·`RiskLevel` enum |
 | `src/monitoring.py` | 이벤트 생성·지표 집계·Critical payload 생성 |
-| `src/report.py` | 대시보드 payload와 주간·월간 리포트 envelope |
+| `src/discord.py` | `DISCORD_WEBHOOK_URL`로 Critical 알림을 Discord 웹훅에 발송 (미설정 시 no-op) |
+| `src/report.py` | 대시보드 payload·주간/월간 envelope + `step05-metrics.json`/`.html` 결과 리포트 생성 |
+| `src/step03_report.py` | 3단계 결과 HTML 렌더러의 로컬 복사본 — `report.py`와 이름 충돌 방지용 |
 | `src/dashboard.html` | API 지표와 Critical 알림을 보여주는 웹 화면 |
 | `requirements.txt` | 5단계 FastAPI·Uvicorn 실행 의존성 |
 | `slides/s00-tech-spec.svg` | FastAPI·SQLite·API Key 기술 사양 |
