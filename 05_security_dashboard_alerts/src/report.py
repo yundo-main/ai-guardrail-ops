@@ -1,4 +1,4 @@
-"""Day 5: dashboard and alert payload helpers."""
+"""Step 05: dashboard and alert payload helpers."""
 
 from datetime import datetime, timezone
 

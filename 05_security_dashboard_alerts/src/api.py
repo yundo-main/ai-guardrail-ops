@@ -1,4 +1,4 @@
-"""FastAPI service for the day 5 security dashboard backend."""
+"""FastAPI service for the step 05 security dashboard backend."""
 
 from __future__ import annotations
 
@@ -45,7 +45,7 @@ class EventRequest(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    """User message sent through the real Day 2 → Day 3 guardrail service."""
+    """User message sent through the real Step 02 → Step 03 guardrail service."""
 
     message: str = Field(min_length=1, max_length=8000)
     conversation_id: Optional[str] = Field(default=None, max_length=128)

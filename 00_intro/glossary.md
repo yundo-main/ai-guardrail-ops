@@ -36,17 +36,22 @@
 | 용어 | 설명 |
 | --- | --- |
 | GPU 메모리 | Transformers 경로에서 모델 로드에 필요한 자원 |
+| LLAMA_GUARD_BACKEND | Llama Guard 백엔드 선택 환경변수 — 기본 ollama |
 | Llama Guard | 요청·응답의 안전성 범주를 분류하는 안전성 판정 모델 |
 | NeMo Guardrails | 대화 주제·절차·응답 경로를 정책으로 제어하는 대화 흐름 프레임워크 |
 | Ollama | 로컬 LLM 실행 백엔드 — 학습용 기본 경로 |
 | PyTorch | Transformers 경로의 딥러닝 런타임 |
 | Transformers | HuggingFace 모델 직접 로드 경로 — 심화 옵션 |
 | custom adapter | NeMo에서 전용 분류 모델을 연결하는 어댑터 |
+| llama-guard3:1b | Ollama에서 실행하는 Llama Guard 기본 모델 |
 | llama_guard.py | Llama Guard 실제 호출 모듈 (classifier/) |
 | nemo_guardrails_client.py | NeMo Guardrails 호출 모듈 (dialogue/) |
 | not_responsible_for | 각 기술이 대신하지 않는 책임을 명시하는 필드 |
+| prompts.yml | NeMo self check 레일이 사용하는 프롬프트 파일 |
 | real_integration.py | 실제 모델 호출 파이프라인 (pipeline/) |
 | receives→produces→handoff_to | 어댑터 규약 3요소 — 입력·출력·다음 단계 |
+| report.py | 실행 결과 JSON을 HTML 보고서로 렌더링 (pipeline/) |
+| self check input/output | NeMo Guardrails의 입력·출력 안전 검사 레일 |
 | 대화 정책 | 허용된 주제와 응답 경로를 정의하는 규칙 집합 |
 | 대화 흐름 제어 | 대화가 특정 주제·절차를 벗어나지 않도록 하는 제어 |
 | 모델 가중치 | 학습된 파라미터 — Llama Guard 직접 실행 시 추가 관리 대상 |
@@ -173,4 +178,4 @@
 
 ---
 
-총 137개 용어 · 6개 단계
+총 142개 용어 · 6개 단계

@@ -1,4 +1,4 @@
-"""Day 4: deterministic risk rating helper for security events."""
+"""Step 04: deterministic risk rating helper for security events."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ def classify_risk(impact: int, exploitability: int, exposure: int) -> RiskLevel:
 
 
 def event_from_guardrail_file(path: str | Path):
-    """Convert a day 3 JSON result into a day 4 security event."""
+    """Convert a step 03 JSON result into a step 04 security event."""
     # 파일 경계에서만 연결하므로 3단계 코드를 import하지 않아도 독립 실행이 가능하다.
     # 즉, 각 단계 소스의 중복을 허용하면서도 결과 파일로 학습 흐름을 이어 간다.
     source_path = Path(path)
@@ -55,12 +55,17 @@ def write_event_result(event, path: str | Path) -> None:
 if __name__ == "__main__":
     # 3단계 결과가 있으면 실제 파일을 읽어 4단계 이벤트로 변환한다.
     # 파일이 없을 때도 점수 기반 예제를 출력해 4단계 함수 자체를 독립 실행할 수 있게 한다.
-    project_root = Path(__file__).resolve().parents[2]
-    source_path = project_root / "99_ref" / "results" / "step03-guardrail-result.json"
-    target_path = project_root / "99_ref" / "results" / "step04-security-event.json"
+    repo_root = Path(__file__).resolve().parents[2]
+    stage_dir = Path(__file__).resolve().parents[1]
+    source_path = repo_root / "03_policy_blocking_output_filtering" / "results" / "step03-guardrail-result.json"
+    target_path = stage_dir / "results" / "step04-security-event.json"
     if source_path.exists():
         event = event_from_guardrail_file(source_path)
         write_event_result(event, target_path)
+        # report.py는 __main__ 실행 시에만 필요하므로 지연 import로 테스트 격리 로드를 유지한다.
+        from report import write_report
+
+        write_report(event_payload(event), target_path.with_suffix(".html"))
         print(json.dumps(event_payload(event), ensure_ascii=False, indent=2))
     else:
         print(classify_risk(3, 3, 3).value)

@@ -37,10 +37,11 @@
 PYTHONPATH=04_risk_rating_system/src python3 04_risk_rating_system/src/risk.py
 ```
 
-3단계 결과 파일이 있으면 위 명령이 이를 읽어 `results/step04-security-event.json`을 생성한다. 결과는 다음처럼 확인한다.
+3단계 결과 파일이 있으면 위 명령이 이를 읽어 `results/step04-security-event.json`과 같은 이름의 `.html` 보고서를 생성한다. 결과는 다음처럼 확인한다.
 
 ```bash
 python3 -m json.tool results/step04-security-event.json
+open results/step04-security-event.html
 ```
 
 ## 산출물
@@ -49,6 +50,7 @@ python3 -m json.tool results/step04-security-event.json
 - 등급별 대응 절차
 - 보안 이벤트 필드 정의서
 - `results/step04-security-event.json` API 전달 파일
+- `results/step04-security-event.html` 판정·등급·이벤트 상세 보고서
 
 ## 단계 간 연결
 
@@ -66,11 +68,13 @@ python3 -m json.tool results/step04-security-event.json
 | --- | --- |
 | `src/policy.py` | 4단계 이벤트 판정용 `Decision`·`RiskLevel` 정의 |
 | `src/monitoring.py` | `SecurityEvent` 생성과 API 전달 payload 직렬화 |
-| `src/risk.py` | 점수 기반 위험 분류와 3단계 JSON→4단계 이벤트 변환 |
+| `src/risk.py` | 점수 기반 위험 분류와 3단계 JSON→4단계 이벤트 변환·JSON+HTML 저장 |
+| `src/report.py` | 보안 이벤트 JSON을 독립 HTML 보고서로 렌더링 |
 | `slides/s00-tech-spec.svg` | 위험 점수·이벤트·JSON 연결 기술 사양 |
 | `slides/s01-risk-rating.svg` | 위험 등급 체계 개요 |
 | `slides/s02-risk-theory.svg` | 등급 기준과 대응 이론 |
 | `slides/s03-risk-source.svg` | `risk.py` 소스 설명 |
-| `slides/s04-risk-checklist.svg` | 등급·대응·이벤트 체크리스트 |
-| `slides/s05-summary.svg` | 4단계 핵심 요약과 질문 |
+| `slides/s04-event-format.svg` | 보안 이벤트 산출물 형식 — JSON 필드·생성 흐름 |
+| `slides/s05-risk-checklist.svg` | 등급·대응·이벤트 체크리스트 |
+| `slides/s06-summary.svg` | 4단계 핵심 요약과 질문 |
 | `slides/readme.md` | 슬라이드 순서·제목·산출물 목록 |

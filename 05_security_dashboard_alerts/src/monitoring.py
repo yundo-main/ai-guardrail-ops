@@ -1,4 +1,4 @@
-"""Dashboard metrics and critical alerts for day 5."""
+"""Dashboard metrics and critical alerts for step 05."""
 
 from __future__ import annotations
 

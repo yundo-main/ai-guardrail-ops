@@ -1,4 +1,4 @@
-"""Day 1: describe and execute the smallest Guardrail pipeline.
+"""Step 01: describe and execute the smallest Guardrail pipeline.
 
 The first lesson uses deterministic stand-ins. Later lessons can replace the
 model and guardrail implementations while preserving this same sequence.
@@ -31,7 +31,7 @@ DEFAULT_PIPELINE = (
 
 @dataclass(frozen=True)
 class PipelineResult:
-    """Serializable evidence produced by the Day 1 demonstration pipeline."""
+    """Serializable evidence produced by the Step 01 demonstration pipeline."""
 
     prompt: str
     model_response: str
@@ -43,8 +43,8 @@ class PipelineResult:
 def run_pipeline(prompt: str, model: Callable[[str], str] | None = None) -> PipelineResult:
     """Run a deterministic input → model → output → monitoring exercise.
 
-    The input and output controls are intentionally simple in Day 1. Their
-    purpose is to make the insertion points executable before Day 2 replaces
+    The input and output controls are intentionally simple in Step 01. Their
+    purpose is to make the insertion points executable before Step 02 replaces
     the model with Ollama/NeMo and adds the optional Llama Guard path.
     """
     stages = tuple(stage.name for stage in DEFAULT_PIPELINE)

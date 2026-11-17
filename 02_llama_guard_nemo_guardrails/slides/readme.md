@@ -10,11 +10,13 @@
 | s06 | 실행 백엔드 선택 | 기본 Ollama·심화 Transformers 경로 |
 | s07 | 복습 체크리스트 | 분류·대화 정책·적용 확인 |
 | s08 | 핵심 요약과 실습 질문 | 학습 내용과 완료 확인 |
+| s09 | 전체 실행 구조 | 사용자→main.py→pipeline→두 어댑터→JSON/HTML→3단계 |
+| s10 | 심화 경로 구조 (선택) | Transformers 백엔드 — HF 직접 로드 vs 기본 Ollama 차이 |
 
 기술 사양: [s00-tech-spec.svg](s00-tech-spec.svg)
 
-실제 슬라이드: [s01-guard-models.svg](s01-guard-models.svg), [s02-guardrail-theory.svg](s02-guardrail-theory.svg), [s03-adapters-source.svg](s03-adapters-source.svg), [s04-llama-guard-detail.svg](s04-llama-guard-detail.svg), [s05-nemo-guardrails-detail.svg](s05-nemo-guardrails-detail.svg), [s06-runtime-choice.svg](s06-runtime-choice.svg), [s07-guardrail-checklist.svg](s07-guardrail-checklist.svg), [s08-summary.svg](s08-summary.svg)
+실제 슬라이드: [s01-guard-models.svg](s01-guard-models.svg), [s02-guardrail-theory.svg](s02-guardrail-theory.svg), [s03-adapters-source.svg](s03-adapters-source.svg), [s04-llama-guard-detail.svg](s04-llama-guard-detail.svg), [s05-nemo-guardrails-detail.svg](s05-nemo-guardrails-detail.svg), [s06-runtime-choice.svg](s06-runtime-choice.svg), [s07-guardrail-checklist.svg](s07-guardrail-checklist.svg), [s08-summary.svg](s08-summary.svg), [s09-overall-structure.svg](s09-overall-structure.svg), [s10-advanced-structure.svg](s10-advanced-structure.svg)
 
-`s00-tech-spec.svg`는 2단계 필수 기술과 실제 모델 연동 범위를 설명하는 참고 슬라이드다. `s01`~`s08`은 발표용 SVG이며, `s03-adapters-source.svg`는 2단계 소스 전체의 호출 방향과 설정·결과 관계를 보여준다. `s04`와 `s05`에서는 두 가드레일의 역할을 각각 분리해 설명한다.
+`s00-tech-spec.svg`는 2단계 필수 기술과 실제 모델 연동 범위를 설명하는 참고 슬라이드다. `s01`~`s08`은 발표용 SVG이며, `s03-adapters-source.svg`는 2단계 소스 전체의 호출 방향과 설정·결과 관계를 보여준다. `s04`와 `s05`에서는 두 가드레일의 역할을 각각 분리해 설명한다. `s09-overall-structure.svg`는 사용자 프롬프트부터 결과 저장·3단계 전달까지의 전체 실행 경로를 한 장으로 정리한다. `s10-advanced-structure.svg`는 선택 사항인 Transformers 심화 경로의 구조와 기본 Ollama 경로와의 차이를 보여준다.
 
-실제 호출 실습은 `python3.12 src/main.py real --prompt "..."`로 수행하고, 결과는 `results/step02-real-guardrails.json`에서 확인한다.
+실제 호출 실습은 `python3.12 src/main.py real --prompt "..."`로 수행하면 JSON과 HTML 보고서가 함께 저장되고, 결과는 `results/step02-real-guardrails.json`과 같은 이름의 `.html`에서 확인한다. Llama Guard는 기본적으로 Ollama `llama-guard3:1b`를 사용하고, `--backend transformers`는 심화 선택 경로다.

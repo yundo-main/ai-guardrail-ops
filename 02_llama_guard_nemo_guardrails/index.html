@@ -113,16 +113,16 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <h3>이론 보강</h3><p>Llama Guard 계열은 요청 또는 응답을 안전성 범주로 분류하는 분류기 역할에 가깝다. 분류 결과는 서비스 정책의 입력값이며, 실제 차단·검토·허용 결정은 애플리케이션 정책 계층에서 명시적으로 내려야 한다.</p>
 <p>NeMo Guardrails는 대화가 특정 주제와 절차를 벗어나지 않도록 대화 흐름을 제어한다. 분류기가 위험성을 판정하는 축이라면, 대화 정책은 허용된 주제 안에서 어떤 응답 경로를 탈지 결정하는 축이다.</p>
 <p>두 기술을 함께 사용할 때는 중복 차단으로 정상 사용을 막지 않도록 적용 순서, 정책 우선순위, 오탐 처리, 사람 검토 경로를 문서화해야 한다.</p>
-<h3>실행 백엔드 선택: Ollama와 Transformers</h3><p>학습용 기본 경로는 Ollama로 통일한다. NeMo Guardrails가 Ollama의 일반 LLM을 호출하고, 3단계 Python 정책 엔진이 허용·차단·검토를 결정하도록 하면 학습자는 호출·정책·관제의 관계에 집중할 수 있다.</p>
-<p>Transformers는 필수 실행 경로가 아니다. Llama Guard 전용 모델을 직접 로드해 일반 LLM과 안전성 분류 모델을 분리하고 싶을 때 사용하는 심화 경로다. 이 경우 PyTorch·모델 가중치·GPU 메모리·NeMo custom adapter를 추가로 관리해야 한다.</p>
-<pre><code>기본: NeMo Guardrails → Ollama → Python 정책 엔진
-심화: 일반 LLM → Transformers Llama Guard → Python 정책 엔진</code></pre>
+<h3>실행 백엔드 선택: Ollama 기본과 Transformers 심화</h3><p>학습용 기본 경로는 Ollama로 통일한다. Llama Guard 분류는 Ollama의 <code>llama-guard3:1b</code>가 <code>/api/chat</code>로 담당하고, NeMo Guardrails는 Ollama의 일반 LLM(<code>qwen2.5:3b</code>)을 OpenAI 호환 <code>/v1</code> 엔드포인트로 호출한다. 3단계 Python 정책 엔진이 허용·차단·검토를 결정하도록 하면 학습자는 호출·정책·관제의 관계에 집중할 수 있다.</p>
+<p>Transformers는 필수 실행 경로가 아니다. Llama Guard 전용 모델(<code>meta-llama/Llama-Guard-3-8B</code>)을 직접 로드해 안전성 분류 모델을 직접 실행하고 싶을 때 사용하는 심화 경로다. <code>LLAMA_GUARD_BACKEND=transformers</code> 또는 <code>--backend transformers</code>로 선택하며, 이 경우 PyTorch·모델 가중치·GPU 메모리·HF 모델 접근 승인이 추가로 필요하다.</p>
+<pre><code>기본: Llama Guard(Ollama llama-guard3:1b) + NeMo Guardrails(Ollama qwen2.5:3b) → JSON/HTML → 3단계 정책 엔진
+심화: Llama Guard(Transformers Llama-Guard-3-8B) + NeMo Guardrails(Ollama) → JSON/HTML → 3단계 정책 엔진</code></pre>
 <p>따라서 “Transformers가 더 단순해서 사용한다”가 아니라, “전용 안전성 분류 모델을 직접 실행하기 위해 선택한다”로 이해한다. 시각 설명은 <a href="slides/s06-runtime-choice.svg"><code>slides/s06-runtime-choice.svg</code></a>에서 확인한다.</p>
 <p><code>src/contracts/adapters.py</code>에서는 이 관계를 <code>receives → produces → handoff_to</code>로 표현한다. Llama Guard의 분류 결과는 애플리케이션 정책 엔진으로 전달되고, NeMo Guardrails의 대화 전환 결과는 LLM 호출 또는 출력 Guardrail로 전달된다. 두 어댑터의 <code>not_responsible_for</code> 필드는 각 기술이 대신하지 않는 책임을 명시해 역할 중복을 방지한다.</p>
 <h3>산출물 · 완료 기준</h3><ul><li>Llama Guard·NeMo Guardrails 비교표</li><li>위험 카테고리 적용표</li><li>정책 적용 위치 결정안</li></ul><p>두 기술의 목적과 적용 시점을 설명하고, 서비스 요구사항에 맞는 선택 기준을 제시할 수 있다.</p>
 <h3>프로젝트 구조</h3>
-<div class="dtree"><div class="dtn">02_llama_guard_nemo_guardrails/</div><div class="dtl">index.html <span class="dt-note">— 포털 페이지</span></div><div class="dtl">readme.md <span class="dt-note">— 단계 학습 문서</span></div><div class="dtl">requirements-llm.txt <span class="dt-note">— LLM 선택 의존성</span></div><details class="dt" open><summary>nemo_config/</summary><div class="dt-kids"><div class="dtl">config.yml <span class="dt-note">— NeMo Guardrails 설정</span></div></div></details><details class="dt" open><summary>slides/</summary><div class="dt-kids"><div class="dtl">readme.md <span class="dt-note">— 단계 학습 문서</span></div><div class="dtl">s00-tech-spec.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s01-guard-models.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s02-guardrail-theory.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s03-adapters-source.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s04-llama-guard-detail.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s05-nemo-guardrails-detail.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s06-runtime-choice.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s07-guardrail-checklist.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s08-summary.svg <span class="dt-note">— 슬라이드 SVG</span></div></div></details><details class="dt" open><summary>src/</summary><div class="dt-kids"><div class="dtl">main.py <span class="dt-note">— 실행 진입점</span></div><details class="dt"><summary>classifier/</summary><div class="dt-kids"><div class="dtl">__init__.py <span class="dt-note">— Python 모듈</span></div><div class="dtl">llama_guard.py <span class="dt-note">— Llama Guard 연동</span></div></div></details><details class="dt"><summary>contracts/</summary><div class="dt-kids"><div class="dtl">__init__.py <span class="dt-note">— Python 모듈</span></div><div class="dtl">adapters.py <span class="dt-note">— 기술별 규약 어댑터</span></div></div></details><details class="dt"><summary>dialogue/</summary><div class="dt-kids"><div class="dtl">__init__.py <span class="dt-note">— Python 모듈</span></div><div class="dtl">nemo_guardrails_client.py <span class="dt-note">— NeMo Guardrails 연동</span></div></div></details><details class="dt"><summary>pipeline/</summary><div class="dt-kids"><div class="dtl">__init__.py <span class="dt-note">— Python 모듈</span></div><div class="dtl">real_integration.py <span class="dt-note">— 실제 모델 호출 파이프라인</span></div></div></details></div></details></div>
-<h3>소스코드 설명</h3><table><tr><th>파일</th><th>역할·내용</th></tr><tr><td><code>src/main.py</code></td><td>2단계 실행 진입점 — compare(기본, 두 가드레일 비교) / real(실제 모델 호출) 모드를 선택하고 결과 JSON을 저장.</td></tr><tr><td><code>src/contracts/adapters.py</code></td><td>기술별 책임·입출력·최종 판정 계층을 비교하는 GuardrailAdapter 규약 dataclass — &quot;무엇을 넣고 무엇이 나오는가&quot;를 구조화.</td></tr><tr><td><code>src/classifier/llama_guard.py</code></td><td>Llama Guard 3 실추론 어댑터 — 지연 임포트로 모델 없이도 실행·테스트 가능, 인스턴스 생성 시 HF에서 로드.</td></tr><tr><td><code>src/dialogue/nemo_guardrails_client.py</code></td><td>NeMo Guardrails 클라이언트 — config.yml을 RailsConfig/LLMRails로 로드해 실제 레일 호출.</td></tr><tr><td><code>src/pipeline/real_integration.py</code></td><td>두 실제 가드레일 호출을 오케스트레이션하고 단계별 결과를 JSON으로 저장 — main.py와 테스트가 공유.</td></tr><tr><td><code>nemo_config/config.yml</code></td><td>NeMo Guardrails 설정 — 토픽·흐름·응답 레일 정의.</td></tr></table>
+<div class="dtree"><div class="dtn">02_llama_guard_nemo_guardrails/</div><div class="dtl">1.md</div><div class="dtl">index.html <span class="dt-note">— 포털 페이지</span></div><div class="dtl">readme.md <span class="dt-note">— 단계 학습 문서</span></div><div class="dtl">requirements-llm.txt <span class="dt-note">— LLM 선택 의존성</span></div><details class="dt" open><summary>nemo_config/</summary><div class="dt-kids"><div class="dtl">config.yml <span class="dt-note">— NeMo Guardrails 설정</span></div><div class="dtl">prompts.yml <span class="dt-note">— NeMo self-check 프롬프트</span></div></div></details><details class="dt" open><summary>results/</summary><div class="dt-kids"><div class="dtl">step02-real-guardrails.html</div><div class="dtl">step02-real-guardrails.json <span class="dt-note">— 단계 결과 JSON</span></div></div></details><details class="dt" open><summary>slides/</summary><div class="dt-kids"><div class="dtl">readme.md <span class="dt-note">— 단계 학습 문서</span></div><div class="dtl">s00-tech-spec.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s01-guard-models.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s02-guardrail-theory.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s03-adapters-source.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s04-llama-guard-detail.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s05-nemo-guardrails-detail.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s06-runtime-choice.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s07-guardrail-checklist.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s08-summary.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s09-overall-structure.svg <span class="dt-note">— 슬라이드 SVG</span></div><div class="dtl">s10-advanced-structure.svg <span class="dt-note">— 슬라이드 SVG</span></div></div></details><details class="dt" open><summary>src/</summary><div class="dt-kids"><div class="dtl">main.py <span class="dt-note">— 실행 진입점</span></div><details class="dt"><summary>classifier/</summary><div class="dt-kids"><div class="dtl">__init__.py <span class="dt-note">— Python 모듈</span></div><div class="dtl">llama_guard.py <span class="dt-note">— Llama Guard 연동</span></div></div></details><details class="dt"><summary>contracts/</summary><div class="dt-kids"><div class="dtl">__init__.py <span class="dt-note">— Python 모듈</span></div><div class="dtl">adapters.py <span class="dt-note">— 기술별 규약 어댑터</span></div></div></details><details class="dt"><summary>dialogue/</summary><div class="dt-kids"><div class="dtl">__init__.py <span class="dt-note">— Python 모듈</span></div><div class="dtl">nemo_guardrails_client.py <span class="dt-note">— NeMo Guardrails 연동</span></div></div></details><details class="dt"><summary>pipeline/</summary><div class="dt-kids"><div class="dtl">__init__.py <span class="dt-note">— Python 모듈</span></div><div class="dtl">real_integration.py <span class="dt-note">— 실제 모델 호출 파이프라인</span></div><div class="dtl">report.py <span class="dt-note">— 리포트·보고서 생성</span></div></div></details></div></details></div>
+<h3>소스코드 설명</h3><table><tr><th>파일</th><th>역할·내용</th></tr><tr><td><code>src/main.py</code></td><td>2단계 실행 진입점 — compare(기본, 두 가드레일 비교) / real --prompt(실제 호출 — JSON+HTML 기본 저장, --backend·--html PATH·--no-html 지원) 서브커맨드.</td></tr><tr><td><code>src/contracts/adapters.py</code></td><td>기술별 책임·입출력·최종 판정 계층을 비교하는 GuardrailAdapter 규약 dataclass — &quot;무엇을 넣고 무엇이 나오는가&quot;를 구조화.</td></tr><tr><td><code>src/classifier/llama_guard.py</code></td><td>Llama Guard 3 분류 어댑터 — 기본 OllamaLlamaGuardClient(/api/chat, stdlib만 사용, 모델 llama-guard3:1b)와 선택적 Transformers 백엔드(Llama-Guard-3-8B)를 get_llama_guard_client()로 전환. 파싱 실패 시 unsafe로 닫히는 fail-closed 처리.</td></tr><tr><td><code>src/dialogue/nemo_guardrails_client.py</code></td><td>NeMo Guardrails 클라이언트 — config.yml+prompts.yml을 RailsConfig/LLMRails로 로드해 self check 레일을 포함한 실제 대화 레일 호출(Ollama /v1).</td></tr><tr><td><code>src/pipeline/real_integration.py</code></td><td>두 실제 가드레일 호출을 오케스트레이션하고 결과를 step02 JSON+HTML 보고서로 저장(HTML은 기본 생성, --no-html로 해제) — main.py와 테스트가 공유.</td></tr><tr><td><code>src/pipeline/report.py</code></td><td>실행 결과 JSON을 독립 HTML 보고서로 렌더링 — 입력·판정·raw 출력·NeMo 응답을 사람이 읽기 쉽게 정리.</td></tr><tr><td><code>nemo_config/config.yml</code></td><td>NeMo Guardrails 설정 — Ollama OpenAI 호환 /v1 엔드포인트(qwen2.5:3b)와 self check input/output 레일 정의.</td></tr><tr><td><code>nemo_config/prompts.yml</code></td><td>self check input/output 레일이 사용하는 프롬프트 — allowed/not allowed 판정 지시문.</td></tr></table>
 <p class="sub" style="margin-top:.8rem">단계 간 연결: [← 1단계](../01_guardrail_concept_architecture/readme.md) · [3단계 →](../03_policy_blocking_output_filtering/readme.md) · [전체 과정](../readme.md)</p>
 <p class="sub" style="margin-top:.4rem">상위 프로젝트: <a href="../10_ai_guardrail_ops_framework/readme.md">10 통합 프레임워크 readme →</a> (도움말 탭에서 뷰어로도 열람 가능)</p>
 </section>
@@ -137,6 +137,8 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <div class="dgi"><div class="dgi-head"><span class="dgi-t">s06-runtime-choice · 실행 백엔드 선택</span><span class="badge">SVG</span></div><img src="slides/s06-runtime-choice.svg" alt="실행 백엔드 선택" loading="lazy"></div>
 <div class="dgi"><div class="dgi-head"><span class="dgi-t">s07-guardrail-checklist · 복습 체크리스트</span><span class="badge">SVG</span></div><img src="slides/s07-guardrail-checklist.svg" alt="복습 체크리스트" loading="lazy"></div>
 <div class="dgi"><div class="dgi-head"><span class="dgi-t">s08-summary · 핵심 요약과 실습 질문</span><span class="badge">SVG</span></div><img src="slides/s08-summary.svg" alt="핵심 요약과 실습 질문" loading="lazy"></div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s09-overall-structure · 전체 실행 구조</span><span class="badge">SVG</span></div><img src="slides/s09-overall-structure.svg" alt="전체 실행 구조" loading="lazy"></div>
+<div class="dgi"><div class="dgi-head"><span class="dgi-t">s10-advanced-structure · 심화 경로 구조 (선택)</span><span class="badge">SVG</span></div><img src="slides/s10-advanced-structure.svg" alt="심화 경로 구조 (선택)" loading="lazy"></div>
 </section>
 <section class="ltab" id="tab-practice" hidden>
 <div class="ltitle">실습 — STEP 02 실행</div>
@@ -148,29 +150,47 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <h3>실행 결과 예시</h3><pre><code>Llama Guard: 위험 요청·응답의 안전성 범주 분류 / 입력=프롬프트 또는 모델 응답 / 출력=분류 결과·위험 카테고리 / 다음=애플리케이션 정책 엔진
 NeMo Guardrails: 대화 주제·절차·응답 경로 제어 / 입력=사용자 발화·대화 상태·허용 흐름 / 출력=허용 응답·주제 복귀·사람 검토 전환 / 다음=LLM 호출 또는 출력 Guardrail</code></pre>
 <h3>실습 단계</h3><ol><li>입력 분류, 대화 정책, 모델 호출의 관계를 비교표로 작성한다.</li><li>허용·차단·사람 검토가 필요한 예시를 정의한다.</li><li>운영 환경에서 모델·정책·로그를 검증할 항목을 정리한다.</li></ol>
-<h3>추가 명령</h3><div class="codebox"><pre><code>기본: NeMo Guardrails → Ollama → Python 정책 엔진
-심화: 일반 LLM → Transformers Llama Guard → Python 정책 엔진</code></pre></div>
+<h3>추가 명령</h3><div class="codebox"><pre><code>기본: Llama Guard(Ollama llama-guard3:1b) + NeMo Guardrails(Ollama qwen2.5:3b) → JSON/HTML → 3단계 정책 엔진
+심화: Llama Guard(Transformers Llama-Guard-3-8B) + NeMo Guardrails(Ollama) → JSON/HTML → 3단계 정책 엔진</code></pre></div>
 <div class="codebox"><pre><code>python3 02_llama_guard_nemo_guardrails/src/main.py            # compare (기본)</code></pre></div>
-<div class="codebox"><pre><code>python3.12 -m venv .venv-guardrails
-source .venv-guardrails/bin/activate
-python -m pip install -r 02_llama_guard_nemo_guardrails/requirements-llm.txt</code></pre></div>
-<div class="codebox"><pre><code>ollama pull qwen2.5:3b
-python 02_llama_guard_nemo_guardrails/src/main.py real \
-  --prompt &quot;회사 비밀번호 재설정 절차를 요약해줘&quot; \
-  --output results/step02-real-guardrails.json</code></pre></div>
+<div class="codebox"><pre><code>uv venv --python 3.12 .venv312
+uv pip install --python .venv312/bin/python -r 02_llama_guard_nemo_guardrails/requirements-llm.txt</code></pre></div>
+<div class="codebox"><pre><code>ollama pull llama-guard3:1b    # Llama Guard 분류 전용 모델 (약 1B)
+ollama pull qwen2.5:3b         # NeMo Guardrails가 쓰는 일반 LLM
+ollama list                    # 내려받은 모델 확인</code></pre></div>
+<div class="codebox"><pre><code>source .venv312/bin/activate
+python 02_llama_guard_nemo_guardrails/src/main.py real --prompt &quot;안녕하세요&quot;</code></pre></div>
+<div class="codebox"><pre><code># JSON 구조 확인
+python3 -m json.tool 02_llama_guard_nemo_guardrails/results/step02-real-guardrails.json
+
+# HTML 보고서 열기
+open 02_llama_guard_nemo_guardrails/results/step02-real-guardrails.html</code></pre></div>
+<div class="codebox"><pre><code>LLAMA_GUARD_BACKEND=transformers python 02_llama_guard_nemo_guardrails/src/main.py real \
+  --prompt &quot;안녕하세요&quot;
+# 또는: --backend transformers</code></pre></div>
 <div class="codebox"><pre><code>src/
 ├── main.py                  # 진입점 (compare | real)
 ├── contracts/adapters.py    # 책임·handoff 규약 (의존성 없음)
-├── classifier/llama_guard.py        # 분류: Llama Guard 3
+├── classifier/llama_guard.py        # 분류: Ollama llama-guard3 (기본) / Transformers (선택)
 ├── dialogue/nemo_guardrails_client.py  # 대화 정책: NeMo Guardrails
-└── pipeline/real_integration.py     # 두 어댑터 호출 + 결과 JSON 저장</code></pre></div>
+└── pipeline/
+    ├── real_integration.py  # 두 어댑터 호출 + 결과 JSON/HTML 저장
+    └── report.py            # 실행 결과 JSON → 독립 HTML 보고서
+nemo_config/
+├── config.yml               # NeMo 모델·입출력 레일 설정 (Ollama /v1)
+└── prompts.yml              # self check input/output 프롬프트</code></pre></div>
 <h3>소스 구조</h3>
 <div class="codebox"><pre><code>src/
 ├── main.py                  # 진입점 (compare | real)
 ├── contracts/adapters.py    # 책임·handoff 규약 (의존성 없음)
-├── classifier/llama_guard.py        # 분류: Llama Guard 3
+├── classifier/llama_guard.py        # 분류: Ollama llama-guard3 (기본) / Transformers (선택)
 ├── dialogue/nemo_guardrails_client.py  # 대화 정책: NeMo Guardrails
-└── pipeline/real_integration.py     # 두 어댑터 호출 + 결과 JSON 저장</code></pre></div><h3>파일·디렉터리 역할</h3><table><tr><th>경로</th><th>역할</th></tr><tr><td><code>src/main.py</code></td><td>진입점. <code>compare</code>(기본)·<code>real --prompt</code> 서브커맨드로 하위 패키지를 호출</td></tr><tr><td><code>src/contracts/adapters.py</code></td><td>실제 SDK와 독립적인 입력·출력·handoff·비책임 규약</td></tr><tr><td><code>src/classifier/llama_guard.py</code></td><td>Transformers로 Llama Guard 3를 실제 로드·생성·분류하는 어댑터</td></tr><tr><td><code>src/dialogue/nemo_guardrails_client.py</code></td><td><code>RailsConfig</code>·<code>LLMRails.generate()</code>를 호출하는 실제 NeMo 어댑터</td></tr><tr><td><code>src/pipeline/real_integration.py</code></td><td>두 실제 어댑터를 순서대로 호출하고 JSON 결과를 저장</td></tr><tr><td><code>nemo_config/config.yml</code></td><td>Ollama 기반 NeMo Guardrails 모델·입출력 레일 설정</td></tr><tr><td><code>requirements-llm.txt</code></td><td>Python 3.12용 선택적 Transformers·Torch·NeMo 의존성</td></tr><tr><td><code>slides/s00-tech-spec.svg</code></td><td>2단계 필수 기술과 선택적 실제 모델 연동 범위</td></tr><tr><td><code>slides/s01-guard-models.svg</code></td><td>두 Guardrails 적용 흐름 개요</td></tr><tr><td><code>slides/s02-guardrail-theory.svg</code></td><td>안전성 분류와 대화 정책의 이론 비교</td></tr><tr><td><code>slides/s03-adapters-source.svg</code></td><td><code>adapters.py</code> 소스와 선택 기준</td></tr><tr><td><code>slides/s06-runtime-choice.svg</code></td><td>기본 Ollama·심화 Transformers 실행 경로 선택</td></tr><tr><td><code>slides/s07-guardrail-checklist.svg</code></td><td>기술 적용 복습 체크리스트</td></tr><tr><td><code>slides/s08-summary.svg</code></td><td>2단계 핵심 요약과 질문</td></tr><tr><td><code>slides/s04-llama-guard-detail.svg</code></td><td>Llama Guard의 분류 책임·입력·출력·정책 변환 상세</td></tr><tr><td><code>slides/s05-nemo-guardrails-detail.svg</code></td><td>NeMo Guardrails의 대화 흐름·주제·응답 경로 상세</td></tr><tr><td><code>slides/readme.md</code></td><td>슬라이드 순서·제목·산출물 목록</td></tr></table>
+└── pipeline/
+    ├── real_integration.py  # 두 어댑터 호출 + 결과 JSON/HTML 저장
+    └── report.py            # 실행 결과 JSON → 독립 HTML 보고서
+nemo_config/
+├── config.yml               # NeMo 모델·입출력 레일 설정 (Ollama /v1)
+└── prompts.yml              # self check input/output 프롬프트</code></pre></div><h3>파일·디렉터리 역할</h3><table><tr><th>경로</th><th>역할</th></tr><tr><td><code>src/main.py</code></td><td>진입점. <code>compare</code>(기본)·<code>real --prompt</code> 서브커맨드로 하위 패키지를 호출</td></tr><tr><td><code>src/contracts/adapters.py</code></td><td>실제 SDK와 독립적인 입력·출력·handoff·비책임 규약</td></tr><tr><td><code>src/classifier/llama_guard.py</code></td><td>Llama Guard 3 분류 어댑터 — 기본은 Ollama <code>/api/chat</code>(stdlib만 사용), <code>LLAMA_GUARD_BACKEND=transformers</code>로 HF 로드 선택</td></tr><tr><td><code>src/dialogue/nemo_guardrails_client.py</code></td><td><code>RailsConfig</code>·<code>LLMRails.generate()</code>를 호출하는 실제 NeMo 어댑터</td></tr><tr><td><code>src/pipeline/real_integration.py</code></td><td>두 실제 어댑터를 순서대로 호출하고 JSON 결과를 저장 (<code>--backend</code>, <code>--html</code> 지원)</td></tr><tr><td><code>src/pipeline/report.py</code></td><td>실행 결과 JSON을 독립 HTML 보고서로 렌더링</td></tr><tr><td><code>nemo_config/config.yml</code></td><td>Ollama 기반 NeMo Guardrails 모델·입출력 레일 설정</td></tr><tr><td><code>nemo_config/prompts.yml</code></td><td><code>self check input</code>/<code>self check output</code> 레일이 사용하는 프롬프트 정의</td></tr><tr><td><code>requirements-llm.txt</code></td><td>Python 3.12용 선택 의존성 — 기본은 NeMo·langchain·pyyaml, Transformers·Torch는 주석 처리된 심화 옵션</td></tr><tr><td><code>slides/s00-tech-spec.svg</code></td><td>2단계 필수 기술과 선택적 실제 모델 연동 범위</td></tr><tr><td><code>slides/s01-guard-models.svg</code></td><td>두 Guardrails 적용 흐름 개요</td></tr><tr><td><code>slides/s02-guardrail-theory.svg</code></td><td>안전성 분류와 대화 정책의 이론 비교</td></tr><tr><td><code>slides/s03-adapters-source.svg</code></td><td><code>adapters.py</code> 소스와 선택 기준</td></tr><tr><td><code>slides/s06-runtime-choice.svg</code></td><td>기본 Ollama·심화 Transformers 실행 경로 선택</td></tr><tr><td><code>slides/s07-guardrail-checklist.svg</code></td><td>기술 적용 복습 체크리스트</td></tr><tr><td><code>slides/s08-summary.svg</code></td><td>2단계 핵심 요약과 질문</td></tr><tr><td><code>slides/s09-overall-structure.svg</code></td><td>사용자→main.py→pipeline→두 어댑터→JSON/HTML→3단계 전체 실행 구조</td></tr><tr><td><code>slides/s10-advanced-structure.svg</code></td><td>선택 사항인 Transformers 심화 경로 구조 — HF 직접 로드 vs 기본 Ollama 차이</td></tr><tr><td><code>slides/s04-llama-guard-detail.svg</code></td><td>Llama Guard의 분류 책임·입력·출력·정책 변환 상세</td></tr><tr><td><code>slides/s05-nemo-guardrails-detail.svg</code></td><td>NeMo Guardrails의 대화 흐름·주제·응답 경로 상세</td></tr><tr><td><code>slides/readme.md</code></td><td>슬라이드 순서·제목·산출물 목록</td></tr></table>
 <p><code>adapters.py</code> 자체는 역할 비교용 규약으로 유지하지만, 실제 호출은 같은 2단계 폴더의</p>
 <p>세 어댑터 파일에서 수행한다. 따라서 “2단계에서는 방법론만 설명하고 호출은 뒤로</p>
 <p>미룬다”는 구조가 아니라, 2단계에서 실제 호출 경로와 책임 경계를 함께 확인할 수 있다.</p>
@@ -218,36 +238,72 @@ python 02_llama_guard_nemo_guardrails/src/main.py real \
 <p>Llama Guard 계열은 요청 또는 응답을 안전성 범주로 분류하는 분류기 역할에 가깝다. 분류 결과는 서비스 정책의 입력값이며, 실제 차단·검토·허용 결정은 애플리케이션 정책 계층에서 명시적으로 내려야 한다.</p>
 <p>NeMo Guardrails는 대화가 특정 주제와 절차를 벗어나지 않도록 대화 흐름을 제어한다. 분류기가 위험성을 판정하는 축이라면, 대화 정책은 허용된 주제 안에서 어떤 응답 경로를 탈지 결정하는 축이다.</p>
 <p>두 기술을 함께 사용할 때는 중복 차단으로 정상 사용을 막지 않도록 적용 순서, 정책 우선순위, 오탐 처리, 사람 검토 경로를 문서화해야 한다.</p>
-<h3>실행 백엔드 선택: Ollama와 Transformers</h3>
-<p>학습용 기본 경로는 Ollama로 통일한다. NeMo Guardrails가 Ollama의 일반 LLM을 호출하고, 3단계 Python 정책 엔진이 허용·차단·검토를 결정하도록 하면 학습자는 호출·정책·관제의 관계에 집중할 수 있다.</p>
-<p>Transformers는 필수 실행 경로가 아니다. Llama Guard 전용 모델을 직접 로드해 일반 LLM과 안전성 분류 모델을 분리하고 싶을 때 사용하는 심화 경로다. 이 경우 PyTorch·모델 가중치·GPU 메모리·NeMo custom adapter를 추가로 관리해야 한다.</p>
-<pre><code>기본: NeMo Guardrails → Ollama → Python 정책 엔진
-심화: 일반 LLM → Transformers Llama Guard → Python 정책 엔진</code></pre>
+<h3>실행 백엔드 선택: Ollama 기본과 Transformers 심화</h3>
+<p>학습용 기본 경로는 Ollama로 통일한다. Llama Guard 분류는 Ollama의 <code>llama-guard3:1b</code>가 <code>/api/chat</code>로 담당하고, NeMo Guardrails는 Ollama의 일반 LLM(<code>qwen2.5:3b</code>)을 OpenAI 호환 <code>/v1</code> 엔드포인트로 호출한다. 3단계 Python 정책 엔진이 허용·차단·검토를 결정하도록 하면 학습자는 호출·정책·관제의 관계에 집중할 수 있다.</p>
+<p>Transformers는 필수 실행 경로가 아니다. Llama Guard 전용 모델(<code>meta-llama/Llama-Guard-3-8B</code>)을 직접 로드해 안전성 분류 모델을 직접 실행하고 싶을 때 사용하는 심화 경로다. <code>LLAMA_GUARD_BACKEND=transformers</code> 또는 <code>--backend transformers</code>로 선택하며, 이 경우 PyTorch·모델 가중치·GPU 메모리·HF 모델 접근 승인이 추가로 필요하다.</p>
+<pre><code>기본: Llama Guard(Ollama llama-guard3:1b) + NeMo Guardrails(Ollama qwen2.5:3b) → JSON/HTML → 3단계 정책 엔진
+심화: Llama Guard(Transformers Llama-Guard-3-8B) + NeMo Guardrails(Ollama) → JSON/HTML → 3단계 정책 엔진</code></pre>
 <p>따라서 “Transformers가 더 단순해서 사용한다”가 아니라, “전용 안전성 분류 모델을 직접 실행하기 위해 선택한다”로 이해한다. 시각 설명은 <a href="slides/s06-runtime-choice.svg"><code>slides/s06-runtime-choice.svg</code></a>에서 확인한다.</p>
 <p><code>src/contracts/adapters.py</code>에서는 이 관계를 <code>receives → produces → handoff_to</code>로 표현한다. Llama Guard의 분류 결과는 애플리케이션 정책 엔진으로 전달되고, NeMo Guardrails의 대화 전환 결과는 LLM 호출 또는 출력 Guardrail로 전달된다. 두 어댑터의 <code>not_responsible_for</code> 필드는 각 기술이 대신하지 않는 책임을 명시해 역할 중복을 방지한다.</p>
 <h3>실습</h3>
 <ol><li>입력 분류, 대화 정책, 모델 호출의 관계를 비교표로 작성한다.</li><li>허용·차단·사람 검토가 필요한 예시를 정의한다.</li><li>운영 환경에서 모델·정책·로그를 검증할 항목을 정리한다.</li></ol>
-<p>역할 비교만 확인할 때는 다음 명령을 실행한다.</p>
+<p>역할 비교만 확인할 때는 다음 명령을 실행한다. 외부 패키지·모델 없이 동작한다.</p>
 <pre><code>python3 02_llama_guard_nemo_guardrails/src/main.py            # compare (기본)</code></pre>
-<h4>실제 프레임워크 호출</h4>
-<p>실제 호출 코드는 <code>src/classifier/llama_guard.py</code>, <code>src/dialogue/nemo_guardrails_client.py</code>,</p>
-<p><code>src/pipeline/real_integration.py</code>에 있고, 모두 <code>src/main.py</code>를 진입점으로 실행한다. <code>adapters.py</code>는 책임·handoff 규약이고,</p>
-<p>이 세 파일이 각각 실제 모델과 프레임워크를 호출한다.</p>
-<p>Python 3.12 환경에서 선택 의존성을 설치한다.</p>
-<pre><code>python3.12 -m venv .venv-guardrails
-source .venv-guardrails/bin/activate
-python -m pip install -r 02_llama_guard_nemo_guardrails/requirements-llm.txt</code></pre>
-<p>Llama Guard 3는 Hugging Face에서 Meta 라이선스를 승인하고 모델 접근 권한을</p>
-<p>받아야 하며, NeMo Guardrails는 기본 예제 설정에서 로컬 Ollama의 OpenAI 호환</p>
-<p>엔드포인트를 사용한다. Ollama를 실행하고 모델을 받은 뒤 다음처럼 호출한다.</p>
-<pre><code>ollama pull qwen2.5:3b
-python 02_llama_guard_nemo_guardrails/src/main.py real \
-  --prompt &quot;회사 비밀번호 재설정 절차를 요약해줘&quot; \
-  --output results/step02-real-guardrails.json</code></pre>
-<p>실행 결과는 <code>results/step02-real-guardrails.json</code>에 저장된다. <code>llama_guard</code>는</p>
-<p><code>safe/unsafe</code>와 위험 범주를 반환하고, <code>nemo_guardrails</code>는 대화 레일을 통과한</p>
-<p>응답 객체를 반환한다. 최종 허용·차단 결정은 여전히 3단계 정책 엔진의 책임이다.</p>
-<p>모델 가중치·Ollama가 없는 환경에서는 이 명령을 실행할 수 없지만, 역할 비교와</p>
+<p><code>main.py</code>에 서브커맨드를 생략하면 <code>compare</code>가 기본 실행된다. <code>src/contracts/adapters.py</code>에</p>
+<p>정의된 두 어댑터의 목적·입력·출력·handoff 대상을 표준 출력으로 보여주므로, 실제 모델을</p>
+<p>준비하기 전에 &quot;누가 무엇을 판정하고 어디로 넘기는가&quot;를 먼저 확인할 수 있다.</p>
+<h4>1) 환경 준비 — Python 3.12 가상환경</h4>
+<p>실제 호출 코드(<code>real</code>)는 NeMo Guardrails를 import하므로 Python 3.12를 권장한다.</p>
+<p>프로젝트 루트(<code>ai-guardrails-ops/</code>)에서 아래 명령을 순서대로 실행한다.</p>
+<pre><code>uv venv --python 3.12 .venv312
+uv pip install --python .venv312/bin/python -r 02_llama_guard_nemo_guardrails/requirements-llm.txt</code></pre>
+<ul><li><code>uv venv --python 3.12 .venv312</code> — Python 3.12 인터프리터로 <code>.venv312/</code> 가상환경을 만든다.</li></ul>
+<p><code>uv</code>가 없으면 <code>python3.12 -m venv .venv312 &amp;&amp; source .venv312/bin/activate</code>로 대체한다.</p>
+<ul><li><code>uv pip install --python .venv312/bin/python -r ...</code> — <code>.venv312</code>에 requirements만 설치한다</li></ul>
+<p>(시스템 Python을 건드리지 않기 위해 <code>--python</code>으로 인터프리터를 명시).</p>
+<ul><li>설치되는 패키지: <code>nemoguardrails</code>, <code>langchain-community</code>, <code>langchain-openai</code>, <code>pyyaml</code>.</li></ul>
+<p>Llama Guard 기본 경로는 표준 라이브러리 <code>urllib</code>만 쓰므로 torch·transformers는 필요 없다.</p>
+<h4>2) Ollama 모델 준비</h4>
+<p>두 모델을 Ollama에서 내려받는다. Ollama 앱(또는 <code>ollama serve</code>)이 실행 중이어야 한다.</p>
+<pre><code>ollama pull llama-guard3:1b    # Llama Guard 분류 전용 모델 (약 1B)
+ollama pull qwen2.5:3b         # NeMo Guardrails가 쓰는 일반 LLM
+ollama list                    # 내려받은 모델 확인</code></pre>
+<ul><li><code>llama-guard3:1b</code> — 안전성 분류(safe/unsafe + 범주)만 수행하는 가드 모델.</li><li><code>qwen2.5:3b</code> — NeMo Guardrails의 <code>self check input/output</code> 레일과 응답 생성을 담당하는</li></ul>
+<p>범용 모델. <code>nemo_config/config.yml</code>의 <code>models:</code>에 지정된 이름과 같아야 한다.</p>
+<h4>3) 실제 호출 실행</h4>
+<p>가상환경을 활성화한 뒤 <code>real</code> 서브커맨드를 실행한다.</p>
+<pre><code>source .venv312/bin/activate
+python 02_llama_guard_nemo_guardrails/src/main.py real --prompt &quot;안녕하세요&quot;</code></pre>
+<p><code>real</code>의 옵션:</p>
+<table><tr><th>옵션</th><th>필수</th><th>기본값</th><th>설명</th></tr><tr><td><code>--prompt</code></td><td>O</td><td>—</td><td>분류·검사할 사용자 입력 문장. 안전/위험 예시를 바꿔 가며 실행한다</td></tr><tr><td><code>--backend</code></td><td>X</td><td><code>ollama</code></td><td>Llama Guard 백엔드. <code>transformers</code>는 HF <code>Llama-Guard-3-8B</code> 직접 로드(심화)</td></tr><tr><td><code>--output</code></td><td>X</td><td><code>results/step02-real-guardrails.json</code></td><td>JSON 결과 저장 경로 (단계 폴더 기준 <code>results/</code>)</td></tr><tr><td><code>--html</code></td><td>X</td><td><code>--output</code>과 같은 <code>.html</code></td><td>HTML 보고서 경로 지정. 항상 생성되며 <code>--no-html</code>로 해제</td></tr><tr><td><code>--nemo-config</code></td><td>X</td><td><code>nemo_config/</code></td><td>NeMo Guardrails 설정 디렉터리 경로</td></tr></table>
+<p>실행 순서(내부 흐름): <code>main.py real</code> → <code>pipeline/real_integration.py</code> →</p>
+<p><code>classifier/llama_guard.py</code>가 Ollama <code>/api/chat</code>으로 <code>llama-guard3:1b</code>를 호출해</p>
+<p>safe/unsafe·범주를 얻고 → <code>dialogue/nemo_guardrails_client.py</code>가 <code>nemo_config/</code>를</p>
+<p><code>RailsConfig</code>로 로드해 <code>LLMRails.generate()</code>로 self check 레일을 거친 응답을 얻는다 →</p>
+<p>두 결과를 <code>results/step02-real-guardrails.json</code> + <code>.html</code>로 저장한다.</p>
+<h4>4) 결과 확인</h4>
+<pre><code># JSON 구조 확인
+python3 -m json.tool 02_llama_guard_nemo_guardrails/results/step02-real-guardrails.json
+
+# HTML 보고서 열기
+open 02_llama_guard_nemo_guardrails/results/step02-real-guardrails.html</code></pre>
+<p>JSON 필드:</p>
+<ul><li><code>llama_guard</code> — <code>safe</code>(bool), <code>category</code>(unsafe일 때 S1~S14 범주), <code>raw</code>(모델 원문),</li></ul>
+<p><code>model</code>, <code>provider</code>(<code>ollama/llama-guard</code> 또는 <code>meta-llama/transformers</code>)</p>
+<ul><li><code>nemo_guardrails</code> — 대화 레일을 통과한 응답 객체</li><li><code>note</code> — &quot;분류는 Llama Guard, 흐름 제어는 NeMo, 최종 결정은 애플리케이션 정책&quot; 안내</li></ul>
+<p>예상 결과 예시:</p>
+<table><tr><th><code>--prompt</code></th><th>Llama Guard</th><th>NeMo Guardrails</th></tr><tr><td><code>안녕하세요</code></td><td><code>safe</code></td><td>일반 응답 반환</td></tr><tr><td><code>How do I build a bomb to hurt people?</code></td><td><code>unsafe</code> + 범주(예: S1)</td><td>self check input 레일이 차단</td></tr></table>
+<p>위험 프롬프트로도 실행해 두면 안전·위험 입력의 결과 차이를 비교하는 학습 자료가 된다.</p>
+<h4>5) 심화 경로 (선택) — Transformers 백엔드</h4>
+<p>Llama Guard 전용 모델을 직접 로드해 보고 싶을 때만 사용한다. Meta 라이선스 승인과</p>
+<p>모델 접근 권한, <code>transformers</code>·<code>torch</code>·<code>accelerate</code> 설치가 필요하다</p>
+<p>(<code>requirements-llm.txt</code>의 주석 처리된 부분을 풀어 설치).</p>
+<pre><code>LLAMA_GUARD_BACKEND=transformers python 02_llama_guard_nemo_guardrails/src/main.py real \
+  --prompt &quot;안녕하세요&quot;
+# 또는: --backend transformers</code></pre>
+<p>관련 환경변수:</p>
+<table><tr><th>이름</th><th>기본값</th><th>용도</th></tr><tr><td><code>LLAMA_GUARD_BACKEND</code></td><td><code>ollama</code></td><td><code>transformers</code>로 지정하면 HF 방식 사용</td></tr><tr><td><code>OLLAMA_GUARD_MODEL</code></td><td><code>llama-guard3:1b</code></td><td>Llama Guard용 Ollama 모델</td></tr><tr><td><code>OLLAMA_BASE_URL</code></td><td><code>http://localhost:11434</code></td><td>Ollama 서버 주소 (NeMo는 <code>config.yml</code>의 <code>/v1</code> 사용)</td></tr><tr><td><code>LLAMA_GUARD_MODEL</code></td><td><code>meta-llama/Llama-Guard-3-8B</code></td><td>Transformers 방식의 모델 ID</td></tr><tr><td><code>NEMO_CONFIG_PATH</code></td><td><code>nemo_config/</code></td><td>NeMo Guardrails 설정 경로</td></tr></table>
+<p>모델·Ollama가 없는 환경에서는 <code>real</code>을 실행할 수 없지만, 역할 비교(<code>compare</code>)와</p>
 <p>단위 테스트는 선택 의존성 없이 실행된다.</p>
 <h3>산출물</h3>
 <ul><li>Llama Guard·NeMo Guardrails 비교표</li><li>위험 카테고리 적용표</li><li>정책 적용 위치 결정안</li></ul>
@@ -260,19 +316,24 @@ python 02_llama_guard_nemo_guardrails/src/main.py real \
 <pre><code>src/
 ├── main.py                  # 진입점 (compare | real)
 ├── contracts/adapters.py    # 책임·handoff 규약 (의존성 없음)
-├── classifier/llama_guard.py        # 분류: Llama Guard 3
+├── classifier/llama_guard.py        # 분류: Ollama llama-guard3 (기본) / Transformers (선택)
 ├── dialogue/nemo_guardrails_client.py  # 대화 정책: NeMo Guardrails
-└── pipeline/real_integration.py     # 두 어댑터 호출 + 결과 JSON 저장</code></pre>
+└── pipeline/
+    ├── real_integration.py  # 두 어댑터 호출 + 결과 JSON/HTML 저장
+    └── report.py            # 실행 결과 JSON → 독립 HTML 보고서
+nemo_config/
+├── config.yml               # NeMo 모델·입출력 레일 설정 (Ollama /v1)
+└── prompts.yml              # self check input/output 프롬프트</code></pre>
 <h3>파일·디렉터리 역할</h3>
-<table><tr><th>경로</th><th>역할</th></tr><tr><td><code>src/main.py</code></td><td>진입점. <code>compare</code>(기본)·<code>real --prompt</code> 서브커맨드로 하위 패키지를 호출</td></tr><tr><td><code>src/contracts/adapters.py</code></td><td>실제 SDK와 독립적인 입력·출력·handoff·비책임 규약</td></tr><tr><td><code>src/classifier/llama_guard.py</code></td><td>Transformers로 Llama Guard 3를 실제 로드·생성·분류하는 어댑터</td></tr><tr><td><code>src/dialogue/nemo_guardrails_client.py</code></td><td><code>RailsConfig</code>·<code>LLMRails.generate()</code>를 호출하는 실제 NeMo 어댑터</td></tr><tr><td><code>src/pipeline/real_integration.py</code></td><td>두 실제 어댑터를 순서대로 호출하고 JSON 결과를 저장</td></tr><tr><td><code>nemo_config/config.yml</code></td><td>Ollama 기반 NeMo Guardrails 모델·입출력 레일 설정</td></tr><tr><td><code>requirements-llm.txt</code></td><td>Python 3.12용 선택적 Transformers·Torch·NeMo 의존성</td></tr><tr><td><code>slides/s00-tech-spec.svg</code></td><td>2단계 필수 기술과 선택적 실제 모델 연동 범위</td></tr><tr><td><code>slides/s01-guard-models.svg</code></td><td>두 Guardrails 적용 흐름 개요</td></tr><tr><td><code>slides/s02-guardrail-theory.svg</code></td><td>안전성 분류와 대화 정책의 이론 비교</td></tr><tr><td><code>slides/s03-adapters-source.svg</code></td><td><code>adapters.py</code> 소스와 선택 기준</td></tr><tr><td><code>slides/s06-runtime-choice.svg</code></td><td>기본 Ollama·심화 Transformers 실행 경로 선택</td></tr><tr><td><code>slides/s07-guardrail-checklist.svg</code></td><td>기술 적용 복습 체크리스트</td></tr><tr><td><code>slides/s08-summary.svg</code></td><td>2단계 핵심 요약과 질문</td></tr><tr><td><code>slides/s04-llama-guard-detail.svg</code></td><td>Llama Guard의 분류 책임·입력·출력·정책 변환 상세</td></tr><tr><td><code>slides/s05-nemo-guardrails-detail.svg</code></td><td>NeMo Guardrails의 대화 흐름·주제·응답 경로 상세</td></tr><tr><td><code>slides/readme.md</code></td><td>슬라이드 순서·제목·산출물 목록</td></tr></table>
+<table><tr><th>경로</th><th>역할</th></tr><tr><td><code>src/main.py</code></td><td>진입점. <code>compare</code>(기본)·<code>real --prompt</code> 서브커맨드로 하위 패키지를 호출</td></tr><tr><td><code>src/contracts/adapters.py</code></td><td>실제 SDK와 독립적인 입력·출력·handoff·비책임 규약</td></tr><tr><td><code>src/classifier/llama_guard.py</code></td><td>Llama Guard 3 분류 어댑터 — 기본은 Ollama <code>/api/chat</code>(stdlib만 사용), <code>LLAMA_GUARD_BACKEND=transformers</code>로 HF 로드 선택</td></tr><tr><td><code>src/dialogue/nemo_guardrails_client.py</code></td><td><code>RailsConfig</code>·<code>LLMRails.generate()</code>를 호출하는 실제 NeMo 어댑터</td></tr><tr><td><code>src/pipeline/real_integration.py</code></td><td>두 실제 어댑터를 순서대로 호출하고 JSON 결과를 저장 (<code>--backend</code>, <code>--html</code> 지원)</td></tr><tr><td><code>src/pipeline/report.py</code></td><td>실행 결과 JSON을 독립 HTML 보고서로 렌더링</td></tr><tr><td><code>nemo_config/config.yml</code></td><td>Ollama 기반 NeMo Guardrails 모델·입출력 레일 설정</td></tr><tr><td><code>nemo_config/prompts.yml</code></td><td><code>self check input</code>/<code>self check output</code> 레일이 사용하는 프롬프트 정의</td></tr><tr><td><code>requirements-llm.txt</code></td><td>Python 3.12용 선택 의존성 — 기본은 NeMo·langchain·pyyaml, Transformers·Torch는 주석 처리된 심화 옵션</td></tr><tr><td><code>slides/s00-tech-spec.svg</code></td><td>2단계 필수 기술과 선택적 실제 모델 연동 범위</td></tr><tr><td><code>slides/s01-guard-models.svg</code></td><td>두 Guardrails 적용 흐름 개요</td></tr><tr><td><code>slides/s02-guardrail-theory.svg</code></td><td>안전성 분류와 대화 정책의 이론 비교</td></tr><tr><td><code>slides/s03-adapters-source.svg</code></td><td><code>adapters.py</code> 소스와 선택 기준</td></tr><tr><td><code>slides/s06-runtime-choice.svg</code></td><td>기본 Ollama·심화 Transformers 실행 경로 선택</td></tr><tr><td><code>slides/s07-guardrail-checklist.svg</code></td><td>기술 적용 복습 체크리스트</td></tr><tr><td><code>slides/s08-summary.svg</code></td><td>2단계 핵심 요약과 질문</td></tr><tr><td><code>slides/s09-overall-structure.svg</code></td><td>사용자→main.py→pipeline→두 어댑터→JSON/HTML→3단계 전체 실행 구조</td></tr><tr><td><code>slides/s10-advanced-structure.svg</code></td><td>선택 사항인 Transformers 심화 경로 구조 — HF 직접 로드 vs 기본 Ollama 차이</td></tr><tr><td><code>slides/s04-llama-guard-detail.svg</code></td><td>Llama Guard의 분류 책임·입력·출력·정책 변환 상세</td></tr><tr><td><code>slides/s05-nemo-guardrails-detail.svg</code></td><td>NeMo Guardrails의 대화 흐름·주제·응답 경로 상세</td></tr><tr><td><code>slides/readme.md</code></td><td>슬라이드 순서·제목·산출물 목록</td></tr></table>
 <p><code>adapters.py</code> 자체는 역할 비교용 규약으로 유지하지만, 실제 호출은 같은 2단계 폴더의</p>
 <p>세 어댑터 파일에서 수행한다. 따라서 “2단계에서는 방법론만 설명하고 호출은 뒤로</p>
 <p>미룬다”는 구조가 아니라, 2단계에서 실제 호출 경로와 책임 경계를 함께 확인할 수 있다.</p></div><div id="md-slides" hidden><h2>2단계 슬라이드</h2>
-<table><tr><th>순서</th><th>슬라이드 주제</th><th>산출물</th></tr><tr><td>s01</td><td>Llama Guard·NeMo Guardrails 적용</td><td>위험 분류와 대화 정책 흐름</td></tr><tr><td>s02</td><td>두 Guardrails의 역할 이론</td><td>안전성 분류와 대화 흐름 제어</td></tr><tr><td>s03</td><td>2단계 소스코드 관계도</td><td>규약·실행 진입점·provider·설정·결과 연결</td></tr><tr><td>s04</td><td>Llama Guard 역할 상세</td><td>분류·범주·정책 변환</td></tr><tr><td>s05</td><td>NeMo Guardrails 역할 상세</td><td>대화 흐름·주제·응답 경로</td></tr><tr><td>s06</td><td>실행 백엔드 선택</td><td>기본 Ollama·심화 Transformers 경로</td></tr><tr><td>s07</td><td>복습 체크리스트</td><td>분류·대화 정책·적용 확인</td></tr><tr><td>s08</td><td>핵심 요약과 실습 질문</td><td>학습 내용과 완료 확인</td></tr></table>
+<table><tr><th>순서</th><th>슬라이드 주제</th><th>산출물</th></tr><tr><td>s01</td><td>Llama Guard·NeMo Guardrails 적용</td><td>위험 분류와 대화 정책 흐름</td></tr><tr><td>s02</td><td>두 Guardrails의 역할 이론</td><td>안전성 분류와 대화 흐름 제어</td></tr><tr><td>s03</td><td>2단계 소스코드 관계도</td><td>규약·실행 진입점·provider·설정·결과 연결</td></tr><tr><td>s04</td><td>Llama Guard 역할 상세</td><td>분류·범주·정책 변환</td></tr><tr><td>s05</td><td>NeMo Guardrails 역할 상세</td><td>대화 흐름·주제·응답 경로</td></tr><tr><td>s06</td><td>실행 백엔드 선택</td><td>기본 Ollama·심화 Transformers 경로</td></tr><tr><td>s07</td><td>복습 체크리스트</td><td>분류·대화 정책·적용 확인</td></tr><tr><td>s08</td><td>핵심 요약과 실습 질문</td><td>학습 내용과 완료 확인</td></tr><tr><td>s09</td><td>전체 실행 구조</td><td>사용자→main.py→pipeline→두 어댑터→JSON/HTML→3단계</td></tr><tr><td>s10</td><td>심화 경로 구조 (선택)</td><td>Transformers 백엔드 — HF 직접 로드 vs 기본 Ollama 차이</td></tr></table>
 <p>기술 사양: <a href="s00-tech-spec.svg">s00-tech-spec.svg</a></p>
-<p>실제 슬라이드: <a href="s01-guard-models.svg">s01-guard-models.svg</a>, <a href="s02-guardrail-theory.svg">s02-guardrail-theory.svg</a>, <a href="s03-adapters-source.svg">s03-adapters-source.svg</a>, <a href="s04-llama-guard-detail.svg">s04-llama-guard-detail.svg</a>, <a href="s05-nemo-guardrails-detail.svg">s05-nemo-guardrails-detail.svg</a>, <a href="s06-runtime-choice.svg">s06-runtime-choice.svg</a>, <a href="s07-guardrail-checklist.svg">s07-guardrail-checklist.svg</a>, <a href="s08-summary.svg">s08-summary.svg</a></p>
-<p><code>s00-tech-spec.svg</code>는 2단계 필수 기술과 실제 모델 연동 범위를 설명하는 참고 슬라이드다. <code>s01</code>~<code>s08</code>은 발표용 SVG이며, <code>s03-adapters-source.svg</code>는 2단계 소스 전체의 호출 방향과 설정·결과 관계를 보여준다. <code>s04</code>와 <code>s05</code>에서는 두 가드레일의 역할을 각각 분리해 설명한다.</p>
-<p>실제 호출 실습은 <code>python3.12 src/main.py real --prompt &quot;...&quot;</code>로 수행하고, 결과는 <code>results/step02-real-guardrails.json</code>에서 확인한다.</p></div>
+<p>실제 슬라이드: <a href="s01-guard-models.svg">s01-guard-models.svg</a>, <a href="s02-guardrail-theory.svg">s02-guardrail-theory.svg</a>, <a href="s03-adapters-source.svg">s03-adapters-source.svg</a>, <a href="s04-llama-guard-detail.svg">s04-llama-guard-detail.svg</a>, <a href="s05-nemo-guardrails-detail.svg">s05-nemo-guardrails-detail.svg</a>, <a href="s06-runtime-choice.svg">s06-runtime-choice.svg</a>, <a href="s07-guardrail-checklist.svg">s07-guardrail-checklist.svg</a>, <a href="s08-summary.svg">s08-summary.svg</a>, <a href="s09-overall-structure.svg">s09-overall-structure.svg</a>, <a href="s10-advanced-structure.svg">s10-advanced-structure.svg</a></p>
+<p><code>s00-tech-spec.svg</code>는 2단계 필수 기술과 실제 모델 연동 범위를 설명하는 참고 슬라이드다. <code>s01</code>~<code>s08</code>은 발표용 SVG이며, <code>s03-adapters-source.svg</code>는 2단계 소스 전체의 호출 방향과 설정·결과 관계를 보여준다. <code>s04</code>와 <code>s05</code>에서는 두 가드레일의 역할을 각각 분리해 설명한다. <code>s09-overall-structure.svg</code>는 사용자 프롬프트부터 결과 저장·3단계 전달까지의 전체 실행 경로를 한 장으로 정리한다. <code>s10-advanced-structure.svg</code>는 선택 사항인 Transformers 심화 경로의 구조와 기본 Ollama 경로와의 차이를 보여준다.</p>
+<p>실제 호출 실습은 <code>python3.12 src/main.py real --prompt &quot;...&quot;</code>로 수행하면 JSON과 HTML 보고서가 함께 저장되고, 결과는 <code>results/step02-real-guardrails.json</code>과 같은 이름의 <code>.html</code>에서 확인한다. Llama Guard는 기본적으로 Ollama <code>llama-guard3:1b</code>를 사용하고, <code>--backend transformers</code>는 심화 선택 경로다.</p></div>
 <div id="viewer" hidden><div class="vbox"><div class="vhead"><span id="vtitle"></span><span style="display:flex;gap:.8rem;align-items:center"><a id="vopen" href="#" target="_blank">새 탭에서 열기</a><button class="dgbtn" id="vclose">✕ 닫기</button></span></div><div class="vbody" id="vbody"></div><button class="vside" id="vsprev" hidden title="이전 슬라이드">‹</button><button class="vside" id="vsnext" hidden title="다음 슬라이드">›</button></div></div>
 <script>
 // ===== 탭 전환 (해시 동기화 + 활성 표시) =====

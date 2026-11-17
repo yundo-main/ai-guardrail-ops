@@ -1,6 +1,14 @@
-# Optional dependencies for the real Day 2 integrations.
+# Optional dependencies for the real step-02 integrations.
 # Install with Python 3.12: python3.12 -m pip install -r requirements-llm.txt
-transformers>=4.43,<5
-torch>=2.2
-accelerate>=0.30
+#
+# Default path: Llama Guard via a local Ollama server (stdlib urllib only)
+# plus NeMo Guardrails backed by Ollama. No Transformers/PyTorch download.
 nemoguardrails>=0.24,<1
+langchain-community>=0.3,<1
+langchain-openai>=0.3,<1
+pyyaml>=6,<7
+
+# Optional Transformers backend (LLAMA_GUARD_BACKEND=transformers):
+# transformers>=4.43,<5
+# torch>=2.2
+# accelerate>=0.30

@@ -37,7 +37,7 @@ def stage(number: str) -> None:
     if number == "05":
         # 현재는 API 서버를 별도 실행하지 않고 계약 결과로 지표를 재현한다.
         # 실제형 통합 단계에서는 이 부분을 POST /events → GET /metrics로 교체한다.
-        source = ROOT / "results" / "step04-security-event.json"
+        source = ROOT / "04_risk_rating_system" / "results" / "step04-security-event.json"
         target = RESULTS / "step04-security-event.json"
         if not source.exists():
             stage("03")
@@ -63,11 +63,11 @@ def stage(number: str) -> None:
     command, env = commands[number]
     execute(command, extra_env=env)
     if number == "03":
-        shutil.copy2(ROOT / "99_ref/results/step03-guardrail-result.json", RESULTS / "step03-guardrail-result.json")
+        shutil.copy2(ROOT / "03_policy_blocking_output_filtering" / "results" / "step03-guardrail-result.json", RESULTS / "step03-guardrail-result.json")
     elif number == "04":
-        shutil.copy2(ROOT / "99_ref/results/step04-security-event.json", RESULTS / "step04-security-event.json")
+        shutil.copy2(ROOT / "04_risk_rating_system" / "results" / "step04-security-event.json", RESULTS / "step04-security-event.json")
     elif number == "06":
-        report = json.loads((ROOT / "99_ref/results/step06-report.json").read_text(encoding="utf-8"))
+        report = json.loads((ROOT / "06_operations_report_integrated_lab" / "results" / "step06-report.json").read_text(encoding="utf-8"))
         metrics_path = RESULTS / "step05-metrics.json"
         if metrics_path.exists():
             report["upstream_metrics"] = json.loads(metrics_path.read_text(encoding="utf-8"))

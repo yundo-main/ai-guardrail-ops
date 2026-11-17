@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="t d">
+  <title id="t">4단계 보안 이벤트 산출물 형식</title>
+  <desc id="d">step04-security-event.json의 필드 구성과 3축 점수에서 이벤트까지의 생성 흐름</desc>
+  <style>:root{--bg:#0b1220;--ink:#f8fafc;--muted:#b5c2d1;--panel:#152235;--line:#496078;--accent:#ffc267;--good:#65dfa0;--code:#0b1220}*{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}.bg{fill:var(--bg)}.title{fill:var(--ink);font-size:38px;font-weight:700}.sub{fill:var(--muted);font-size:20px}.panel{fill:var(--panel);stroke:var(--line);stroke-width:2}.h{fill:var(--ink);font-size:22px;font-weight:700}.p{fill:var(--muted);font-size:18px}.accent{fill:var(--accent);font-size:18px;font-weight:700}.field{fill:var(--ink);font-size:16px;font-weight:700}.val{fill:var(--muted);font-size:15px}.code{fill:var(--ink);font-family:ui-monospace,Menlo,monospace;font-size:14px}.codebox{fill:var(--code);stroke:var(--line);stroke-width:1.5}.note{fill:var(--muted);font-size:14px}.foot{fill:var(--muted);font-size:14px}.arrow{stroke:var(--line);stroke-width:3;fill:none;marker-end:url(#a)}.mk{fill:var(--line)}@media(prefers-color-scheme:light){:root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--panel:#edf3f8;--line:#c9d5e1;--accent:#1769aa;--good:#16704a;--code:#f4f6f9}}</style>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+  <rect class="bg" width="1280" height="720"/>
+  <text class="title" x="60" y="90">4단계 · 보안 이벤트 산출물 형식</text>
+  <text class="sub" x="60" y="126">step04-security-event.json — 5단계 API가 그대로 받는 이벤트 규약</text>
+
+  <!-- left: field groups -->
+  <rect class="panel" x="60" y="170" width="560" height="400" rx="16"/>
+  <text class="h" x="90" y="215">필드 구성 (그룹별)</text>
+  <g>
+    <text class="field" x="90" y="256">식별</text>
+    <text class="val" x="200" y="256">event_id · trace_id · schema_version</text>
+    <text class="field" x="90" y="290">판정</text>
+    <text class="val" x="200" y="290">decision(allow/block/review) · risk(Low~Critical)</text>
+    <text class="field" x="90" y="324">내용</text>
+    <text class="val" x="200" y="324">category · detail — 무엇이 왜 위험한가</text>
+    <text class="field" x="90" y="358">운영</text>
+    <text class="val" x="200" y="358">timestamp(UTC) · status(open→acknowledged) · acknowledged_at</text>
+    <text class="field" x="90" y="392">연결</text>
+    <text class="val" x="200" y="392">source_stage=step04 · next=05_… · policy_version</text>
+  </g>
+  <text class="accent" x="90" y="452">3축 점수 → 등급: impact + exploitability + exposure</text>
+  <text class="p" x="90" y="482" font-size="16">각 축 0~3, 합계 0~9 → classify_risk()가</text>
+  <text class="p" x="90" y="510" font-size="16">≥8 Critical · ≥6 High · ≥3 Medium · 나머지 Low</text>
+  <text class="p" x="90" y="548" font-size="15">model_name은 LLM 판정 사용 시에만 채워진다(없으면 null).</text>
+
+  <!-- right: flow -->
+  <rect class="panel" x="660" y="170" width="560" height="410" rx="16"/>
+  <text class="h" x="690" y="215">생성 흐름</text>
+  <g>
+    <rect class="codebox" x="700" y="240" width="360" height="46" rx="10"/>
+    <text class="code" x="720" y="269" font-size="13">step03-guardrail-result.json 입력</text>
+    <path class="arrow" d="M880 286 V306"/>
+    <rect class="codebox" x="700" y="308" width="360" height="46" rx="10"/>
+    <text class="code" x="720" y="337" font-size="13">event_from_guardrail_file() 변환</text>
+    <path class="arrow" d="M880 354 V374"/>
+    <rect class="codebox" x="700" y="376" width="360" height="46" rx="10"/>
+    <text class="code" x="720" y="405" font-size="13">SecurityEvent (make_event)</text>
+    <path class="arrow" d="M880 422 V442"/>
+    <rect class="codebox" x="700" y="444" width="360" height="46" rx="10"/>
+    <text class="code" x="720" y="473" font-size="13">event_payload() — enum→문자열</text>
+    <path class="arrow" d="M880 490 V510"/>
+    <rect class="codebox" x="700" y="512" width="360" height="40" rx="10"/>
+    <text class="code" x="720" y="537" font-size="13">results/ JSON + HTML 보고서</text>
+  </g>
+  <text class="note" x="690" y="568" font-size="15">→ 5단계 POST /events · GET /metrics · /alerts/critical</text>
+
+  <!-- bottom: real example -->
+  <rect class="panel" x="60" y="600" width="1160" height="80" rx="14"/>
+  <text class="h" x="85" y="634" font-size="18">실제 산출물 예시</text>
+  <text class="code" x="250" y="634" font-size="13">decision: "review" · risk: "Critical" · category: "guardrail" · status: "open"</text>
+  <text class="code" x="250" y="660" font-size="13">trace_id: "step03-guardrail-result" · source_stage: "step04" · next: "05_security_dashboard_alerts"</text>
+  <text class="foot" x="60" y="705">4단계 · 보안 이벤트 산출물 형식 · 4 / 6</text>
+</svg>

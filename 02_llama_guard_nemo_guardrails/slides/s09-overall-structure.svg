@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="title desc">
+  <title id="title">2단계 전체 구조</title>
+  <desc id="desc">사용자 프롬프트가 main.py와 pipeline을 거쳐 Llama Guard 어댑터와 NeMo Guardrails 어댑터로 나뉘고, 각각 Ollama의 모델을 호출한 뒤 JSON·HTML 결과로 저장되어 3단계 정책 엔진으로 전달되는 전체 구조</desc>
+  <style>
+    :root{--bg:#0b1220;--ink:#f8fafc;--muted:#b5c2d1;--blue:#173b63;--green:#183d2d;--orange:#3b2b18;--purple:#30204d;--line:#8fa5bd;--accent:#60aef5;--good:#65dfa0;--warn:#ffc267;--violet:#c4a7ff;--frame:#112036}
+    *{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+    .bg{fill:var(--bg)}.title{fill:var(--ink);font-size:38px;font-weight:700}.sub{fill:var(--muted);font-size:19px}
+    .h{fill:var(--ink);font-size:20px;font-weight:700}.p{fill:var(--muted);font-size:15px}.code{fill:var(--ink);font-family:ui-monospace,Menlo,monospace;font-size:13px}.label{fill:var(--ink);font-size:14px;font-weight:700}.foot{fill:var(--muted);font-size:14px}
+    .entry{fill:var(--blue);stroke:var(--accent);stroke-width:2}.runtime{fill:var(--green);stroke:var(--good);stroke-width:2}.model{fill:var(--orange);stroke:var(--warn);stroke-width:2}.alt{fill:none;stroke:var(--warn);stroke-width:2;stroke-dasharray:8 6}.contract{fill:var(--purple);stroke:var(--violet);stroke-width:2;stroke-dasharray:8 6}.frame{fill:var(--frame);stroke:var(--line);stroke-width:1.5;stroke-dasharray:3 5}
+    .line{stroke:var(--line);stroke-width:3;fill:none;marker-end:url(#arrow)}.dwarn{stroke:var(--warn);stroke-width:2;fill:none;stroke-dasharray:8 6;marker-end:url(#arrowW)}.dviolet{stroke:var(--violet);stroke-width:2;fill:none;stroke-dasharray:8 6;marker-end:url(#arrowV)}
+    .mk{fill:var(--line)}.mkw{fill:var(--warn)}.mkv{fill:var(--violet)}
+    @media(prefers-color-scheme:light){:root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#e8f2fb;--green:#e7f6ee;--orange:#fff4df;--purple:#efe9fb;--line:#9aabba;--accent:#1769aa;--good:#16704a;--warn:#b45309;--violet:#6d3fc0;--frame:#eef3f8}}
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="arrowW" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="mkw" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="arrowV" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="mkv" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+  <rect class="bg" width="1280" height="720"/>
+  <text class="title" x="60" y="70">2단계 · 전체 구조</text>
+  <text class="sub" x="60" y="102">프롬프트 하나가 두 Guardrails를 지나 JSON·HTML 결과가 되기까지</text>
+
+  <!-- Row 1: entry -->
+  <rect class="entry" x="40" y="140" width="150" height="90" rx="14"/>
+  <g text-anchor="middle"><text class="h" x="115" y="180">사용자</text><text class="p" x="115" y="205">--prompt "..."</text></g>
+
+  <rect class="entry" x="240" y="140" width="170" height="90" rx="14"/>
+  <text class="h" x="258" y="178">src/main.py</text>
+  <text class="p" x="258" y="206">compare | real</text>
+
+  <rect class="entry" x="440" y="140" width="580" height="90" rx="14"/>
+  <text class="h" x="460" y="174">pipeline/real_integration.py</text>
+  <text class="p" x="460" y="198">두 어댑터를 순차 호출하고 결과를 저장한다</text>
+  <text class="p" x="460" y="218">pipeline/report.py → HTML 보고서 생성</text>
+
+  <rect class="contract" x="1060" y="140" width="190" height="90" rx="14"/>
+  <text class="h" x="1078" y="174" font-size="17">contracts/</text>
+  <text class="code" x="1078" y="196">adapters.py</text>
+  <text class="p" x="1078" y="216" font-size="14">compare · 모델 호출 없음</text>
+
+  <path class="line" d="M190 185 H238"/>
+  <path class="line" d="M410 185 H438"/>
+  <path class="dviolet" d="M325 140 V120 H1155 V138"/>
+  <text class="label" x="860" y="114">compare</text>
+
+  <!-- Row 2: adapters -->
+  <rect class="runtime" x="440" y="270" width="260" height="115" rx="14"/>
+  <text class="h" x="460" y="302">classifier/</text>
+  <text class="code" x="460" y="324">llama_guard.py</text>
+  <text class="p" x="460" y="347">OllamaLlamaGuardClient</text>
+  <text class="p" x="460" y="369">safe / unsafe + 범주(S1~S14)</text>
+
+  <rect class="runtime" x="760" y="270" width="260" height="115" rx="14"/>
+  <text class="h" x="780" y="302">dialogue/</text>
+  <text class="code" x="780" y="324">nemo_guardrails_client.py</text>
+  <text class="p" x="780" y="347">LLMRails.generate()</text>
+  <text class="p" x="780" y="369" font-size="14">nemo_config/ (config · prompts)</text>
+
+  <path class="line" d="M570 230 V268"/>
+  <path class="line" d="M890 230 V268"/>
+
+  <!-- Row 3: Ollama -->
+  <rect class="frame" x="420" y="415" width="610" height="165" rx="16"/>
+  <text class="label" x="440" y="570">Ollama 서버 · localhost:11434</text>
+
+  <rect class="model" x="440" y="455" width="260" height="90" rx="14"/>
+  <text class="h" x="460" y="486">llama-guard3:1b</text>
+  <text class="p" x="460" y="510">안전성 분류 전용 모델</text>
+  <text class="p" x="460" y="531">HF 승인 불필요</text>
+
+  <rect class="model" x="760" y="455" width="260" height="90" rx="14"/>
+  <text class="h" x="780" y="486">qwen2.5:3b</text>
+  <text class="p" x="780" y="510">일반 LLM · 응답 생성</text>
+  <text class="p" x="780" y="531">self check input·output 레일</text>
+
+  <path class="line" d="M570 385 V453"/>
+  <text class="label" x="582" y="408">/api/chat</text>
+  <path class="line" d="M890 385 V453"/>
+  <text class="label" x="902" y="408">/v1 (OpenAI 호환)</text>
+
+  <!-- Results -->
+  <rect class="entry" x="1060" y="415" width="190" height="165" rx="14"/>
+  <text class="h" x="1078" y="446">결과 저장</text>
+  <text class="code" x="1078" y="470" font-size="12">results/</text>
+  <text class="code" x="1078" y="490" font-size="11">step02-real-guardrails</text>
+  <text class="p" x="1078" y="512" font-size="14">.json + .html</text>
+  <text class="p" x="1078" y="544" font-size="14" style="fill:var(--good)">→ 3단계 정책 엔진</text>
+  <path class="line" d="M1020 185 H1040 V490 H1058"/>
+
+  <!-- Left note -->
+  <rect class="contract" x="40" y="415" width="350" height="165" rx="14" style="stroke-dasharray:none"/>
+  <text class="h" x="60" y="446">역할 분리</text>
+  <text class="p" x="60" y="474">Llama Guard: 입력의 위험 여부를 분류</text>
+  <text class="p" x="60" y="498">NeMo: 대화 흐름·응답 경로를 제어</text>
+  <text class="p" x="60" y="522">최종 허용·차단은 3단계 정책 엔진이 결정</text>
+
+  <!-- Legend -->
+  <g>
+    <rect class="frame" x="1060" y="270" width="190" height="115" rx="14" style="stroke-dasharray:none"/>
+    <text class="label" x="1078" y="298">범례</text>
+    <path d="M1078 320 H1130" stroke="var(--line)" stroke-width="3"/>
+    <text class="p" x="1142" y="325" font-size="14">실행 흐름</text>
+    <path d="M1078 345 H1130" stroke="var(--violet)" stroke-width="2" stroke-dasharray="8 6"/>
+    <text class="p" x="1142" y="374" font-size="14">compare 경로</text>
+  </g>
+
+  <text class="foot" x="60" y="625">실행: python3.12 src/main.py real --prompt "..."  (Python 3.12 venv · Ollama 실행 필요)</text>
+  <text class="foot" x="60" y="651">읽는 순서: 사용자 → main.py → pipeline → classifier / dialogue → Ollama 모델 → 결과 JSON·HTML → 3단계</text>
+  <text class="foot" x="60" y="690">2단계 · 전체 구조 · 요약 지도 — 심화 경로(Transformers)는 s10 슬라이드 참조</text>
+</svg>

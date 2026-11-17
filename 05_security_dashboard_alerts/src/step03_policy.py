@@ -1,4 +1,4 @@
-"""Rules and risk classification for day 3."""
+"""Rules and risk classification for step 03."""
 
 from __future__ import annotations
 

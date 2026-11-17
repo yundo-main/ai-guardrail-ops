@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="t d">
+  <title id="t">3단계 정책 규칙 구조</title>
+  <desc id="d">policy-rules.json의 규칙 항목 필드와 입력 문자열이 PolicyMatch를 거쳐 GuardrailResult가 되는 구조</desc>
+  <style>:root{--bg:#0b1220;--ink:#f8fafc;--muted:#b5c2d1;--panel:#152235;--line:#496078;--accent:#ffc267;--good:#65dfa0;--code:#0b1220}*{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}.bg{fill:var(--bg)}.title{fill:var(--ink);font-size:38px;font-weight:700}.sub{fill:var(--muted);font-size:20px}.panel{fill:var(--panel);stroke:var(--line);stroke-width:2}.h{fill:var(--ink);font-size:22px;font-weight:700}.p{fill:var(--muted);font-size:18px}.accent{fill:var(--accent);font-size:18px;font-weight:700}.good{fill:var(--good);font-size:18px;font-weight:700}.field{fill:var(--ink);font-size:16px;font-weight:700}.val{fill:var(--muted);font-size:15px}.code{fill:var(--ink);font-family:ui-monospace,Menlo,monospace;font-size:14px}.codebox{fill:var(--code);stroke:var(--line);stroke-width:1.5}.note{fill:var(--muted);font-size:14px}.foot{fill:var(--muted);font-size:14px}.arrow{stroke:var(--line);stroke-width:3;fill:none;marker-end:url(#a)}.mk{fill:var(--line)}@media(prefers-color-scheme:light){:root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--panel:#edf3f8;--line:#c9d5e1;--accent:#1769aa;--good:#16704a;--code:#f4f6f9}}</style>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+  <rect class="bg" width="1280" height="720"/>
+  <text class="title" x="60" y="90">3단계 · 정책 규칙 구조</text>
+  <text class="sub" x="60" y="126">policy-rules.json 한 항목 = 규칙 하나 — 필드가 판정 근거 전체를 만든다</text>
+
+  <!-- left: fields -->
+  <rect class="panel" x="60" y="170" width="560" height="400" rx="16"/>
+  <text class="h" x="90" y="215">규칙 항목 필드 (policy-rules.json)</text>
+  <g>
+    <text class="field" x="90" y="258">rule_id</text><text class="val" x="230" y="258">규칙 고유 ID — 감사·보고서 근거</text>
+    <text class="field" x="90" y="292">pattern</text><text class="val" x="230" y="292">입력에 적용하는 정규식 — 매칭 결정</text>
+    <text class="field" x="90" y="326">reason</text><text class="val" x="230" y="326">발동 사유 — 설명 가능한 차단 근거</text>
+    <text class="field" x="90" y="360">risk</text><text class="val" x="230" y="360">Low / Medium / High / Critical</text>
+    <text class="field" x="90" y="394">decision</text><text class="val" x="230" y="394">allow / block / review 판정</text>
+    <text class="field" x="90" y="428">flags</text><text class="val" x="230" y="428">IGNORECASE · DOTALL 등 플래그</text>
+  </g>
+  <text class="accent" x="90" y="486">규칙 추가 = JSON 항목 추가 — 코드 수정 불필요</text>
+  <text class="p" x="90" y="522" font-size="16">policy.py가 JSON을 읽어 Rule로 컴파일하고,</text>
+  <text class="p" x="90" y="550" font-size="16">inspect_input()이 각 pattern을 순서대로 검색한다.</text>
+
+  <!-- right: flow chain -->
+  <rect class="panel" x="660" y="170" width="560" height="410" rx="16"/>
+  <text class="h" x="690" y="215">매칭 흐름</text>
+  <g>
+    <rect class="codebox" x="700" y="240" width="360" height="46" rx="10"/>
+    <text class="code" x="720" y="269" font-size="13">policy-rules.json (규칙 목록)</text>
+    <path class="arrow" d="M860 286 V302"/>
+    <rect class="codebox" x="700" y="304" width="360" height="46" rx="10"/>
+    <text class="code" x="720" y="333" font-size="13">inspect_input(prompt) — 순차 검색</text>
+    <path class="arrow" d="M860 350 V366"/>
+    <rect class="codebox" x="700" y="368" width="360" height="56" rx="10"/>
+    <text class="code" x="720" y="390" font-size="13">PolicyMatch 목록</text>
+    <text class="code" x="720" y="412" font-size="12" fill="var(--muted)">rule_id · reason · risk · decision</text>
+    <path class="arrow" d="M860 424 V440"/>
+    <rect class="codebox" x="700" y="442" width="360" height="46" rx="10"/>
+    <text class="code" x="720" y="471" font-size="13">GuardrailResult → decision + risk</text>
+    <path class="arrow" d="M860 488 V504"/>
+    <rect class="codebox" x="700" y="506" width="360" height="40" rx="10"/>
+    <text class="code" x="720" y="531" font-size="13">results/ JSON + HTML 보고서</text>
+  </g>
+  <text class="note" x="690" y="566" font-size="15">매칭 ≥1건 → BLOCK · 없으면 ALLOW 후 출력 검열로 진행</text>
+
+  <!-- bottom: example -->
+  <rect class="panel" x="60" y="600" width="1160" height="80" rx="14"/>
+  <text class="h" x="85" y="634" font-size="18">예시 규칙 INJ-001</text>
+  <text class="code" x="250" y="634" font-size="14">pattern: "ignore\s+(?:all\s+)?previous instructions"</text>
+  <text class="p" x="250" y="662" font-size="15">reason: prompt injection · risk: High · decision: block · flags: [IGNORECASE]</text>
+  <text class="foot" x="60" y="705">3단계 · 정책 규칙 구조 · 4 / 7</text>
+</svg>

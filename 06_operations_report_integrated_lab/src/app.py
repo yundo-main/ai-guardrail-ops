@@ -1,4 +1,4 @@
-"""Integrated day 6 runner: policy·guardrail·monitoring are bundled in this src/ folder."""
+"""Integrated step 06 runner: policy·guardrail·monitoring are bundled in this src/ folder."""
 
 from __future__ import annotations
 

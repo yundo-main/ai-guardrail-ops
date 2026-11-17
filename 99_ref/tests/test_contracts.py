@@ -3,13 +3,12 @@ import unittest
 from pathlib import Path
 
 root = Path(__file__).parents[2]
-shared = root / "99_ref"
 
 
 class ContractTests(unittest.TestCase):
     def test_result_contract_files_have_trace_fields(self):
-        step03 = json.loads((shared / "results/step03-guardrail-result.json").read_text(encoding="utf-8"))
-        step04 = json.loads((shared / "results/step04-security-event.json").read_text(encoding="utf-8"))
+        step03 = json.loads((root / "03_policy_blocking_output_filtering" / "results" / "step03-guardrail-result.json").read_text(encoding="utf-8"))
+        step04 = json.loads((root / "04_risk_rating_system" / "results" / "step04-security-event.json").read_text(encoding="utf-8"))
         self.assertEqual(step03["schema_version"], "1.0")
         self.assertEqual(step03["trace_id"], step04["trace_id"])
         self.assertEqual(step04["next"], "05_security_dashboard_alerts")

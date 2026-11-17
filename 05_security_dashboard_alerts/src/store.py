@@ -1,4 +1,4 @@
-"""SQLite persistence for the day 5 security-event API."""
+"""SQLite persistence for the step 05 security-event API."""
 
 from __future__ import annotations
 

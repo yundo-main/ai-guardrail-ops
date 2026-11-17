@@ -1,4 +1,4 @@
-"""Day 2: compare safety classification and conversational policy adapters."""
+"""Step 02: compare safety classification and conversational policy adapters."""
 
 from dataclasses import dataclass
 

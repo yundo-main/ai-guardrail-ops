@@ -1,4 +1,4 @@
-"""Optional local Ollama adapter used by the day 6 integration lab."""
+"""Optional local Ollama adapter used by the step 06 integration lab."""
 
 from __future__ import annotations
 

@@ -1,0 +1,15 @@
+{
+  "decision": "review",
+  "text": "Contact [EMAIL_REDACTED]; api_key=[API_KEY_REDACTED].",
+  "risk": "Critical",
+  "matches": [],
+  "masked_fields": [
+    "email",
+    "api_key"
+  ],
+  "schema_version": "1.0",
+  "event_id": "step03-guardrail-result",
+  "trace_id": "step03-guardrail-result",
+  "source_stage": "step03",
+  "next": "04_risk_rating_system"
+}

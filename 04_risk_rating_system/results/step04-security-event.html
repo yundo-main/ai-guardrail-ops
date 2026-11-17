@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4단계 위험 등급·보안 이벤트 보고서</title>
+<style>
+  :root {
+    --bg: #f4f6f9; --card: #ffffff; --ink: #17202e; --muted: #66707f;
+    --line: #e3e8ef; --accent: #2f6fed; --ok: #1a7f4b; --ok-bg: #e7f6ee;
+    --bad: #c93a3a; --bad-bg: #fdecec; --warn: #9a6b12; --warn-bg: #fdf3e0;
+    --code-bg: #eef1f6; --code-ink: #1d2735;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d1420; --card: #141d2e; --ink: #e8edf5; --muted: #9aa7b8;
+      --line: #26334a; --accent: #6ea0ff; --ok: #5fd39a; --ok-bg: #14301f;
+      --bad: #ff7b72; --bad-bg: #3a1c1c; --warn: #f0b95a; --warn-bg: #33270f;
+      --code-bg: #0b1220; --code-ink: #d7e0ee;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", "Noto Sans KR", sans-serif;
+    background: var(--bg); color: var(--ink); margin: 0;
+    line-height: 1.6; padding: 2.2rem 1rem 3rem;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  .doc { background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+          padding: 2rem 2.2rem; box-shadow: 0 1px 3px rgba(15,23,42,.06); }
+  .doc-head { border-bottom: 2px solid var(--ink); padding-bottom: 1rem; margin-bottom: 1.2rem; }
+  .eyebrow { font-size: .75rem; font-weight: 800; letter-spacing: .12em;
+              color: var(--accent); text-transform: uppercase; }
+  h1 { font-size: 1.45rem; margin: .25rem 0 .3rem; }
+  .doc-sub { color: var(--muted); font-size: .85rem; }
+  h2 { font-size: 1.02rem; margin: 1.6rem 0 .6rem; display: flex; align-items: baseline; gap: .55rem; }
+  h2 .no { color: var(--accent); font-size: .8rem; font-weight: 800; letter-spacing: .05em; }
+  h2 .tag { font-size: .68rem; font-weight: 700; padding: .12rem .5rem;
+             border-radius: 6px; background: var(--bg); color: var(--muted);
+             border: 1px solid var(--line); }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: .4rem .9rem .4rem 0; vertical-align: top;
+           border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; width: 7.5rem; white-space: nowrap; }
+  tr:last-child th, tr:last-child td { border-bottom: none; }
+  .verdict-row { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap;
+                 padding: .9rem 1.1rem; border-radius: 12px; margin: .4rem 0 0;
+                 border: 1px solid var(--line); }
+  .verdict {
+    display: inline-flex; align-items: center; gap: .45rem;
+    padding: .3rem .95rem; border-radius: 999px; font-weight: 800;
+    font-size: .95rem; letter-spacing: .04em;
+  }
+  .verdict .dot { width: .6rem; height: .6rem; border-radius: 50%; background: currentColor; }
+  .ok { background: var(--ok-bg); color: var(--ok); }
+  .bad { background: var(--bad-bg); color: var(--bad); }
+  .warn { background: var(--warn-bg); color: var(--warn); }
+  .summary { color: var(--muted); font-size: .92rem; line-height: 1.7; }
+  pre.json {
+    background: var(--code-bg); color: var(--code-ink); border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: .9rem 1rem; overflow-x: auto; white-space: pre-wrap;
+    word-break: break-word; font-size: .84rem; margin: .5rem 0 0;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .85em; }
+  .conclusion {
+    background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
+    padding: .9rem 1.1rem; font-size: .92rem;
+  }
+  .note { color: var(--muted); font-size: .85rem; margin-top: 1.6rem;
+          padding-top: 1rem; border-top: 1px solid var(--line); }
+  footer { color: var(--muted); font-size: .78rem; text-align: center; margin-top: 1.4rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="doc">
+  <div class="doc-head">
+    <div class="eyebrow">Step 04 · 실행 보고서</div>
+    <h1>위험 등급·보안 이벤트 보고서</h1>
+    <div class="doc-sub">3단계 판정 → 4단계 위험 분류·이벤트화 — step03-guardrail-result</div>
+  </div>
+
+  <h2><span class="no">1.</span>보고서 정보</h2>
+  <table><tr><th>스키마 버전</th><td>1.0</td></tr><tr><th>이벤트 ID</th><td>step03-guardrail-result</td></tr><tr><th>추적 ID</th><td>step03-guardrail-result</td></tr><tr><th>발생 시각</th><td>2026-11-17T21:34:34.961916+00:00</td></tr><tr><th>정책 버전</th><td>policy-1</td></tr><tr><th>모델</th><td>—</td></tr><tr><th>단계</th><td>step04 → 05_security_dashboard_alerts</td></tr></table>
+
+  <h2><span class="no">2.</span>판정 요약</h2>
+  <div class="verdict-row">
+    <span class="verdict warn"><span class="dot"></span>REVIEW · 검토</span>
+    <span class="verdict bad"><span class="dot"></span>CRITICAL · 긴급</span>
+    <span class="verdict warn"><span class="dot"></span>OPEN · 미처리</span>
+    <span class="summary">Critical 등급 — 즉시 알림·에스컬레이션 대상입니다.<br>아직 확인(acknowledge)되지 않은 open 상태입니다.<br>대시보드 표시·알림 발송·지표 집계는 5단계 API의 책임입니다.</span>
+  </div>
+
+  <h2><span class="no">3.</span>이벤트 상세</h2>
+  <table><tr><th>카테고리</th><td>guardrail</td></tr><tr><th>상세</th><td>—</td></tr><tr><th>처리 상태</th><td>open</td></tr><tr><th>확인 시각</th><td>—</td></tr></table>
+
+  <h2><span class="no">4.</span>결과 규약 원본 <span class="tag">5단계 API 입력 필드</span></h2>
+  <pre class="json">{
+  &quot;event_id&quot;: &quot;step03-guardrail-result&quot;,
+  &quot;decision&quot;: &quot;review&quot;,
+  &quot;risk&quot;: &quot;Critical&quot;,
+  &quot;category&quot;: &quot;guardrail&quot;,
+  &quot;detail&quot;: &quot;&quot;,
+  &quot;timestamp&quot;: &quot;2026-11-17T21:34:34.961916+00:00&quot;,
+  &quot;schema_version&quot;: &quot;1.0&quot;,
+  &quot;trace_id&quot;: &quot;step03-guardrail-result&quot;,
+  &quot;source_stage&quot;: &quot;step04&quot;,
+  &quot;policy_version&quot;: &quot;policy-1&quot;,
+  &quot;model_name&quot;: null,
+  &quot;status&quot;: &quot;open&quot;,
+  &quot;acknowledged_at&quot;: null,
+  &quot;next&quot;: &quot;05_security_dashboard_alerts&quot;
+}</pre>
+
+  <h2><span class="no">5.</span>결론 및 다음 단계</h2>
+  <div class="conclusion">
+    이 이벤트는 <b>4단계 위험 등급 분류의 산출물</b>입니다.<br>
+    대시보드 등록·Critical 알림·지표 집계는 5단계 API(<code>POST /events</code>)에서 수행하며,<br>
+    이 JSON은 <code>05_security_dashboard_alerts</code> 단계로 전달됩니다.
+  </div>
+
+  <p class="note">원본 데이터: 같은 이름의 <code>.json</code> 파일 · schema_version 1.0</p>
+</div>
+<footer>4단계 · 위험 등급·보안 이벤트 실습 — ai-guardrails-ops</footer>
+</div>
+</body>
+</html>

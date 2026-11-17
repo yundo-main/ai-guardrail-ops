@@ -1,4 +1,4 @@
-"""Input blocking and output redaction for day 3."""
+"""Input blocking and output redaction for step 03."""
 
 from __future__ import annotations
 
@@ -69,7 +69,7 @@ def safe_response(prompt: str, model_response: str) -> tuple[GuardrailResult, Gu
 
 
 def result_payload(result: GuardrailResult, next_stage: str = "04_risk_rating_system") -> dict[str, object]:
-    """Serialize a result for the next day's JSON-based exercise."""
+    """Serialize a result for the next stage's JSON-based exercise."""
     # 폴더별 코드는 독립적으로 유지하고, 단계 간에는 안정적인 JSON을 전달한다.
     # enum·dataclass는 그대로 JSON에 넣을 수 없으므로 경계에서 문자열·dict로 정규화한다.
     payload = asdict(result)
@@ -88,7 +88,7 @@ def result_payload(result: GuardrailResult, next_stage: str = "04_risk_rating_sy
 
 
 def write_result(result: GuardrailResult, path: str | Path) -> None:
-    """Write a redacted result artifact for the next day's exercise."""
+    """Write a redacted result artifact for the next stage's exercise."""
     # 결과 파일에는 모델 원문 대신 정책 판정과 마스킹된 값만 남긴다.
     # 이 파일이 4단계의 입력이 되므로 경로와 필드 변경은 문서와 함께 관리한다.
     output_path = Path(path)
@@ -100,12 +100,16 @@ def write_result(result: GuardrailResult, path: str | Path) -> None:
 if __name__ == "__main__":
     # 파일을 직접 실행했을 때도 학습자가 입력 차단과 출력 마스킹을 한 번에 확인하도록 한다.
     # 실제 모델 호출은 포함하지 않고, 안전한 더미 응답만 사용해 재현 가능한 결과를 만든다.
-    project_root = Path(__file__).resolve().parents[2]
-    result_path = project_root / "99_ref" / "results" / "step03-guardrail-result.json"
+    project_root = Path(__file__).resolve().parents[1]
+    result_path = project_root / "results" / "step03-guardrail-result.json"
     input_result, output_result = safe_response(
         "What is the support contact?",
         "Contact learner@example.invalid; api_key=sk_demo_1234567890.",
     )
     result = output_result if input_result.decision is Decision.ALLOW else input_result
     write_result(result, result_path)
+    # report.py는 __main__ 실행 시에만 필요하므로 지연 import로 테스트 격리 로드를 유지한다.
+    from report import write_report
+
+    write_report(result_payload(result), result_path.with_suffix(".html"))
     print(json.dumps(result_payload(result), ensure_ascii=False, indent=2))

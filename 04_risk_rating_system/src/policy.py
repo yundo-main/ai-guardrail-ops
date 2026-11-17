@@ -1,4 +1,4 @@
-"""Shared decision and risk enums for day 4."""
+"""Shared decision and risk enums for step 04."""
 
 from enum import Enum
 

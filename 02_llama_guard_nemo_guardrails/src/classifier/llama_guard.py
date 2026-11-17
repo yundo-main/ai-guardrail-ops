@@ -1,15 +1,23 @@
-"""Real Llama Guard 3 inference adapter.
+"""Llama Guard inference adapters.
 
-The imports are intentionally lazy: the day-by-day exercises and unit tests
-can run without downloading an 8B model.  When this adapter is instantiated it
-loads the model from Hugging Face and performs the actual Transformers call.
+Two interchangeable backends normalize Llama Guard's ``safe``/``unsafe``
+contract into ``LlamaGuardResult``:
+
+- ``OllamaLlamaGuardClient`` (default): calls a local Ollama server, so the
+  real integration needs no large Hugging Face download.
+- ``LlamaGuardClient``: loads the model with Transformers (optional, heavy).
+
+The imports for both backends are lazy: the day-by-day exercises and unit
+tests can run without downloading a model or installing the LLM packages.
 """
 
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+import json
 import os
 from typing import Any
+from urllib.request import Request, urlopen
 
 
 @dataclass(frozen=True)
@@ -26,7 +34,11 @@ class LlamaGuardResult:
         return asdict(self)
 
 
-def parse_guard_output(raw: str, model: str) -> LlamaGuardResult:
+def parse_guard_output(
+    raw: str,
+    model: str,
+    provider: str = "meta-llama/transformers",
+) -> LlamaGuardResult:
     """Parse the model's first-line ``safe``/``unsafe`` contract.
 
     Llama Guard emits ``safe`` or ``unsafe`` followed by a category for an
@@ -37,7 +49,13 @@ def parse_guard_output(raw: str, model: str) -> LlamaGuardResult:
     status = lines[0].lower() if lines else "unknown"
     safe = status == "safe"
     category = None if safe else (lines[1] if len(lines) > 1 else "unknown")
-    return LlamaGuardResult(safe=safe, category=category, raw=raw.strip(), model=model)
+    return LlamaGuardResult(
+        safe=safe,
+        category=category,
+        raw=raw.strip(),
+        model=model,
+        provider=provider,
+    )
 
 
 class LlamaGuardClient:
@@ -86,3 +104,74 @@ class LlamaGuardClient:
         prompt_length = inputs["input_ids"].shape[-1]
         raw = self.tokenizer.decode(outputs[0][prompt_length:], skip_special_tokens=True)
         return parse_guard_output(raw, self.model_id)
+
+
+class OllamaLlamaGuardClient:
+    """Call Llama Guard through a local Ollama ``/api/chat`` endpoint.
+
+    This is the default backend for the real integration: it needs only a
+    running Ollama server and a pulled guard model, not the Transformers
+    stack.  Set ``OLLAMA_BASE_URL``/``OLLAMA_GUARD_MODEL`` to override the
+    defaults.
+    """
+
+    PROVIDER = "ollama/llama-guard"
+
+    def __init__(
+        self,
+        model: str | None = None,
+        base_url: str | None = None,
+        timeout: int = 120,
+    ):
+        self.model = model or os.getenv("OLLAMA_GUARD_MODEL", "llama-guard3:1b")
+        self.base_url = (
+            base_url or os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+        ).rstrip("/")
+        self.timeout = timeout
+
+    def classify(self, user_text: str, assistant_text: str | None = None) -> LlamaGuardResult:
+        """Classify a user request, optionally together with an assistant reply."""
+        chat = [{"role": "user", "content": user_text}]
+        if assistant_text:
+            chat.append({"role": "assistant", "content": assistant_text})
+        body = json.dumps(
+            {
+                "model": self.model,
+                "messages": chat,
+                "stream": False,
+                "options": {"num_predict": 128},
+            }
+        ).encode("utf-8")
+        request = Request(
+            f"{self.base_url}/api/chat",
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urlopen(request, timeout=self.timeout) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except OSError as exc:
+            raise RuntimeError(
+                f"Ollama server is unreachable at {self.base_url}. "
+                "Start Ollama and pull the guard model first."
+            ) from exc
+        raw = payload.get("message", {}).get("content", "")
+        return parse_guard_output(raw, self.model, provider=self.PROVIDER)
+
+
+def get_llama_guard_client(backend: str | None = None):
+    """Instantiate the configured Llama Guard backend.
+
+    ``backend`` may be ``"ollama"`` (default) or ``"transformers"``; when it is
+    ``None`` the ``LLAMA_GUARD_BACKEND`` environment variable is consulted,
+    falling back to ``ollama``.
+    """
+    selected = (backend or os.getenv("LLAMA_GUARD_BACKEND", "ollama")).lower()
+    if selected == "ollama":
+        return OllamaLlamaGuardClient()
+    if selected == "transformers":
+        return LlamaGuardClient()
+    raise ValueError(
+        f"Unknown Llama Guard backend {selected!r}; use 'ollama' or 'transformers'."
+    )

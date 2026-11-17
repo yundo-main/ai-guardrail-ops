@@ -1,4 +1,4 @@
-"""Application service that composes Day 2 adapters with Day 3 policy.
+"""Application service that composes Step 02 adapters with Step 03 policy.
 
 This module is the real-service boundary: it does not hide the vendor calls,
 but it makes their order, failure behavior, and normalized response explicit.
@@ -56,7 +56,7 @@ class GuardrailService:
     """Run input policy, NeMo dialogue rails, Llama classification, output policy."""
 
     def __init__(self):
-        # Day 5 also has a module named ``policy.py``.  Day 3's guardrail.py
+        # Step 05 also has a module named ``policy.py``.  Step 03's guardrail.py
         # uses an absolute import, so temporarily bind the intended policy
         # module while loading it and then restore the API's module binding.
         # 05/src/ 안의 step03-policy.py·step03-guardrail.py를 사용한다.

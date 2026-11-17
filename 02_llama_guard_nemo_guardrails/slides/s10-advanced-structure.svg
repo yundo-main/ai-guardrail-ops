@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="title desc">
+  <title id="title">2단계 심화 경로 구조 (선택)</title>
+  <desc id="desc">선택 사항인 Transformers 백엔드 경로 — Llama Guard를 Hugging Face Llama-Guard-3-8B로 직접 로드하는 구조와 기본 Ollama 경로와의 차이</desc>
+  <style>
+    :root{--bg:#0b1220;--ink:#f8fafc;--muted:#b5c2d1;--blue:#173b63;--green:#183d2d;--orange:#3b2b18;--purple:#30204d;--line:#8fa5bd;--accent:#60aef5;--good:#65dfa0;--warn:#ffc267;--violet:#c4a7ff;--frame:#112036}
+    *{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+    .bg{fill:var(--bg)}.title{fill:var(--ink);font-size:38px;font-weight:700}.sub{fill:var(--muted);font-size:19px}
+    .h{fill:var(--ink);font-size:20px;font-weight:700}.p{fill:var(--muted);font-size:15px}.code{fill:var(--ink);font-family:ui-monospace,Menlo,monospace;font-size:13px}.label{fill:var(--ink);font-size:14px;font-weight:700}.foot{fill:var(--muted);font-size:14px}
+    .entry{fill:var(--blue);stroke:var(--accent);stroke-width:2}.runtime{fill:var(--green);stroke:var(--good);stroke-width:2}.model{fill:var(--orange);stroke:var(--warn);stroke-width:2}.alt{fill:none;stroke:var(--warn);stroke-width:2;stroke-dasharray:8 6}.contract{fill:var(--purple);stroke:var(--violet);stroke-width:2;stroke-dasharray:8 6}.frame{fill:var(--frame);stroke:var(--line);stroke-width:1.5;stroke-dasharray:3 5}.opt{fill:none;stroke:var(--warn);stroke-width:2}
+    .line{stroke:var(--line);stroke-width:3;fill:none;marker-end:url(#arrow)}.dwarn{stroke:var(--warn);stroke-width:2;fill:none;stroke-dasharray:8 6;marker-end:url(#arrowW)}
+    .mk{fill:var(--line)}.mkw{fill:var(--warn)}
+    @media(prefers-color-scheme:light){:root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#e8f2fb;--green:#e7f6ee;--orange:#fff4df;--purple:#efe9fb;--line:#9aabba;--accent:#1769aa;--good:#16704a;--warn:#b45309;--violet:#6d3fc0;--frame:#eef3f8}}
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="arrowW" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="mkw" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+  <rect class="bg" width="1280" height="720"/>
+  <text class="title" x="60" y="70">2단계 · 심화 경로 구조 <tspan fill="var(--warn)">(선택 사항)</tspan></text>
+  <text class="sub" x="60" y="102">--backend transformers — Llama Guard 전용 모델을 직접 로드하는 경로 (기본은 Ollama, s09 참조)</text>
+
+  <!-- optional badge -->
+  <rect class="opt" x="60" y="125" width="200" height="34" rx="17"/>
+  <text class="label" x="160" y="147" text-anchor="middle" fill="var(--warn)">OPTIONAL · 필수 아님</text>
+
+  <!-- Row 1 -->
+  <rect class="entry" x="40" y="190" width="150" height="90" rx="14"/>
+  <g text-anchor="middle"><text class="h" x="115" y="230">사용자</text><text class="p" x="115" y="255">--prompt "..."</text></g>
+
+  <rect class="entry" x="240" y="190" width="170" height="90" rx="14"/>
+  <text class="h" x="258" y="228">src/main.py</text>
+  <text class="p" x="258" y="256">real --backend transformers</text>
+
+  <rect class="entry" x="440" y="190" width="580" height="90" rx="14"/>
+  <text class="h" x="460" y="224">pipeline/real_integration.py</text>
+  <text class="p" x="460" y="248">get_llama_guard_client("transformers") 선택</text>
+  <text class="p" x="460" y="268">두 어댑터 순차 호출 → JSON + HTML 저장</text>
+
+  <path class="line" d="M190 235 H238"/>
+  <path class="line" d="M410 235 H438"/>
+
+  <!-- Row 2: adapters -->
+  <rect class="alt" x="40" y="330" width="370" height="130" rx="14"/>
+  <text class="h" x="60" y="362" fill="var(--warn)" style="fill:var(--warn)">Transformers 백엔드 (추가 설치 필요)</text>
+  <text class="code" x="60" y="390" font-size="12">transformers · torch · accelerate</text>
+  <text class="p" x="60" y="414">HF 모델 접근 승인 + 가중치 다운로드</text>
+  <text class="p" x="60" y="438">GPU/메모리 관리 필요 — 학습용 필수 아님</text>
+
+  <rect class="runtime" x="440" y="330" width="260" height="130" rx="14"/>
+  <text class="h" x="460" y="362">classifier/</text>
+  <text class="code" x="460" y="384">llama_guard.py</text>
+  <text class="p" x="460" y="408" font-size="14">LlamaGuardClient (HF)</text>
+  <text class="p" x="460" y="432" font-size="14">safe / unsafe + 범주</text>
+  <text class="p" x="460" y="452" font-size="13">get_llama_guard_client() 선택</text>
+
+  <rect class="runtime" x="760" y="330" width="260" height="130" rx="14"/>
+  <text class="h" x="780" y="362">dialogue/</text>
+  <text class="code" x="780" y="384">nemo_guardrails_client.py</text>
+  <text class="p" x="780" y="408" font-size="14">LLMRails.generate() — 동일</text>
+  <text class="p" x="780" y="432" font-size="14">nemo_config/ 그대로 사용</text>
+  <text class="p" x="780" y="452" font-size="13">Ollama qwen2.5:3b 연결</text>
+
+  <path class="line" d="M570 280 V328"/>
+  <path class="line" d="M890 280 V328"/>
+  <path class="dwarn" d="M410 395 H438"/>
+
+  <!-- Row 3: model hosts -->
+  <rect class="frame" x="420" y="500" width="610" height="150" rx="16"/>
+  <text class="label" x="440" y="522">실행 백엔드 — 경로마다 다름</text>
+
+  <rect class="model" x="440" y="532" width="280" height="100" rx="14"/>
+  <text class="h" x="460" y="562">Hugging Face Transformers</text>
+  <text class="code" x="460" y="586" font-size="12">meta-llama/Llama-Guard-3-8B</text>
+  <text class="p" x="460" y="608" font-size="14">모델 가중치 로컬 로드 · GPU</text>
+  <text class="p" x="460" y="628" font-size="13">torch · HF 접근 승인 필요</text>
+
+  <rect class="model" x="760" y="532" width="260" height="100" rx="14"/>
+  <text class="h" x="780" y="562">Ollama (변경 없음)</text>
+  <text class="code" x="780" y="586" font-size="12">/v1 → qwen2.5:3b</text>
+  <text class="p" x="780" y="608" font-size="14">NeMo Guardrails 일반 LLM</text>
+  <text class="p" x="780" y="628" font-size="13">self check input·output 레일</text>
+
+  <path class="line" d="M570 460 V532"/>
+  <text class="label" x="560" y="484">직접 로드 (torch)</text>
+  <path class="line" d="M890 460 V532"/>
+  <text class="label" x="878" y="484">/v1 (OpenAI 호환)</text>
+
+  <!-- Results -->
+  <rect class="entry" x="1060" y="500" width="190" height="150" rx="14"/>
+  <text class="h" x="1078" y="530">결과 저장</text>
+  <text class="code" x="1078" y="554" font-size="12">results/</text>
+  <text class="code" x="1078" y="572" font-size="11">step02-real-guardrails</text>
+  <text class="p" x="1078" y="592" font-size="14">.json + .html</text>
+  <text class="p" x="1078" y="620" font-size="14" style="fill:var(--good)">→ 3단계 정책 엔진</text>
+  <path class="line" d="M1020 235 H1040 V575 H1058"/>
+
+  <!-- Left note: diff vs default -->
+  <rect class="contract" x="40" y="500" width="350" height="150" rx="14" style="stroke-dasharray:none"/>
+  <text class="h" x="60" y="528">기본 경로와의 차이</text>
+  <text class="p" x="60" y="552" font-size="14">classifier만 Ollama → HF 직접 로드로 교체</text>
+  <text class="p" x="60" y="574" font-size="14">dialogue(NeMo)는 두 경로 동일</text>
+  <text class="p" x="60" y="596" font-size="14">결과 JSON/HTML 스키마도 동일</text>
+  <text class="p" x="60" y="620" font-size="14" fill="var(--warn)" style="fill:var(--warn)">provider: meta-llama/transformers</text>
+  <text class="p" x="60" y="642" font-size="13">결과 파일만으로 경로 구분 불가</text>
+
+  <!-- Legend -->
+  <g>
+    <rect class="frame" x="1060" y="330" width="190" height="130" rx="14" style="stroke-dasharray:none"/>
+    <text class="label" x="1078" y="356">범례</text>
+    <path d="M1078 376 H1130" stroke="var(--line)" stroke-width="3"/>
+    <text class="p" x="1142" y="381" font-size="14">실행 흐름</text>
+    <path d="M1078 400 H1130" stroke="var(--warn)" stroke-width="2" stroke-dasharray="8 6"/>
+    <text class="p" x="1142" y="405" font-size="14">선택·대안</text>
+    <rect x="1078" y="424" width="18" height="12" rx="3" fill="var(--orange)" stroke="var(--warn)" stroke-width="1.5"/>
+    <text class="p" x="1142" y="434" font-size="14">외부 모델/런타임</text>
+  </g>
+
+  <text class="foot" x="60" y="680">실행: LLAMA_GUARD_BACKEND=transformers python3.12 src/main.py real --prompt "..."  (또는 --backend transformers)</text>
+  <text class="foot" x="60" y="700">2단계 · 심화 경로 구조 — 선택 사항, 기본 경로는 s09-overall-structure.svg</text>
+</svg>

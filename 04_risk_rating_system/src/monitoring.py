@@ -1,4 +1,4 @@
-"""Security events and risk classification for day 4."""
+"""Security events and risk classification for step 04."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def make_event(event_id: str, decision: Decision, risk: RiskLevel, category: str
 
 
 def event_payload(event: SecurityEvent, next_stage: str = "05_security_dashboard_alerts") -> dict[str, object]:
-    """Serialize one event for the next day's API exercise."""
+    """Serialize one event for the next stage's API exercise."""
     # enum을 문자열로 바꾸고 다음 단계를 기록해 폴더 간 파일 전달을 명확히 한다.
     payload = asdict(event)
     # JSON 경계에서는 Python enum 대신 계약에 정의된 문자열을 사용한다.

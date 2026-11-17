@@ -1,0 +1,44 @@
+# NeMo Guardrails self-check prompts for the input/output rails enabled in
+# config.yml. The ``self check input``/``self check output`` flows look up these
+# task names; edit the wording to change what the local LLM checks for.
+instructions:
+  - type: general
+    content: |
+      You are a helpful, harmless, and honest assistant.
+      Refuse requests that are unsafe, illegal, or harmful.
+
+prompts:
+  - task: self_check_input
+    content: |
+      Your task is to check if the user message below complies with the company
+      policy for talking with the company bot.
+
+      The company policy for the user includes the following:
+      - Do not ask for personal data (credit card number, social security number, etc.)
+      - Do not ask for illegal or harmful information
+      - Do not insult or harass others
+      - Do not engage in sexual, violent, or hateful content
+
+      User message:
+      """
+      {{ user_input }}
+      """
+
+      Answer with only one word: "allowed" or "not allowed".
+
+  - task: self_check_output
+    content: |
+      Your task is to check if the bot message below complies with the company
+      policy for talking with the company bot.
+
+      The company policy for the bot includes the following:
+      - Do not reveal personal data or internal secrets
+      - Do not produce illegal, harmful, or offensive content
+      - Do not answer off-topic or unsafe requests
+
+      Bot message:
+      """
+      {{ bot_response }}
+      """
+
+      Answer with only one word: "allowed" or "not allowed".

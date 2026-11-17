@@ -1,0 +1,16 @@
+{
+  "event_id": "step03-guardrail-result",
+  "decision": "review",
+  "risk": "Critical",
+  "category": "guardrail",
+  "detail": "",
+  "timestamp": "2026-11-17T21:34:34.961916+00:00",
+  "schema_version": "1.0",
+  "trace_id": "step03-guardrail-result",
+  "source_stage": "step04",
+  "policy_version": "policy-1",
+  "model_name": null,
+  "status": "open",
+  "acknowledged_at": null,
+  "next": "05_security_dashboard_alerts"
+}

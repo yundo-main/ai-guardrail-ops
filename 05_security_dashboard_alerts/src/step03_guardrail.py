@@ -1,4 +1,4 @@
-"""Input blocking and output redaction for day 3."""
+"""Input blocking and output redaction for step 03."""
 
 from __future__ import annotations
 
@@ -69,7 +69,7 @@ def safe_response(prompt: str, model_response: str) -> tuple[GuardrailResult, Gu
 
 
 def result_payload(result: GuardrailResult, next_stage: str = "04_risk_rating_system") -> dict[str, object]:
-    """Serialize a result for the next day's JSON-based exercise."""
+    """Serialize a result for the next stage's JSON-based exercise."""
     # 폴더별 코드는 독립적으로 유지하고, 단계 간에는 안정적인 JSON을 전달한다.
     # enum·dataclass는 그대로 JSON에 넣을 수 없으므로 경계에서 문자열·dict로 정규화한다.
     payload = asdict(result)
@@ -88,7 +88,7 @@ def result_payload(result: GuardrailResult, next_stage: str = "04_risk_rating_sy
 
 
 def write_result(result: GuardrailResult, path: str | Path) -> None:
-    """Write a redacted result artifact for the next day's exercise."""
+    """Write a redacted result artifact for the next stage's exercise."""
     # 결과 파일에는 모델 원문 대신 정책 판정과 마스킹된 값만 남긴다.
     # 이 파일이 4단계의 입력이 되므로 경로와 필드 변경은 문서와 함께 관리한다.
     output_path = Path(path)

@@ -32,10 +32,11 @@ python3 -m unittest discover -s tests -v
 python3 03_policy_blocking_output_filtering/src/guardrail.py
 ```
 
-`src/policy.py`와 `src/guardrail.py`의 입력 차단·출력 검열 흐름을 실행한다. 직접 실행하면 `results/step03-guardrail-result.json`이 생성되고, 다음 명령으로 결과를 확인할 수 있다.
+`src/policy.py`와 `src/guardrail.py`의 입력 차단·출력 검열 흐름을 실행한다. 직접 실행하면 `results/step03-guardrail-result.json`과 같은 이름의 `.html` 보고서가 함께 생성되고, 다음 명령으로 결과를 확인할 수 있다.
 
 ```bash
 python3 -m json.tool results/step03-guardrail-result.json
+open results/step03-guardrail-result.html
 ```
 
 ## 산출물
@@ -44,6 +45,7 @@ python3 -m json.tool results/step03-guardrail-result.json
 - 입력 차단 테스트 결과
 - 출력 마스킹 전·후 비교
 - `results/step03-guardrail-result.json` 다음 단계 전달 파일
+- `results/step03-guardrail-result.html` 판정·매칭 내역을 사람이 읽기 쉬운 보고서
 
 ## 단계 간 연결
 
@@ -60,12 +62,15 @@ python3 -m json.tool results/step03-guardrail-result.json
 | 경로 | 역할 |
 | --- | --- |
 | `src/policy.py` | 정책 규칙 로딩·입력 탐지·위험 등급 계산 |
-| `src/guardrail.py` | 입력 차단·출력 마스킹·결과 JSON 생성 |
+| `src/guardrail.py` | 입력 차단·출력 마스킹·결과 JSON+HTML 생성 |
+| `src/report.py` | 판정 결과 JSON을 독립 HTML 보고서로 렌더링 |
 | `policy-rules.json` | 규칙 ID·정규식·사유·위험·판정 설정 |
 | `slides/s00-tech-spec.svg` | 3단계 기술·정책 파일·결과 규약 사양 |
 | `slides/s01-policy-filtering.svg` | 정책 차단과 출력 검열 전체 흐름 |
 | `slides/s02-policy-theory.svg` | 판정·마스킹 이론 |
 | `slides/s03-policy-source.svg` | `policy.py`·`guardrail.py` 소스 설명 |
-| `slides/s04-policy-checklist.svg` | 정책·검열 실습 체크리스트 |
-| `slides/s05-summary.svg` | 3단계 핵심 요약과 질문 |
+| `slides/s04-policy-structure.svg` | 정책 규칙 구조 — policy-rules.json 필드·매칭 흐름 |
+| `slides/s05-policy-checklist.svg` | 정책·검열 실습 체크리스트 |
+| `slides/s06-no-llm.svg` | LLM 없이 가능한 실습 — 결정론적 정책·마스킹 안내 |
+| `slides/s07-summary.svg` | 3단계 핵심 요약과 질문 |
 | `slides/readme.md` | 슬라이드 순서·제목·산출물 목록 |
