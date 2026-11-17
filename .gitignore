@@ -34,4 +34,7 @@ results/*
 10_ai_guardrail_ops_framework/results/
 
 # LLM
+AGENTS.md
 agents.md
+.agent
+.agents
