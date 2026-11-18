@@ -68,6 +68,7 @@ python3 -m unittest discover -s 01_guardrail_concept_architecture/tests -v
 | `slides/s02-guardrail-architecture.svg` | Guardrail 아키텍처와 통제 위치 |
 | `slides/s03-threats-and-controls.svg` | 위협 유형과 통제 지점 |
 | `slides/s04-architecture-source.svg` | `architecture.py` 소스 설명과 실행 방법 |
-| `slides/s05-architecture-checklist.svg` | 1단계 복습 체크리스트 |
-| `slides/s06-summary.svg` | 1단계 핵심 요약과 질문 |
+| `slides/s05-practice-order.svg` | 실습 순서 — architecture.py 실행·테스트 명령 |
+| `slides/s06-architecture-checklist.svg` | 1단계 복습 체크리스트 |
+| `slides/s07-summary.svg` | 1단계 핵심 요약과 질문 |
 | `slides/readme.md` | 슬라이드 순서·제목·산출물 목록 |

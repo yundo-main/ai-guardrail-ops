@@ -80,7 +80,10 @@ open 04_risk_rating_system/results/step04-security-event.html
 | `slides/s01-risk-rating.svg` | 위험 등급 체계 개요 |
 | `slides/s02-risk-theory.svg` | 등급 기준과 대응 이론 |
 | `slides/s03-risk-source.svg` | `risk.py` 소스 설명 |
-| `slides/s04-event-format.svg` | 보안 이벤트 산출물 형식 — JSON 필드·생성 흐름 |
-| `slides/s05-risk-checklist.svg` | 등급·대응·이벤트 체크리스트 |
-| `slides/s06-summary.svg` | 4단계 핵심 요약과 질문 |
+| `slides/s04-runtime-flow.svg` | 코드 실행 흐름도 — risk.py 호출 순서·점수 규칙 |
+| `slides/s05-event-format.svg` | 보안 이벤트 산출물 형식 — JSON 필드·생성 흐름 |
+| `slides/s06-practice-order.svg` | 실습 순서 — 03 선행·risk.py 변환·결과 확인 |
+| `slides/s07-flow.svg` | 실습 Flow 도식 — 3단계 JSON → 이벤트 변환·5단계 전달 전체 절차 |
+| `slides/s08-risk-checklist.svg` | 등급·대응·이벤트 체크리스트 |
+| `slides/s09-summary.svg` | 4단계 핵심 요약과 질문 |
 | `slides/readme.md` | 슬라이드 순서·제목·산출물 목록 |

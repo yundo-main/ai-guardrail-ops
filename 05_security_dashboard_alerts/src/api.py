@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+
 import logging
 from dataclasses import asdict
 from datetime import datetime, timezone
@@ -14,10 +15,11 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
 from event_model import SecurityEvent
-from monitoring import critical_alert, dashboard_metrics
+from monitoring import critical_alert, dashboard_metrics, risk_alert
 from policy import Decision, RiskLevel
 import discord
 import store
+
 
 # 05/src/ 안에 번들된 로컬 guardrail_service를 사용한다.
 # 다른 단계 디렉터리를 참조하지 않으므로 이 디렉터리만 복사해도 독립 실행이 가능하다.
@@ -55,7 +57,7 @@ class ChatRequest(BaseModel):
 def verify_api_key(x_api_key: Optional[str] = Header(default=None)) -> None:
     """Protect non-health endpoints with a simple educational API key."""
     # 기본 키는 로컬 교육용일 뿐이며 공유 환경에서는 반드시 환경 변수로 교체한다.
-    expected = os.getenv("GUARDRAIL_API_KEY", "dev-only-key")
+    expected = os.environ.get("GUARDRAIL_API_KEY", "dev-only-key")
     if x_api_key != expected:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid API key")
 
@@ -105,7 +107,7 @@ def guardrail_chat(payload: ChatRequest) -> dict[str, object]:
         model_name="llama-guard-3 + nemo-guardrails",
     )
     store.save(event)
-    if alert := critical_alert(event):
+    if alert := risk_alert(event):
         discord.notify_async(alert)
     result["event_id"] = event.event_id
     result["conversation_id"] = payload.conversation_id
@@ -138,7 +140,7 @@ def create_event(payload: EventRequest) -> dict[str, object]:
         status=payload.status,
     )
     store.save(event)
-    if alert := critical_alert(event):
+    if alert := risk_alert(event):
         discord.notify_async(alert)
     logger.info("security event stored", extra={"event_id": event.event_id, "risk": event.risk.value, "trace_id": event.trace_id})
     return asdict(event)

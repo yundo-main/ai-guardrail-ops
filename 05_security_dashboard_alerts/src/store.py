@@ -20,7 +20,7 @@ DEFAULT_DB_PATH = ROOT / "results" / "security_events.db"
 def database_path() -> Path:
     """Return the configured database path and create its parent directory."""
     # 환경 변수로 테스트용 임시 DB와 운영용 DB를 분리할 수 있다.
-    path = Path(os.getenv("GUARDRAIL_DB_PATH", str(DEFAULT_DB_PATH)))
+    path = Path(os.environ.get("GUARDRAIL_DB_PATH", str(DEFAULT_DB_PATH)))
     path.parent.mkdir(parents=True, exist_ok=True)
     return path
 

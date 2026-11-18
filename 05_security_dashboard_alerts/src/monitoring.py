@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+
 from collections import Counter
 from dataclasses import asdict
 from datetime import datetime, timezone
@@ -32,6 +34,38 @@ def dashboard_metrics(events: list[SecurityEvent]) -> dict[str, object]:
         "by_risk": dict(Counter(e.risk.value for e in events)),
         "open_events": sum(e.status == "open" for e in events),
         "acknowledged_events": sum(e.status == "acknowledged" for e in events),
+    }
+
+
+_ALERT_ORDER = {
+    RiskLevel.LOW: 0,
+    RiskLevel.MEDIUM: 1,
+    RiskLevel.HIGH: 2,
+    RiskLevel.CRITICAL: 3,
+}
+
+
+def alert_min_risk() -> RiskLevel:
+    """Return the lowest risk level that triggers outbound alert delivery."""
+    # GUARDRAIL_ALERT_MIN_RISK로 발송 임계값을 조정한다 — 기본은 Critical만.
+    # 잘못된 값은 가장 보수적인 Critical로 되돌려 알림 폭주를 막는다.
+    raw = os.environ.get("GUARDRAIL_ALERT_MIN_RISK", "Critical").strip()
+    for level in RiskLevel:
+        if raw.lower() == level.value.lower():
+            return level
+    return RiskLevel.CRITICAL
+
+
+def risk_alert(event: SecurityEvent) -> dict[str, object] | None:
+    """Return an alert payload when the event meets the configured threshold."""
+    # 임계값 미만이면 payload를 만들지 않아 알림 피로를 줄인다.
+    # 실제 Discord 외 채널 전송은 이 payload를 받는 어댑터의 책임으로 분리한다.
+    if _ALERT_ORDER[event.risk] < _ALERT_ORDER[alert_min_risk()]:
+        return None
+    return {
+        "severity": event.risk.value.lower(),
+        "title": f"AI 보안 {event.risk.value} 이벤트",
+        "event": asdict(event),
     }
 
 

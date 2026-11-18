@@ -226,10 +226,11 @@ nemo_config/
 | `slides/s02-guardrail-theory.svg` | 안전성 분류와 대화 정책의 이론 비교 |
 | `slides/s03-adapters-source.svg` | `adapters.py` 소스와 선택 기준 |
 | `slides/s06-runtime-choice.svg` | 기본 Ollama·심화 Transformers 실행 경로 선택 |
-| `slides/s07-guardrail-checklist.svg` | 기술 적용 복습 체크리스트 |
-| `slides/s08-summary.svg` | 2단계 핵심 요약과 질문 |
-| `slides/s09-overall-structure.svg` | 사용자→main.py→pipeline→두 어댑터→JSON/HTML→3단계 전체 실행 구조 |
-| `slides/s10-advanced-structure.svg` | 선택 사항인 Transformers 심화 경로 구조 — HF 직접 로드 vs 기본 Ollama 차이 |
+| `slides/s07-practice-order.svg` | 실습 순서 — compare·venv·Ollama·real 실행 순서 |
+| `slides/s08-guardrail-checklist.svg` | 기술 적용 복습 체크리스트 |
+| `slides/s09-summary.svg` | 2단계 핵심 요약과 질문 |
+| `slides/s10-overall-structure.svg` | 사용자→main.py→pipeline→두 어댑터→JSON/HTML→3단계 전체 실행 구조 |
+| `slides/s11-advanced-structure.svg` | 선택 사항인 Transformers 심화 경로 구조 — HF 직접 로드 vs 기본 Ollama 차이 |
 | `slides/s04-llama-guard-detail.svg` | Llama Guard의 분류 책임·입력·출력·정책 변환 상세 |
 | `slides/s05-nemo-guardrails-detail.svg` | NeMo Guardrails의 대화 흐름·주제·응답 경로 상세 |
 | `slides/readme.md` | 슬라이드 순서·제목·산출물 목록 |

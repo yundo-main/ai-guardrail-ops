@@ -53,5 +53,5 @@
   <text class="h" x="85" y="634" font-size="18">실제 산출물 예시</text>
   <text class="code" x="250" y="634" font-size="13">decision: "review" · risk: "Critical" · category: "guardrail" · status: "open"</text>
   <text class="code" x="250" y="660" font-size="13">trace_id: "step03-guardrail-result" · source_stage: "step04" · next: "05_security_dashboard_alerts"</text>
-  <text class="foot" x="60" y="705">4단계 · 보안 이벤트 산출물 형식 · 4 / 6</text>
+  <text class="foot" x="60" y="705">4단계 · 보안 이벤트 산출물 형식 · 5 / 9</text>
 </svg>

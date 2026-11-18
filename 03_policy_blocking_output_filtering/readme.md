@@ -74,8 +74,11 @@ open 03_policy_blocking_output_filtering/results/step03-guardrail-result.html
 | `slides/s01-policy-filtering.svg` | 정책 차단과 출력 검열 전체 흐름 |
 | `slides/s02-policy-theory.svg` | 판정·마스킹 이론 |
 | `slides/s03-policy-source.svg` | `policy.py`·`guardrail.py` 소스 설명 |
-| `slides/s04-policy-structure.svg` | 정책 규칙 구조 — policy-rules.json 필드·매칭 흐름 |
-| `slides/s05-policy-checklist.svg` | 정책·검열 실습 체크리스트 |
-| `slides/s06-no-llm.svg` | LLM 없이 가능한 실습 — 결정론적 정책·마스킹 안내 |
-| `slides/s07-summary.svg` | 3단계 핵심 요약과 질문 |
+| `slides/s04-runtime-flow.svg` | 코드 실행 흐름도 — guardrail.py 호출 순서·판정 분기 |
+| `slides/s05-policy-structure.svg` | 정책 규칙 구조 — policy-rules.json 필드·매칭 흐름 |
+| `slides/s06-practice-order.svg` | 실습 순서 — guardrail.py 실행·결과 확인 명령 |
+| `slides/s07-flow.svg` | 실습 Flow 도식 — 실행부터 결과 JSON·4단계 전달까지 전체 절차 |
+| `slides/s08-policy-checklist.svg` | 정책·검열 실습 체크리스트 |
+| `slides/s09-no-llm.svg` | LLM 없이 가능한 실습 — 결정론적 정책·마스킹 안내 |
+| `slides/s10-summary.svg` | 3단계 핵심 요약과 질문 |
 | `slides/readme.md` | 슬라이드 순서·제목·산출물 목록 |

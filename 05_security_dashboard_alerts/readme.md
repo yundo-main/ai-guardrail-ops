@@ -62,7 +62,39 @@ python3 05_security_dashboard_alerts/src/report.py
 
 기본 API 키는 `dev-only-key`이며 요청 헤더에 `X-API-Key`를 넣는다. 배포 전에는 `GUARDRAIL_API_KEY`를 변경한다. API 문서는 서버 실행 후 `http://127.0.0.1:8000/docs`, 웹 화면은 `http://127.0.0.1:8000/dashboard`에서 확인한다. 이벤트는 기본적으로 `results/security_events.db`에 저장된다.
 
-Critical 이벤트가 등록되면 `critical_alert()` payload가 생성되고, `DISCORD_WEBHOOK_URL` 환경변수가 설정된 경우 `src/discord.py`가 Discord 웹훅으로 알림을 발송한다. 미설정 시 발송은 건너뛰고 API는 그대로 동작한다.
+Critical 이벤트가 등록되면 `critical_alert()` payload가 생성되고, `src/discord.py`의 `WEBHOOK_URL`이 설정된 경우 Discord 웹훅으로 알림을 발송한다. 비어 있으면 발송은 건너뛰고 API는 그대로 동작한다.
+
+### Discord 웹훅 알림 연결
+
+1. Discord에서 알림을 받을 채널을 연다.
+2. 채널 설정 → **연동(Integrations)** → **웹후크(Webhooks)** → **새 웹후크**를 만든다.
+3. 웹후크 이름(예: `AI Guardrail 알림`)을 지정하고 **웹후크 URL을 복사**한다.
+4. `src/discord.py` 상단의 `WEBHOOK_URL`에 복사한 URL을 직접 붙여넣는다. 비워 두면 발송은 건너뛴다.
+
+```python
+# src/discord.py
+WEBHOOK_URL = "https://discord.com/api/webhooks/1234.../xxxx..."
+```
+
+```bash
+uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
+```
+
+5. Critical 이벤트를 등록하면 채널에 embed 알림이 도착한다.
+
+```bash
+curl -X POST http://127.0.0.1:8000/events \
+  -H 'Content-Type: application/json' \
+  -H 'X-API-Key: dev-only-key' \
+  -d '{"event_id":"step04-security-event","decision":"block","risk":"Critical","category":"prompt_injection","detail":"ignore previous instructions","trace_id":"demo-1"}'
+```
+
+동작 특성:
+
+- 발송 임계값은 `GUARDRAIL_ALERT_MIN_RISK` 환경변수로 조정한다 — `Low`/`Medium`/`High`/`Critical` (기본 `Critical`, 잘못된 값은 `Critical`로 복귀). 예: `export GUARDRAIL_ALERT_MIN_RISK=High`이면 High 이상 이벤트도 발송된다.
+- 임계값 이상의 이벤트는 `risk_alert()`이 payload를 만들고 `notify_async()`가 백그라운드 스레드로 전송한다 — 웹훅 지연이 API 응답을 블록하지 않는다.
+- `WEBHOOK_URL`이 비어 있으면 발송은 건너뛰고 API는 정상 동작한다.
+- 웹훅 URL은 비밀값이지만 실습 편의상 `discord.py`에 직접 넣는 방식을 택했다 — 실제 URL을 커밋하기 전에 GitHub 저장소 공개 여부를 확인한다.
 
 ### 실제 Guardrail 서비스 호출
 
@@ -111,16 +143,24 @@ curl -X POST http://127.0.0.1:8000/events/step03-guardrail-result/acknowledge \
 | `src/store.py` | SQLite 초기화·저장·조회·초기화·acknowledgement 처리 |
 | `src/event_model.py` | API·저장소·알림이 공유하는 이벤트 데이터 모델 |
 | `src/policy.py` | API 입력의 `Decision`·`RiskLevel` enum |
-| `src/monitoring.py` | 이벤트 생성·지표 집계·Critical payload 생성 |
-| `src/discord.py` | `DISCORD_WEBHOOK_URL`로 Critical 알림을 Discord 웹훅에 발송 (미설정 시 no-op) |
+| `src/monitoring.py` | 이벤트 생성·지표 집계·임계값 기반 알림 payload 생성 |
+| `src/discord.py` | `WEBHOOK_URL` 상수로 임계값 이상 알림을 Discord 웹훅에 발송 (비어 있으면 no-op) |
 | `src/report.py` | 대시보드 payload·주간/월간 envelope + `step05-metrics.json`/`.html` 결과 리포트 생성 |
 | `src/step03_report.py` | 3단계 결과 HTML 렌더러의 로컬 복사본 — `report.py`와 이름 충돌 방지용 |
+| `src/step03_policy.py` | 3단계 정책 규칙 로더의 로컬 복사본 — `guardrail_service` 전용 (`policy` 모듈명 충돌 회피) |
+| `src/step03_guardrail.py` | 3단계 `check_input`·`redact_output`의 로컬 복사본 — 03 원본과 동기화 유지 |
+| `src/llama_guard.py` | 2단계 Llama Guard 클라이언트 — 프롬프트·응답 안전성 분류 |
+| `src/nemo_guardrails_client.py` | 2단계 NeMo Guardrails 클라이언트 — 대화 레일 응답 생성 |
 | `src/dashboard.html` | API 지표와 Critical 알림을 보여주는 웹 화면 |
 | `requirements.txt` | 5단계 FastAPI·Uvicorn 실행 의존성 |
 | `slides/s00-tech-spec.svg` | FastAPI·SQLite·API Key 기술 사양 |
 | `slides/s01-dashboard-alerts.svg` | 대시보드·알림 전체 구조 |
 | `slides/s02-dashboard-theory.svg` | 운영 지표와 Critical 알림 이론 |
 | `slides/s03-dashboard-source.svg` | API·저장·집계 소스 설명 |
-| `slides/s04-dashboard-checklist.svg` | 관제 실습 체크리스트 |
-| `slides/s05-summary.svg` | 5단계 핵심 요약과 질문 |
+| `slides/s04-practice-order.svg` | 실습 순서 — 서버·이벤트·리포트·Discord 명령 |
+| `slides/s05-discord-setup.svg` | Discord 웹훅 알림 설정 — URL 발급·discord.py 입력·발송 확인 |
+| `slides/s06-server-event-test.svg` | 서버 실행과 이벤트 테스트 — uvicorn·이벤트 등록·대시보드·Discord 확인 |
+| `slides/s07-flow.svg` | 실행 흐름 Flow 도식 — api.py 호출 순서·모듈 역할·분기 규칙 |
+| `slides/s08-dashboard-checklist.svg` | 관제 실습 체크리스트 |
+| `slides/s09-summary.svg` | 5단계 핵심 요약과 질문 |
 | `slides/readme.md` | 슬라이드 순서·제목·산출물 목록 |

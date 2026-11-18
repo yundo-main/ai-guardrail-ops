@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="t d">
+  <title id="t">5단계 · 서버 실행과 이벤트 테스트</title>
+  <desc id="d">uvicorn 서버 실행부터 이벤트 등록, 대시보드·Discord 확인까지의 실습 절차</desc>
+  <defs><style>
+:root{--bg:#0b1220;--ink:#f8fafc;--muted:#b5c2d1;--panel:#152235;--line:#496078;--accent:#65dfa0}
+*{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+text{fill:var(--ink)}
+.bg{fill:var(--bg)}
+.title{fill:var(--ink);font-size:38px;font-weight:700}
+.sub{fill:var(--muted);font-size:20px}
+.panel{fill:var(--panel);stroke:var(--line);stroke-width:2}
+.h{fill:var(--ink);font-weight:700}
+.p{fill:var(--muted);font-size:19px}
+.code{fill:var(--accent);font-family:Menlo,Consolas,"Courier New",monospace}
+.codebox{fill:var(--bg);stroke:var(--line);stroke-width:1.5}
+.foot{fill:var(--muted);font-size:14px}
+@media(prefers-color-scheme:light){:root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--panel:#edf3f8;--line:#c9d5e1;--accent:#16704a}}
+  </style></defs>
+  <rect class="bg" x="0" y="0" width="1280" height="720"/>
+  <text class="title" x="60" y="90">5단계 · 서버 실행과 이벤트 테스트</text>
+  <text class="sub" x="60" y="126">uvicorn 실행 → 이벤트 등록 → 대시보드·Discord 확인</text>
+
+  <rect class="panel" x="60" y="170" width="560" height="400" rx="12"/>
+  <text class="h" x="90" y="215" font-size="22">① 서버 실행 · 이벤트 등록</text>
+
+  <circle cx="105" cy="258" r="16" fill="var(--accent)"/>
+  <text x="105" y="264" font-size="16" font-weight="700" text-anchor="middle" fill="#0b1220">1</text>
+  <text class="p" x="135" y="250" font-size="15">의존성 설치 (최초 1회)</text>
+  <rect class="codebox" x="135" y="258" width="450" height="34" rx="8"/>
+  <text class="code" x="148" y="281" font-size="13">python3 -m pip install -r requirements.txt</text>
+
+  <circle cx="105" cy="328" r="16" fill="var(--accent)"/>
+  <text x="105" y="334" font-size="16" font-weight="700" text-anchor="middle" fill="#0b1220">2</text>
+  <text class="p" x="135" y="320" font-size="15">서버 실행 (05 단계 폴더에서)</text>
+  <rect class="codebox" x="135" y="328" width="450" height="34" rx="8"/>
+  <text class="code" x="148" y="351" font-size="13">uvicorn api:app --app-dir src --port 8000</text>
+
+  <circle cx="105" cy="398" r="16" fill="var(--accent)"/>
+  <text x="105" y="404" font-size="16" font-weight="700" text-anchor="middle" fill="#0b1220">3</text>
+  <text class="p" x="135" y="390" font-size="15">Critical 이벤트 등록 → Discord 알림</text>
+  <rect class="codebox" x="135" y="398" width="450" height="34" rx="8"/>
+  <text class="code" x="148" y="421" font-size="13">POST /events · risk=Critical · X-API-Key</text>
+
+  <circle cx="105" cy="468" r="16" fill="var(--accent)"/>
+  <text x="105" y="474" font-size="16" font-weight="700" text-anchor="middle" fill="#0b1220">4</text>
+  <text class="p" x="135" y="460" font-size="15">등급별 이벤트 추가 등록</text>
+  <rect class="codebox" x="135" y="468" width="450" height="34" rx="8"/>
+  <text class="code" x="148" y="491" font-size="13">High·Medium·Low 몇 건 더 → 분포 확인</text>
+
+  <rect class="panel" x="650" y="170" width="570" height="400" rx="12"/>
+  <text class="h" x="680" y="215" font-size="22">② 확인 · 검증</text>
+  <text class="p" x="680" y="262" font-size="17">• GET /metrics — total·block_rate·by_risk·open 집계</text>
+  <text class="p" x="680" y="302" font-size="17">• GET /dashboard — API 키 입력 → 지표 카드·Critical 알림</text>
+  <text class="p" x="680" y="342" font-size="17">• /docs — Swagger API 문서 자동 생성</text>
+  <text class="p" x="680" y="382" font-size="17">• POST /events/{id}/acknowledge — open → acknowledged</text>
+  <text class="p" x="680" y="422" font-size="17">• Discord 채널 — WEBHOOK_URL 설정 시 Critical embed 수신</text>
+  <text class="p" x="680" y="462" font-size="17">• DELETE /events — 실습 후 이벤트 초기화</text>
+  <text class="p" x="680" y="502" font-size="17">• GET /events — 등록된 이벤트 목록 조회</text>
+
+  <rect class="codebox" x="60" y="600" width="1160" height="76" rx="10"/>
+  <text class="code" x="80" y="628" font-size="13">curl -X POST http://127.0.0.1:8000/events -H 'X-API-Key: dev-only-key' -H 'Content-Type: application/json' \</text>
+  <text class="code" x="80" y="654" font-size="13">  -d '{"event_id":"e1","decision":"block","risk":"Critical","category":"prompt_injection","trace_id":"t1"}'</text>
+
+  <text class="foot" x="60" y="705">5단계 · 서버 실행과 이벤트 테스트 · 6 / 9</text>
+</svg>

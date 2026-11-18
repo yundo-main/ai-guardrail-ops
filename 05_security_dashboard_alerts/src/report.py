@@ -215,7 +215,7 @@ def render_html(payload: dict[str, Any]) -> str:
     <tr><th>스키마 버전</th><td>{escape(str(payload.get("schema_version", "—")))}</td></tr>
     <tr><th>단계</th><td>{escape(str(payload.get("source_stage", "—")))} → {escape(str(payload.get("next", "—")))}</td></tr>
     <tr><th>생성 시각</th><td>{escape(str(payload.get("generated_at", "—")))}</td></tr>
-    <tr><th>알림 채널</th><td>Discord webhook (<code>DISCORD_WEBHOOK_URL</code>) · 대시보드 <code>/dashboard</code></td></tr>
+    <tr><th>알림 채널</th><td>Discord webhook (<code>discord.py WEBHOOK_URL</code>) · 대시보드 <code>/dashboard</code></td></tr>
   </table>
 
   <h2><span class="no">2.</span>운영 지표 요약</h2>
@@ -238,7 +238,7 @@ def render_html(payload: dict[str, Any]) -> str:
   <h2><span class="no">6.</span>결론 및 다음 단계</h2>
   <div class="conclusion">
     이 보고서는 <b>5단계 관제 계층의 스냅샷</b>입니다.<br>
-    Critical 이벤트는 등록 시점에 Discord 웹훅으로도 발송되며(<code>DISCORD_WEBHOOK_URL</code> 설정 시),<br>
+    Critical 이벤트는 등록 시점에 Discord 웹훅으로도 발송되며(<code>WEBHOOK_URL</code> 설정 시),<br>
     이 JSON은 <code>{escape(str(payload.get("next", "")))}</code> 단계가 <code>upstream_metrics</code>로 읽어 최종 운영 리포트를 작성합니다.
   </div>
 

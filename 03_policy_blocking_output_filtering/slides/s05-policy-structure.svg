@@ -49,5 +49,5 @@
   <text class="h" x="85" y="634" font-size="18">예시 규칙 INJ-001</text>
   <text class="code" x="250" y="634" font-size="14">pattern: "ignore\s+(?:all\s+)?previous instructions"</text>
   <text class="p" x="250" y="662" font-size="15">reason: prompt injection · risk: High · decision: block · flags: [IGNORECASE]</text>
-  <text class="foot" x="60" y="705">3단계 · 정책 규칙 구조 · 4 / 7</text>
+  <text class="foot" x="60" y="705">3단계 · 정책 규칙 구조 · 5 / 10</text>
 </svg>

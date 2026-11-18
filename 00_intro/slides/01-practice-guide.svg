@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="practice-guide-title practice-guide-desc">
-  <title id="practice-guide-title">단계별 실습 진행</title>
-  <desc id="practice-guide-desc">각 단계를 독립적으로 실행하고 마지막에 점층 통합하는 실습 진행 순서와 명령</desc>
+  <title id="practice-guide-title">단계별 실습 진행 순서</title>
+  <desc id="practice-guide-desc">00~06 학습 단계와 10 통합 프레임워크의 실습 명령을 단계별로 정리한 실행 순서</desc>
   <style>
     :root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--blue:#1769aa;--blue-soft:#e8f2fb;--green:#16704a;--green-soft:#e7f6ee;--orange:#b45309;--orange-soft:#fff4df;--line:#9aabba;--code:#1a2f45}
     *{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
@@ -14,43 +14,45 @@
     .foot{fill:var(--muted);font-size:14px}}
   </style>
   <rect class="bg" width="1280" height="720"/>
-  <text class="title" x="60" y="90">단계별 실습 진행</text>
-  <text class="sub"   x="60" y="126">각 단계는 독립 실행하고, 마지막에 integration 트랙으로 점층 통합한다</text>
-  <!-- 상단 3개 카드: 너비 360, 간격 20 → 60+360+20+360+20+360=1180≤1220 -->
-  <!-- 1~2단계 -->
-  <rect class="ci" x="60"  y="168" width="360" height="175" rx="12"/>
-  <text class="h"    x="84"  y="204">1~2단계 · 개념·설계</text>
-  <text class="p"    x="84"  y="234">01 architecture.py 파이프라인 실행</text>
-  <text class="code" x="84"  y="265">python3 01_.../src/architecture.py</text>
-  <text class="p"    x="84"  y="295">02 adapters.py로 역할 비교</text>
-  <text class="code" x="84"  y="325">python3 02_.../src/adapters.py</text>
-  <!-- 3~4단계 -->
-  <rect class="ci" x="440" y="168" width="360" height="175" rx="12"/>
-  <text class="h"    x="464" y="204">3~4단계 · 판정·이벤트</text>
-  <text class="p"    x="464" y="234">정책 차단·출력 검열 실행</text>
-  <text class="code" x="464" y="265">python3 03_.../src/guardrail.py</text>
-  <text class="p"    x="464" y="295">JSON → 위험 등급 이벤트 생성</text>
-  <text class="code" x="464" y="325">python3 04_.../src/risk.py</text>
-  <!-- 5단계 -->
-  <rect class="ca" x="820" y="168" width="400" height="175" rx="12"/>
-  <text class="h"    x="844" y="204">5단계 · API·관제</text>
-  <text class="code" x="844" y="240">uvicorn api:app \</text>
-  <text class="code" x="844" y="260">  --app-dir 05_.../src --port 8000</text>
-  <text class="p"    x="844" y="292">X-API-Key 헤더로 이벤트 등록</text>
-  <text class="p"    x="844" y="318">/metrics · /dashboard 확인</text>
-  <!-- 화살표 세로선 -->
-  <line class="line" x1="240"  y1="343" x2="240"  y2="388"/>
-  <line class="line" x1="620"  y1="343" x2="620"  y2="388"/>
-  <line class="line" x1="1020" y1="343" x2="1020" y2="388"/>
-  <!-- 6단계 통합 박스 -->
-  <rect class="cint" x="60" y="400" width="1160" height="175" rx="14"/>
-  <text class="h"    x="90" y="438">6단계 · 통합 실습</text>
-  <text class="p"    x="90" y="470">선택: USE_LLM=1 → Ollama 응답 → 입력·출력 Guardrail → 이벤트 → 리포트</text>
-  <text class="code" x="90" y="506">python3 06_.../src/app.py</text>
-  <text class="p"    x="90" y="536">또는 integration 트랙 전체 실행:</text>
-  <text class="code" x="90" y="562">python3 integration/run.py --all</text>
-  <text class="p"    x="600" y="562">결과: integration/results/step06-report.json</text>
-  <!-- 푸터 -->
-  <text class="foot" x="60"   y="668">실습 목적: 실행하고 기록하기 · 결과 검증은 별도 result-check.svg에서 진행</text>
-  <text class="foot" x="1220" y="668" text-anchor="end">1 / 1</text>
+  <text class="title" x="60" y="90">단계별 실습 진행 순서</text>
+  <text class="sub"   x="60" y="126">위에서 아래로 순서대로 실행 — 화살표는 결과 파일이 다음 단계의 입력이 되는 연결</text>
+  <rect class="ci" x="60" y="158" width="1160" height="58" rx="10"/>
+  <text class="h" x="84" y="182" font-size="17">00 · 과정 개요</text>
+  <text class="p" x="330" y="182" font-size="15">readme·용어집·contracts 문서 열람 — 실행 없음</text>
+  <text class="code" x="84" y="203" font-size="13">00_intro/index.html</text>
+  <rect class="ci" x="60" y="224" width="1160" height="58" rx="10"/>
+  <text class="h" x="84" y="248" font-size="17">01 · Guardrail 개념·아키텍처</text>
+  <text class="p" x="330" y="248" font-size="15">파이프라인 분기 구조 실행 + 단위 테스트</text>
+  <text class="code" x="84" y="269" font-size="13">python3 01_.../src/architecture.py</text>
+
+  <text class="code" x="700" y="269" font-size="13">python3 -m unittest discover -s 01_.../tests</text>
+  <rect class="ci" x="60" y="290" width="1160" height="58" rx="10"/>
+  <text class="h" x="84" y="314" font-size="17">02 · Llama Guard·NeMo</text>
+  <text class="p" x="330" y="314" font-size="15">분류기·대화 레일 비교 — Ollama 기본 경로</text>
+  <text class="code" x="84" y="335" font-size="13">python3 02_.../src/main.py</text>
+  <rect class="ci" x="60" y="356" width="1160" height="58" rx="10"/>
+  <text class="h" x="84" y="380" font-size="17">03 · 정책 차단·출력 검열</text>
+  <text class="p" x="330" y="380" font-size="15">입력 차단 + 출력 마스킹 → JSON·HTML 결과</text>
+  <text class="code" x="84" y="401" font-size="13">python3 03_.../src/guardrail.py</text>
+  <rect class="ci" x="60" y="422" width="1160" height="58" rx="10"/>
+  <text class="h" x="84" y="446" font-size="17">04 · 위험 등급·보안 이벤트</text>
+  <text class="p" x="330" y="446" font-size="15">03 결과 JSON → SecurityEvent 변환 (03 선행 필요)</text>
+  <text class="code" x="84" y="467" font-size="13">PYTHONPATH=04_.../src python3 04_.../src/risk.py</text>
+  <rect class="ci" x="60" y="488" width="1160" height="58" rx="10"/>
+  <text class="h" x="84" y="512" font-size="17">05 · 대시보드·알림</text>
+  <text class="p" x="330" y="512" font-size="15">FastAPI 이벤트 API + 지표·Critical 알림 (+Discord)</text>
+  <text class="code" x="84" y="533" font-size="13">uvicorn api:app --app-dir 05_.../src --port 8000</text>
+
+  <text class="code" x="700" y="533" font-size="13">python3 05_.../src/report.py</text>
+  <rect class="ci" x="60" y="554" width="1160" height="58" rx="10"/>
+  <text class="h" x="84" y="578" font-size="17">06 · 통합 실습·운영 리포트</text>
+  <text class="p" x="330" y="578" font-size="15">전체 흐름 통합 실행 — 05 metrics 선행, USE_LLM=1 옵션</text>
+  <text class="code" x="84" y="599" font-size="13">python3 06_.../src/app.py</text>
+  <rect class="ci" x="60" y="620" width="1160" height="58" rx="10"/>
+  <text class="h" x="84" y="644" font-size="17">10 · 통합 프레임워크</text>
+  <text class="p" x="330" y="644" font-size="15">CLI·HTTP·GUI 통합 운영 데모</text>
+  <text class="code" x="84" y="665" font-size="13">python3 10_.../guardrail-ops/src/main.py demo</text>
+
+  <text class="code" x="700" y="665" font-size="13">serve --port 8000</text>
+  <text class="p" x="60" y="700" font-size="14">04는 03 결과 · 05는 04 이벤트 · 06은 05 metrics가 선행 조건 — 각 단계 readme의 실습 섹션에 상세 절차</text>
 </svg>

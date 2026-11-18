@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="t d">
+<title id="t">5단계 실습 Flow · API 서버 실행 흐름 (소스 기준)</title>
+<desc id="d">uvicorn 기동부터 api.py 엔드포인트, store·monitoring·discord·guardrail_service 호출 순서</desc>
+<defs>
+<style>
+text{font-family:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic","Helvetica Neue",Arial,sans-serif;fill:#0f172a}
+.title{font-size:50px;font-weight:800}
+.subt{font-size:25px;fill:#475569}
+.h2{font-size:26px;font-weight:800}
+.body{font-size:20px;fill:#334155}
+.sm{font-size:17px;fill:#475569}
+.lbl{font-size:18px;font-weight:700}
+.bar{font-size:24px;font-weight:800;fill:#ffffff}
+.mono16{font-family:Menlo,Consolas,"Courier New",monospace;font-size:16px;fill:#1e293b}
+.mono14{font-family:Menlo,Consolas,"Courier New",monospace;font-size:14px;fill:#334155}
+</style>
+<marker id="ab" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 1L15 8L0 15Z" fill="#1d4ed8"/></marker>
+<marker id="ag" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 1L15 8L0 15Z" fill="#15803d"/></marker>
+<marker id="ao" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 1L15 8L0 15Z" fill="#c2410c"/></marker>
+<marker id="ap" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 1L15 8L0 15Z" fill="#7c3aed"/></marker>
+<marker id="as" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 1L15 8L0 15Z" fill="#64748b"/></marker>
+</defs>
+
+<rect width="1920" height="1080" fill="#ffffff"/>
+<text class="title" x="60" y="90">5단계 실습 Flow · API 서버 실행 흐름 (소스 기준)</text>
+<text class="subt" x="60" y="140">uvicorn 기동 → api.py 엔드포인트 → store·monitoring·discord·guardrail_service 호출 순서</text>
+
+<!-- 1 서버 기동 -->
+<rect x="60" y="180" width="900" height="104" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<rect x="60" y="180" width="10" height="104" rx="5" fill="#1d4ed8"/>
+<text x="105" y="212" font-size="30" text-anchor="middle" dominant-baseline="central">①</text>
+<text class="lbl" x="140" y="208">서버 기동 — uvicorn api:app</text>
+<rect x="140" y="222" width="780" height="48" rx="8" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="10 6"/>
+<text class="mono16" x="156" y="242">uvicorn api:app --app-dir src --port 8000   (05 단계 폴더)</text>
+<text class="mono14" x="156" y="262">api.py 임포트 시 store.initialize() → results/security_events.db 테이블 생성</text>
+<line x1="510" y1="284" x2="510" y2="306" stroke="#1d4ed8" stroke-width="3" marker-end="url(#ab)"/>
+
+<!-- 2 인증 -->
+<rect x="60" y="306" width="900" height="104" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<rect x="60" y="306" width="10" height="104" rx="5" fill="#7c3aed"/>
+<text x="105" y="338" font-size="30" text-anchor="middle" dominant-baseline="central">②</text>
+<text class="lbl" x="140" y="334">요청 진입 — verify_api_key (Depends)</text>
+<rect x="140" y="348" width="780" height="48" rx="8" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="10 6"/>
+<text class="mono16" x="156" y="368">X-API-Key 헤더 ↔ os.environ.get("GUARDRAIL_API_KEY", "dev-only-key")</text>
+<text class="mono14" x="156" y="388">불일치 → 401 · /health·/dashboard 제외 전 엔드포인트 보호</text>
+<line x1="510" y1="410" x2="510" y2="432" stroke="#1d4ed8" stroke-width="3" marker-end="url(#ab)"/>
+
+<!-- 3 경로 분기 -->
+<rect x="60" y="432" width="900" height="110" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<rect x="60" y="432" width="10" height="110" rx="5" fill="#c2410c"/>
+<text x="105" y="466" font-size="30" text-anchor="middle" dominant-baseline="central">③</text>
+<text class="lbl" x="140" y="462">엔드포인트 분기 — api.py</text>
+<text class="body" x="140" y="496">POST /events → create_event() · POST /guardrail/chat → guardrail_chat()</text>
+<text class="body" x="140" y="526">GET /metrics·/events·/alerts/critical · POST /events/{id}/acknowledge · DELETE /events</text>
+<line x1="300" y1="542" x2="300" y2="562" stroke="#1d4ed8" stroke-width="3" marker-end="url(#ab)"/>
+<line x1="700" y1="542" x2="700" y2="562" stroke="#7c3aed" stroke-width="3" marker-end="url(#ap)"/>
+<text class="sm" x="255" y="556" fill="#1d4ed8">저장 경로</text>
+<text class="sm" x="655" y="556" fill="#7c3aed">실제 가드레일 경로</text>
+
+<!-- 4 create_event -->
+<rect x="60" y="562" width="430" height="180" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<rect x="60" y="562" width="10" height="180" rx="5" fill="#1d4ed8"/>
+<text x="100" y="594" font-size="30" text-anchor="middle" dominant-baseline="central">④</text>
+<text class="lbl" x="128" y="590" font-size="17">create_event()</text>
+<text class="mono14" x="128" y="618">EventRequest → SecurityEvent 조립</text>
+<text class="mono14" x="128" y="640">timestamp 없으면 UTC now 자동 부여</text>
+<text class="mono14" x="128" y="662">store.save(event) → INSERT OR REPLACE</text>
+<text class="mono14" x="128" y="684">risk_alert() → discord.notify_async()</text>
+<text class="mono14" x="128" y="706">return asdict(event) → 201</text>
+
+<!-- 5 guardrail_chat -->
+<rect x="530" y="562" width="430" height="330" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<rect x="530" y="562" width="10" height="330" rx="5" fill="#7c3aed"/>
+<text x="570" y="594" font-size="30" text-anchor="middle" dominant-baseline="central">⑤</text>
+<text class="lbl" x="598" y="590" font-size="17">guardrail_chat() → GuardrailService.chat()</text>
+<text class="mono14" x="598" y="618">① _load(): step03_policy·step03_guardrail·</text>
+<text class="mono14" x="598" y="638">   llama_guard·nemo_client 동적 로드</text>
+<text class="mono14" x="598" y="658">   sys.modules["policy"] 임시 교체</text>
+<text class="mono14" x="598" y="686">② step03.check_input(prompt)</text>
+<text class="mono14" x="598" y="708">   BLOCK → 즉시 block 결과 (모델 미호출)</text>
+<text class="mono14" x="598" y="736">③ nemo.generate → llama.classify</text>
+<text class="mono14" x="598" y="758">   unsafe → Critical block / 실패 → 503</text>
+<text class="mono14" x="598" y="786">④ step03.redact_output(response)</text>
+<text class="mono14" x="598" y="808">⑤ _result() → trace_id·latency·matches</text>
+<text class="mono14" x="598" y="830" fill="#c2410c">이후 ④와 동일: save→risk_alert→notify</text>
+
+<!-- 6 조회·확인 경로 -->
+<rect x="60" y="762" width="900" height="170" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<rect x="60" y="762" width="10" height="170" rx="5" fill="#15803d"/>
+<text x="105" y="794" font-size="30" text-anchor="middle" dominant-baseline="central">⑥</text>
+<text class="lbl" x="140" y="790">조회·확인 경로 — 읽기 전용 집계</text>
+<rect x="140" y="806" width="780" height="110" rx="8" fill="none" stroke="#15803d" stroke-width="1.5" stroke-dasharray="10 6"/>
+<text class="mono16" x="156" y="832">GET /metrics → dashboard_metrics(store.list_events()) — total·block_rate·by_risk·open</text>
+<text class="mono16" x="156" y="858">GET /alerts/critical → critical_alert() 필터 · GET /events → 목록</text>
+<text class="mono16" x="156" y="884">POST /events/{id}/acknowledge → store.acknowledge() status=open→acknowledged</text>
+<text class="mono16" x="156" y="908">GET /dashboard → dashboard.html · DELETE /events → clear_events()</text>
+
+<!-- ===== 우측: 정보 패널 ===== -->
+<rect x="1000" y="180" width="860" height="180" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<rect x="1000" y="180" width="10" height="180" rx="5" fill="#1d4ed8"/>
+<text x="1045" y="215" font-size="30" text-anchor="middle" dominant-baseline="central">①</text>
+<text class="h2" x="1080" y="222">모듈 역할 · src/</text>
+<text class="body" x="1080" y="256">api.py — FastAPI 엔드포인트·인증·서비스 조립</text>
+<text class="body" x="1080" y="288">store.py — SQLite 저장·초기화·acknowledge</text>
+<text class="body" x="1080" y="320">monitoring.py — dashboard_metrics·risk_alert·critical_alert</text>
+<text class="body" x="1080" y="352">discord.py — WEBHOOK_URL 상수·embed 생성·notify_async</text>
+
+<rect x="1000" y="376" width="860" height="180" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<rect x="1000" y="376" width="10" height="180" rx="5" fill="#7c3aed"/>
+<text x="1045" y="411" font-size="30" text-anchor="middle" dominant-baseline="central">②</text>
+<text class="h2" x="1080" y="418">서비스 로딩 · guardrail_service.py</text>
+<text class="body" x="1080" y="452">_load()가 step03_policy·step03_guardrail·llama_guard·</text>
+<text class="body" x="1080" y="484">nemo_guardrails_client를 spec_from_file_location으로 로드</text>
+<text class="body" x="1080" y="516">sys.modules["policy"] 임시 교체 — 05/src/policy.py와 이름 충돌 해소</text>
+<text class="body" x="1080" y="548">GuardrailServiceError → api.py가 503 fail-closed 반환</text>
+
+<rect x="1000" y="572" width="860" height="180" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<rect x="1000" y="572" width="10" height="180" rx="5" fill="#c2410c"/>
+<text x="1045" y="607" font-size="30" text-anchor="middle" dominant-baseline="central">③</text>
+<text class="h2" x="1080" y="614">분기 규칙</text>
+<text class="body" x="1080" y="648">입력 BLOCK → 모델 호출 없이 차단 문구 (비용 절약)</text>
+<text class="body" x="1080" y="680">llama unsafe → Critical block · provider 실패 → 503</text>
+<text class="body" x="1080" y="712">risk ≥ GUARDRAIL_ALERT_MIN_RISK(기본 Critical) → notify_async</text>
+<text class="body" x="1080" y="744">WEBHOOK_URL 빈 문자열 → no-op · 알림 실패는 로그만 (삼킴)</text>
+
+<rect x="1000" y="768" width="860" height="180" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<rect x="1000" y="768" width="10" height="180" rx="5" fill="#0f766e"/>
+<text x="1045" y="803" font-size="30" text-anchor="middle" dominant-baseline="central">④</text>
+<text class="h2" x="1080" y="810">검증 기준 (코드 대조)</text>
+<text class="body" x="1080" y="844">api.py:109-111·142-144 — save→risk_alert→notify_async 순서</text>
+<text class="body" x="1080" y="876">monitoring.py alert_min_risk() — 잘못된 env 값은 Critical 폴백</text>
+<text class="body" x="1080" y="908">discord.py notify() — User-Agent 헤더 필수 (Cloudflare 1010)</text>
+<text class="body" x="1080" y="940">store.py initialize() — security_events 테이블 자동 생성</text>
+
+<!-- ===== 하단 요약 바 ===== -->
+<rect x="0" y="976" width="1920" height="88" fill="#0f172a"/>
+<text class="bar" x="960" y="1030" text-anchor="middle">uvicorn 기동 → X-API-Key 인증 → create_event / guardrail_chat 분기 → store.save → risk_alert 판정 → discord.notify_async → 지표 집계·확인</text>
+</svg>

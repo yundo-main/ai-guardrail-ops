@@ -116,5 +116,5 @@
   </g>
 
   <text class="foot" x="60" y="680">실행: LLAMA_GUARD_BACKEND=transformers python3.12 src/main.py real --prompt "..."  (또는 --backend transformers)</text>
-  <text class="foot" x="60" y="700">2단계 · 심화 경로 구조 — 선택 사항, 기본 경로는 s09-overall-structure.svg</text>
+  <text class="foot" x="60" y="700">2단계 · 심화 경로 구조 — 선택 사항, 기본 경로는 s10-overall-structure.svg</text>
 </svg>

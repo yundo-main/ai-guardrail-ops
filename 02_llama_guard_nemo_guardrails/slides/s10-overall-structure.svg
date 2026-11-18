@@ -106,5 +106,5 @@
 
   <text class="foot" x="60" y="625">실행: python3.12 src/main.py real --prompt "..."  (Python 3.12 venv · Ollama 실행 필요)</text>
   <text class="foot" x="60" y="651">읽는 순서: 사용자 → main.py → pipeline → classifier / dialogue → Ollama 모델 → 결과 JSON·HTML → 3단계</text>
-  <text class="foot" x="60" y="690">2단계 · 전체 구조 · 요약 지도 — 심화 경로(Transformers)는 s10 슬라이드 참조</text>
+  <text class="foot" x="60" y="690">2단계 · 전체 구조 · 요약 지도 — 심화 경로(Transformers)는 s11 슬라이드 참조</text>
 </svg>
