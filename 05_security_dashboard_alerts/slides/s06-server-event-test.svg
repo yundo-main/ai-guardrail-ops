@@ -56,6 +56,7 @@ text{fill:var(--ink)}
   <text class="p" x="680" y="422" font-size="17">• Discord 채널 — WEBHOOK_URL 설정 시 Critical embed 수신</text>
   <text class="p" x="680" y="462" font-size="17">• DELETE /events — 실습 후 이벤트 초기화</text>
   <text class="p" x="680" y="502" font-size="17">• GET /events — 등록된 이벤트 목록 조회</text>
+  <text class="p" x="680" y="534" font-size="17">• Python urllib·모듈 직접 호출로도 이벤트 발생 가능 (readme 참조)</text>
 
   <rect class="codebox" x="60" y="600" width="1160" height="76" rx="10"/>
   <text class="code" x="80" y="628" font-size="13">curl -X POST http://127.0.0.1:8000/events -H 'X-API-Key: dev-only-key' -H 'Content-Type: application/json' \</text>

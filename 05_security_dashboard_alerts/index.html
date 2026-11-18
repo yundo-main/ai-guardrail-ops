@@ -150,6 +150,30 @@ python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v
 
 # 결과 리포트 생성 — DB 이벤트를 step05-metrics.json + .html로 저장
 python3 05_security_dashboard_alerts/src/report.py</code></pre></div>
+<div class="codebox"><pre><code># Critical 차단 이벤트
+curl -X POST http://127.0.0.1:8000/events \
+  -H &#x27;Content-Type: application/json&#x27; -H &#x27;X-API-Key: dev-only-key&#x27; \
+  -d &#x27;{&quot;event_id&quot;:&quot;e1&quot;,&quot;decision&quot;:&quot;block&quot;,&quot;risk&quot;:&quot;Critical&quot;,&quot;category&quot;:&quot;prompt_injection&quot;,&quot;detail&quot;:&quot;ignore previous instructions&quot;,&quot;trace_id&quot;:&quot;t1&quot;}&#x27;
+
+# High 검토 이벤트
+curl -X POST http://127.0.0.1:8000/events \
+  -H &#x27;Content-Type: application/json&#x27; -H &#x27;X-API-Key: dev-only-key&#x27; \
+  -d &#x27;{&quot;event_id&quot;:&quot;e2&quot;,&quot;decision&quot;:&quot;review&quot;,&quot;risk&quot;:&quot;High&quot;,&quot;category&quot;:&quot;data_leakage&quot;,&quot;detail&quot;:&quot;email detected&quot;,&quot;trace_id&quot;:&quot;t2&quot;}&#x27;
+
+# Low 허용 이벤트
+curl -X POST http://127.0.0.1:8000/events \
+  -H &#x27;Content-Type: application/json&#x27; -H &#x27;X-API-Key: dev-only-key&#x27; \
+  -d &#x27;{&quot;event_id&quot;:&quot;e3&quot;,&quot;decision&quot;:&quot;allow&quot;,&quot;risk&quot;:&quot;Low&quot;,&quot;category&quot;:&quot;normal&quot;,&quot;detail&quot;:&quot;hello&quot;,&quot;trace_id&quot;:&quot;t3&quot;}&#x27;</code></pre></div>
+<div class="codebox"><pre><code>두 방식 모두 `results/security_events.db`에 저장되므로 `/dashboard`·`/metrics`에서 바로 집계된다. 2번 방식은 `risk_alert()`·`discord.notify_async()`를 거치지 않으므로 Discord 알림은 발송되지 않는다 — 알림까지 확인하려면 1번(HTTP) 방식을 사용한다.
+
+Critical 이벤트가 등록되면 `critical_alert()` payload가 생성되고, `src/discord.py`의 `WEBHOOK_URL`이 설정된 경우 Discord 웹훅으로 알림을 발송한다. 비어 있으면 발송은 건너뛰고 API는 그대로 동작한다.
+
+### Discord 웹훅 알림 연결
+
+1. Discord에서 알림을 받을 채널을 연다.
+2. 채널 설정 → **연동(Integrations)** → **웹후크(Webhooks)** → **새 웹후크**를 만든다.
+3. 웹후크 이름(예: `AI Guardrail 알림`)을 지정하고 **웹후크 URL을 복사**한다.
+4. `src/discord.py` 상단의 `WEBHOOK_URL`에 복사한 URL을 직접 붙여넣는다. 비워 두면 발송은 건너뛴다.</code></pre></div>
 <div class="codebox"><pre><code>5. Critical 이벤트를 등록하면 채널에 embed 알림이 도착한다.</code></pre></div>
 <div class="codebox"><pre><code>동작 특성:
 
@@ -225,6 +249,60 @@ python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v
 # 결과 리포트 생성 — DB 이벤트를 step05-metrics.json + .html로 저장
 python3 05_security_dashboard_alerts/src/report.py</code></pre>
 <p>기본 API 키는 <code>dev-only-key</code>이며 요청 헤더에 <code>X-API-Key</code>를 넣는다. 배포 전에는 <code>GUARDRAIL_API_KEY</code>를 변경한다. API 문서는 서버 실행 후 <code>http://127.0.0.1:8000/docs</code>, 웹 화면은 <code>http://127.0.0.1:8000/dashboard</code>에서 확인한다. 이벤트는 기본적으로 <code>results/security_events.db</code>에 저장된다.</p>
+<h4>이벤트 등록 예시 (위험 등급별)</h4>
+<p>서버 실행 후 아래 3건을 등록하면 대시보드에서 등급·판정 분포를 바로 확인할 수 있다.</p>
+<pre><code># Critical 차단 이벤트
+curl -X POST http://127.0.0.1:8000/events \
+  -H &#x27;Content-Type: application/json&#x27; -H &#x27;X-API-Key: dev-only-key&#x27; \
+  -d &#x27;{&quot;event_id&quot;:&quot;e1&quot;,&quot;decision&quot;:&quot;block&quot;,&quot;risk&quot;:&quot;Critical&quot;,&quot;category&quot;:&quot;prompt_injection&quot;,&quot;detail&quot;:&quot;ignore previous instructions&quot;,&quot;trace_id&quot;:&quot;t1&quot;}&#x27;
+
+# High 검토 이벤트
+curl -X POST http://127.0.0.1:8000/events \
+  -H &#x27;Content-Type: application/json&#x27; -H &#x27;X-API-Key: dev-only-key&#x27; \
+  -d &#x27;{&quot;event_id&quot;:&quot;e2&quot;,&quot;decision&quot;:&quot;review&quot;,&quot;risk&quot;:&quot;High&quot;,&quot;category&quot;:&quot;data_leakage&quot;,&quot;detail&quot;:&quot;email detected&quot;,&quot;trace_id&quot;:&quot;t2&quot;}&#x27;
+
+# Low 허용 이벤트
+curl -X POST http://127.0.0.1:8000/events \
+  -H &#x27;Content-Type: application/json&#x27; -H &#x27;X-API-Key: dev-only-key&#x27; \
+  -d &#x27;{&quot;event_id&quot;:&quot;e3&quot;,&quot;decision&quot;:&quot;allow&quot;,&quot;risk&quot;:&quot;Low&quot;,&quot;category&quot;:&quot;normal&quot;,&quot;detail&quot;:&quot;hello&quot;,&quot;trace_id&quot;:&quot;t3&quot;}&#x27;</code></pre>
+<h4>코드로 이벤트 발생시키기</h4>
+<p>curl 대신 Python 코드로도 이벤트를 등록할 수 있다. 외부 패키지 없이 stdlib만 사용한다.</p>
+<pre><code># 1) HTTP로 발생 — 서버가 떠 있어야 한다 (uvicorn 실행 중)
+import json
+import urllib.request
+
+payload = {
+    &quot;event_id&quot;: &quot;py-event-1&quot;,
+    &quot;decision&quot;: &quot;block&quot;,
+    &quot;risk&quot;: &quot;Critical&quot;,
+    &quot;category&quot;: &quot;prompt_injection&quot;,
+    &quot;detail&quot;: &quot;ignore previous instructions&quot;,
+    &quot;trace_id&quot;: &quot;py-1&quot;,
+}
+req = urllib.request.Request(
+    &quot;http://127.0.0.1:8000/events&quot;,
+    data=json.dumps(payload).encode(&quot;utf-8&quot;),
+    headers={&quot;Content-Type&quot;: &quot;application/json&quot;, &quot;X-API-Key&quot;: &quot;dev-only-key&quot;},
+    method=&quot;POST&quot;,
+)
+with urllib.request.urlopen(req) as res:
+    print(res.status)  # 201</code></pre>
+<pre><code># 2) 서버 없이 직접 발생 — 모듈을 직접 호출해 DB에 저장
+import sys
+sys.path.insert(0, &quot;05_security_dashboard_alerts/src&quot;)
+
+import store
+from monitoring import make_event
+from policy import Decision, RiskLevel
+
+store.initialize()
+event = make_event(
+    &quot;py-event-2&quot;, Decision.BLOCK, RiskLevel.CRITICAL,
+    &quot;data_leakage&quot;, &quot;email address detected&quot;, trace_id=&quot;py-2&quot;,
+)
+store.save(event)
+print(store.list_events()[-1].event_id)  # py-event-2</code></pre>
+<p>두 방식 모두 <code>results/security_events.db</code>에 저장되므로 <code>/dashboard</code>·<code>/metrics</code>에서 바로 집계된다. 2번 방식은 <code>risk_alert()</code>·<code>discord.notify_async()</code>를 거치지 않으므로 Discord 알림은 발송되지 않는다 — 알림까지 확인하려면 1번(HTTP) 방식을 사용한다.</p>
 <p>Critical 이벤트가 등록되면 <code>critical_alert()</code> payload가 생성되고, <code>src/discord.py</code>의 <code>WEBHOOK_URL</code>이 설정된 경우 Discord 웹훅으로 알림을 발송한다. 비어 있으면 발송은 건너뛰고 API는 그대로 동작한다.</p>
 <h4>Discord 웹훅 알림 연결</h4>
 <ol><li>Discord에서 알림을 받을 채널을 연다.</li><li>채널 설정 → <b>연동(Integrations)</b> → <b>웹후크(Webhooks)</b> → <b>새 웹후크</b>를 만든다.</li><li>웹후크 이름(예: <code>AI Guardrail 알림</code>)을 지정하고 <b>웹후크 URL을 복사</b>한다.</li><li><code>src/discord.py</code> 상단의 <code>WEBHOOK_URL</code>에 복사한 URL을 직접 붙여넣는다. 비워 두면 발송은 건너뛴다.</li></ol>

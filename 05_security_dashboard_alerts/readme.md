@@ -62,6 +62,74 @@ python3 05_security_dashboard_alerts/src/report.py
 
 기본 API 키는 `dev-only-key`이며 요청 헤더에 `X-API-Key`를 넣는다. 배포 전에는 `GUARDRAIL_API_KEY`를 변경한다. API 문서는 서버 실행 후 `http://127.0.0.1:8000/docs`, 웹 화면은 `http://127.0.0.1:8000/dashboard`에서 확인한다. 이벤트는 기본적으로 `results/security_events.db`에 저장된다.
 
+### 이벤트 등록 예시 (위험 등급별)
+
+서버 실행 후 아래 3건을 등록하면 대시보드에서 등급·판정 분포를 바로 확인할 수 있다.
+
+```bash
+# Critical 차단 이벤트
+curl -X POST http://127.0.0.1:8000/events \
+  -H 'Content-Type: application/json' -H 'X-API-Key: dev-only-key' \
+  -d '{"event_id":"e1","decision":"block","risk":"Critical","category":"prompt_injection","detail":"ignore previous instructions","trace_id":"t1"}'
+
+# High 검토 이벤트
+curl -X POST http://127.0.0.1:8000/events \
+  -H 'Content-Type: application/json' -H 'X-API-Key: dev-only-key' \
+  -d '{"event_id":"e2","decision":"review","risk":"High","category":"data_leakage","detail":"email detected","trace_id":"t2"}'
+
+# Low 허용 이벤트
+curl -X POST http://127.0.0.1:8000/events \
+  -H 'Content-Type: application/json' -H 'X-API-Key: dev-only-key' \
+  -d '{"event_id":"e3","decision":"allow","risk":"Low","category":"normal","detail":"hello","trace_id":"t3"}'
+```
+
+### 코드로 이벤트 발생시키기
+
+curl 대신 Python 코드로도 이벤트를 등록할 수 있다. 외부 패키지 없이 stdlib만 사용한다.
+
+```python
+# 1) HTTP로 발생 — 서버가 떠 있어야 한다 (uvicorn 실행 중)
+import json
+import urllib.request
+
+payload = {
+    "event_id": "py-event-1",
+    "decision": "block",
+    "risk": "Critical",
+    "category": "prompt_injection",
+    "detail": "ignore previous instructions",
+    "trace_id": "py-1",
+}
+req = urllib.request.Request(
+    "http://127.0.0.1:8000/events",
+    data=json.dumps(payload).encode("utf-8"),
+    headers={"Content-Type": "application/json", "X-API-Key": "dev-only-key"},
+    method="POST",
+)
+with urllib.request.urlopen(req) as res:
+    print(res.status)  # 201
+```
+
+```python
+# 2) 서버 없이 직접 발생 — 모듈을 직접 호출해 DB에 저장
+import sys
+sys.path.insert(0, "05_security_dashboard_alerts/src")
+
+import store
+from monitoring import make_event
+from policy import Decision, RiskLevel
+
+store.initialize()
+event = make_event(
+    "py-event-2", Decision.BLOCK, RiskLevel.CRITICAL,
+    "data_leakage", "email address detected", trace_id="py-2",
+)
+store.save(event)
+print(store.list_events()[-1].event_id)  # py-event-2
+```
+
+두 방식 모두 `results/security_events.db`에 저장되므로 `/dashboard`·`/metrics`에서 바로 집계된다. 2번 방식은 `risk_alert()`·`discord.notify_async()`를 거치지 않으므로 Discord 알림은 발송되지 않는다 — 알림까지 확인하려면 1번(HTTP) 방식을 사용한다.
+
 Critical 이벤트가 등록되면 `critical_alert()` payload가 생성되고, `src/discord.py`의 `WEBHOOK_URL`이 설정된 경우 Discord 웹훅으로 알림을 발송한다. 비어 있으면 발송은 건너뛰고 API는 그대로 동작한다.
 
 ### Discord 웹훅 알림 연결
