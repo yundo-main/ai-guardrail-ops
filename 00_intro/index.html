@@ -138,21 +138,21 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <section class="ltab" id="tab-flow" hidden>
 <div class="ltitle">흐름 — 처리 흐름·실행 방법·결과 확인</div>
 <h3>처리 흐름</h3>
-<pre><code>사용자 입력
+<div class="codebox"><pre><code>사용자 입력
   → 입력 가드레일: 허용 / 차단 / 검토
   → 모델 호출
   → 출력 검열: PII·기밀 키워드·API 키 마스킹
   → 보안 이벤트 생성
   → 위험 등급 분류
   → 대시보드 집계 및 Critical 알림
-  → 주간·월간 운영 리포트</code></pre>
+  → 주간·월간 운영 리포트</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>로컬 구현 예제</h3>
 <p>외부 API나 LLM 없이 핵심 흐름을 재현하는 교육용 예제다.</p>
 <p>권장 실행 환경은 Python 3.12 이상이다. 현재 코드와 테스트는 Python 3.9 호환성을 유지하며, Python 3.12.16 격리 환경에서도 전체 테스트를 검증했다. API 실행에는 루트 <code>requirements.txt</code>의 FastAPI·Uvicorn·테스트 클라이언트 의존성이 필요하다.</p>
 <table><tr><th>파일</th><th>역할</th></tr><tr><td><code>03_policy_blocking_output_filtering/src/</code></td><td>입력 정책, 입력 차단, 출력 PII·비밀정보 마스킹</td></tr><tr><td><code>04_risk_rating_system/src/</code></td><td>보안 이벤트와 위험 등급 정의</td></tr><tr><td><code>05_security_dashboard_alerts/src/</code></td><td>지표 집계와 Critical 알림</td></tr><tr><td><code>06_operations_report_integrated_lab/src/app.py</code></td><td>정상·위험·민감 출력 통합 실행</td></tr><tr><td><code>06_operations_report_integrated_lab/src/llm.py</code></td><td>선택적 로컬 Ollama 호출 어댑터</td></tr><tr><td><code>results.md</code></td><td>단계 간 JSON 결과 파일 전달 규칙 — <a href="results.md">results.md</a></td></tr><tr><td><code>01_guardrail_concept_architecture/src/</code></td><td>Guardrail 파이프라인 단계 정의</td></tr><tr><td><code>02_llama_guard_nemo_guardrails/src/main.py</code></td><td>2단계 진입점 — <code>contracts/</code>·<code>classifier/</code>·<code>dialogue/</code>·<code>pipeline/</code> 하위 구조</td></tr><tr><td><code>03_policy_blocking_output_filtering/tests/test_guardrail.py</code></td><td>3단계 입력 차단·출력 마스킹 단위 테스트 (단계별 <code>tests/</code>는 각 단계 폴더에 위치)</td></tr><tr><td><code>glossary/</code> · <code>glossary.md</code></td><td>1~6단계 핵심 용어 통합 용어집 — <a href="glossary/index.html">용어 포털</a> · <a href="glossary.md">glossary.md</a></td></tr></table>
 <p>단계별 슬라이드 구성표는 각 단계 폴더의 <code>slides/readme.md</code>에 분리했다.</p>
 <h4>실행</h4>
-<pre><code># 최초 환경 구성 (저장소 루트에서 실행)
+<div class="codebox"><pre><code># 최초 환경 구성 (저장소 루트에서 실행)
 python3 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install -r requirements.txt
@@ -174,37 +174,37 @@ python3 -m pip install -r 05_security_dashboard_alerts/requirements.txt
 uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 
 # 5단계 API를 종료한 뒤 새 터미널에서 6단계 실행
-python3 06_operations_report_integrated_lab/src/app.py</code></pre>
+python3 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
 <h4>실행 결과 확인</h4>
 <p>1~2단계는 터미널에 구조 요약을 출력한다. 3~4·6단계는 실행 후 각 단계 폴더의 <code>results/</code>에 JSON 결과를 저장한다(5단계는 API <code>/metrics</code>로 조회).</p>
-<pre><code># JSON을 사람이 읽기 좋은 형식으로 확인
+<div class="codebox"><pre><code># JSON을 사람이 읽기 좋은 형식으로 확인
 python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
 python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
 python3 -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
-python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre>
+python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>5단계 API는 서버를 켠 별도 터미널에서 다음처럼 확인한다.</p>
-<pre><code>curl http://127.0.0.1:8000/health
+<div class="codebox"><pre><code>curl http://127.0.0.1:8000/health
 curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/events
 curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/metrics
-curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/alerts/critical</code></pre>
+curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/alerts/critical</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>브라우저에서 <code>http://127.0.0.1:8000/docs</code>를 열면 Swagger UI로 요청을 직접 실행할 수 있다. 5단계 지표를 파일로 보관하려면 <code>/metrics</code> 응답을 <code>05_security_dashboard_alerts/results/step05-metrics.json</code>으로 저장한다.</p>
-<pre><code>curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/metrics &gt; 05_security_dashboard_alerts/results/step05-metrics.json</code></pre>
+<div class="codebox"><pre><code>curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/metrics &gt; 05_security_dashboard_alerts/results/step05-metrics.json</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>각 단계의 실행 목적과 산출물은 해당 폴더의 <code>readme.md</code>, 슬라이드 목록은 <code>slides/readme.md</code>, 단계 간 결과 규약은 <a href="results.md">results.md</a>에서 확인한다.</p>
 <h4>선택적 로컬 LLM 실행</h4>
 <p>기본 실행은 더미 응답을 사용한다. Ollama를 설치하고 서버와 모델을 준비한 뒤 <code>USE_LLM=1</code>을 지정하면 6단계 통합 실습이 로컬 모델 응답을 받아 출력 검열 단계로 전달한다.</p>
-<pre><code>ollama serve
+<div class="codebox"><pre><code>ollama serve
 ollama pull qwen2.5:3b
-USE_LLM=1 OLLAMA_MODEL=qwen2.5:3b python3 06_operations_report_integrated_lab/src/app.py</code></pre>
+USE_LLM=1 OLLAMA_MODEL=qwen2.5:3b python3 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
 <h4>5단계 웹 API·대시보드</h4>
 <p>API는 기본적으로 <code>dev-only-key</code>를 사용한다. 공유·배포 전에는 <code>GUARDRAIL_API_KEY</code>를 반드시 변경하고, 저장 위치는 <code>GUARDRAIL_DB_PATH</code>로 지정한다.</p>
-<pre><code>export GUARDRAIL_API_KEY=&#x27;change-me&#x27;
-uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000</code></pre>
+<div class="codebox"><pre><code>export GUARDRAIL_API_KEY=&#x27;change-me&#x27;
+uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000</code></pre><button class="copybtn" type="button">복사</button></div>
 <ul><li>Swagger: <code>http://127.0.0.1:8000/docs</code></li><li>웹 대시보드: <code>http://127.0.0.1:8000/dashboard</code></li><li>저장소: 기본 <code>05_security_dashboard_alerts/results/security_events.db</code> SQLite</li></ul>
 <p>대시보드 화면의 API Key 입력란에 동일한 키를 입력한다. 이벤트 등록 시에는 <code>X-API-Key</code> 헤더를 사용한다.</p>
-<pre><code>curl -X POST http://127.0.0.1:8000/events \
+<div class="codebox"><pre><code>curl -X POST http://127.0.0.1:8000/events \
   -H &#x27;Content-Type: application/json&#x27; \
   -H &#x27;X-API-Key: dev-only-key&#x27; \
-  --data @04_risk_rating_system/results/step04-security-event.json</code></pre>
+  --data @04_risk_rating_system/results/step04-security-event.json</code></pre><button class="copybtn" type="button">복사</button></div>
 <p><code>OLLAMA_BASE_URL</code>로 다른 로컬 Ollama 주소를 지정할 수 있다. 서버가 없거나 호출에 실패하면 더미 응답으로 자동 대체되며, 모델 응답도 동일하게 <code>safe_response()</code>의 입력·출력 가드레일을 통과한다.</p>
 <p>실행 예제는 다음을 확인한다.</p>
 <ul><li>정상 요청은 허용된다.</li><li>프롬프트 인젝션·비밀정보 탈취 요청은 차단된다.</li><li>이메일·API 키 등 민감한 출력은 마스킹된다.</li><li>Critical 이벤트는 알림 payload로 생성된다.</li><li>차단 건수와 위험 등급 분포가 리포트 지표로 집계된다.</li></ul>
@@ -265,8 +265,8 @@ uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000<
 <div class="ltitle">도움말 — SVG 규칙·메타프롬프트·페이지 사용법</div>
 <h3>SVG 작성 및 검수 규칙</h3>
 <ul><li>캔버스는 <code>viewBox=&quot;0 0 1280 720&quot;</code>으로 작성한다.</li><li><code>&lt;title&gt;</code>, <code>&lt;desc&gt;</code>, <code>role=&quot;img&quot;</code>, <code>aria-labelledby</code>를 포함한다.</li><li>색상은 CSS 클래스와 다크 모드 규칙으로 관리한다.</li><li>챕터 표시, 제목, 요약, 본문 도식, 우측 하단 페이지 푸터를 포함한다.</li><li>외부 폰트·이미지·스크립트·링크를 사용하지 않는다.</li><li>완성 후 XML 검증과 PNG 렌더링 확인을 수행한다.</li></ul>
-<pre><code>xmllint --noout slides/00-course-flow.svg ../01_guardrail_concept_architecture/slides/s01-guardrail-flow.svg
-qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
+<div class="codebox"><pre><code>xmllint --noout slides/00-course-flow.svg ../01_guardrail_concept_architecture/slides/s01-guardrail-flow.svg
+qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>SVG 뷰어</h3>
 <ul>
 <li>슬라이드 탭의 <b>SVG 이미지를 클릭</b>하면 팝업 뷰어로 확대 표시됩니다</li>
@@ -298,14 +298,14 @@ qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
 <h3>챕터 목록</h3>
 <table><tr><th>단계</th><th>챕터</th><th>학습 목표</th><th>학습 자료</th></tr><tr><td>0단계</td><td>과정 개요</td><td>전체 흐름·기술 스택·실행 방법을 파악한다.</td><td><a href="readme.md">00_intro</a></td></tr><tr><td>1단계</td><td>Guardrail 개념과 아키텍처</td><td>Guardrail의 개념과 입력·출력 통제 구조를 이해한다.</td><td><a href="../01_guardrail_concept_architecture/readme.md">01_guardrail_concept_architecture</a></td></tr><tr><td>2단계</td><td>Llama Guard·NeMo Guardrails 적용</td><td>위험 분류와 대화 정책의 역할을 이해한다.</td><td><a href="../02_llama_guard_nemo_guardrails/readme.md">02_llama_guard_nemo_guardrails</a></td></tr><tr><td>3단계</td><td>정책 기반 차단 및 출력 검열 구현</td><td>정책 차단과 출력 마스킹을 구현한다.</td><td><a href="../03_policy_blocking_output_filtering/readme.md">03_policy_blocking_output_filtering</a></td></tr><tr><td>4단계</td><td>위험 등급 체계 설계</td><td>보안 이벤트를 위험 등급으로 분류한다.</td><td><a href="../04_risk_rating_system/readme.md">04_risk_rating_system</a></td></tr><tr><td>5단계</td><td>보안 대시보드 및 알림 구축</td><td>보안 지표를 집계하고 Critical 알림을 구성한다.</td><td><a href="../05_security_dashboard_alerts/readme.md">05_security_dashboard_alerts</a></td></tr><tr><td>6단계</td><td>운영 리포트 작성 및 통합 실습</td><td>운영 지표를 리포트로 정리하고 전체 흐름을 통합한다.</td><td><a href="../06_operations_report_integrated_lab/readme.md">06_operations_report_integrated_lab</a></td></tr></table>
 <h3>처리 흐름</h3>
-<pre><code>사용자 입력
+<div class="codebox"><pre><code>사용자 입력
   → 입력 가드레일: 허용 / 차단 / 검토
   → 모델 호출
   → 출력 검열: PII·기밀 키워드·API 키 마스킹
   → 보안 이벤트 생성
   → 위험 등급 분류
   → 대시보드 집계 및 Critical 알림
-  → 주간·월간 운영 리포트</code></pre>
+  → 주간·월간 운영 리포트</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>사용 기술 스택</h3>
 <h4>실행 환경 (전 단계 공통)</h4>
 <table><tr><th>기술</th><th>용도</th></tr><tr><td>Python 3.12+ (3.9 호환)</td><td>전체 학습 코드 언어</td></tr><tr><td>표준 라이브러리 (<code>dataclass</code>·<code>Enum</code>·<code>re</code>·<code>json</code>·<code>sqlite3</code>)</td><td>1~4단계 가드레일·정책·위험 등급 — 외부 패키지 없이 동작</td></tr></table>
@@ -324,7 +324,7 @@ qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
 <table><tr><th>파일</th><th>역할</th></tr><tr><td><code>03_policy_blocking_output_filtering/src/</code></td><td>입력 정책, 입력 차단, 출력 PII·비밀정보 마스킹</td></tr><tr><td><code>04_risk_rating_system/src/</code></td><td>보안 이벤트와 위험 등급 정의</td></tr><tr><td><code>05_security_dashboard_alerts/src/</code></td><td>지표 집계와 Critical 알림</td></tr><tr><td><code>06_operations_report_integrated_lab/src/app.py</code></td><td>정상·위험·민감 출력 통합 실행</td></tr><tr><td><code>06_operations_report_integrated_lab/src/llm.py</code></td><td>선택적 로컬 Ollama 호출 어댑터</td></tr><tr><td><code>results.md</code></td><td>단계 간 JSON 결과 파일 전달 규칙 — <a href="results.md">results.md</a></td></tr><tr><td><code>01_guardrail_concept_architecture/src/</code></td><td>Guardrail 파이프라인 단계 정의</td></tr><tr><td><code>02_llama_guard_nemo_guardrails/src/main.py</code></td><td>2단계 진입점 — <code>contracts/</code>·<code>classifier/</code>·<code>dialogue/</code>·<code>pipeline/</code> 하위 구조</td></tr><tr><td><code>03_policy_blocking_output_filtering/tests/test_guardrail.py</code></td><td>3단계 입력 차단·출력 마스킹 단위 테스트 (단계별 <code>tests/</code>는 각 단계 폴더에 위치)</td></tr><tr><td><code>glossary/</code> · <code>glossary.md</code></td><td>1~6단계 핵심 용어 통합 용어집 — <a href="glossary/index.html">용어 포털</a> · <a href="glossary.md">glossary.md</a></td></tr></table>
 <p>단계별 슬라이드 구성표는 각 단계 폴더의 <code>slides/readme.md</code>에 분리했다.</p>
 <h4>실행</h4>
-<pre><code># 최초 환경 구성 (저장소 루트에서 실행)
+<div class="codebox"><pre><code># 최초 환경 구성 (저장소 루트에서 실행)
 python3 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install -r requirements.txt
@@ -346,37 +346,37 @@ python3 -m pip install -r 05_security_dashboard_alerts/requirements.txt
 uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 
 # 5단계 API를 종료한 뒤 새 터미널에서 6단계 실행
-python3 06_operations_report_integrated_lab/src/app.py</code></pre>
+python3 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
 <h4>실행 결과 확인</h4>
 <p>1~2단계는 터미널에 구조 요약을 출력한다. 3~4·6단계는 실행 후 각 단계 폴더의 <code>results/</code>에 JSON 결과를 저장한다(5단계는 API <code>/metrics</code>로 조회).</p>
-<pre><code># JSON을 사람이 읽기 좋은 형식으로 확인
+<div class="codebox"><pre><code># JSON을 사람이 읽기 좋은 형식으로 확인
 python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
 python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
 python3 -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
-python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre>
+python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>5단계 API는 서버를 켠 별도 터미널에서 다음처럼 확인한다.</p>
-<pre><code>curl http://127.0.0.1:8000/health
+<div class="codebox"><pre><code>curl http://127.0.0.1:8000/health
 curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/events
 curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/metrics
-curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/alerts/critical</code></pre>
+curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/alerts/critical</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>브라우저에서 <code>http://127.0.0.1:8000/docs</code>를 열면 Swagger UI로 요청을 직접 실행할 수 있다. 5단계 지표를 파일로 보관하려면 <code>/metrics</code> 응답을 <code>05_security_dashboard_alerts/results/step05-metrics.json</code>으로 저장한다.</p>
-<pre><code>curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/metrics &gt; 05_security_dashboard_alerts/results/step05-metrics.json</code></pre>
+<div class="codebox"><pre><code>curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/metrics &gt; 05_security_dashboard_alerts/results/step05-metrics.json</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>각 단계의 실행 목적과 산출물은 해당 폴더의 <code>readme.md</code>, 슬라이드 목록은 <code>slides/readme.md</code>, 단계 간 결과 규약은 <a href="results.md">results.md</a>에서 확인한다.</p>
 <h4>선택적 로컬 LLM 실행</h4>
 <p>기본 실행은 더미 응답을 사용한다. Ollama를 설치하고 서버와 모델을 준비한 뒤 <code>USE_LLM=1</code>을 지정하면 6단계 통합 실습이 로컬 모델 응답을 받아 출력 검열 단계로 전달한다.</p>
-<pre><code>ollama serve
+<div class="codebox"><pre><code>ollama serve
 ollama pull qwen2.5:3b
-USE_LLM=1 OLLAMA_MODEL=qwen2.5:3b python3 06_operations_report_integrated_lab/src/app.py</code></pre>
+USE_LLM=1 OLLAMA_MODEL=qwen2.5:3b python3 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
 <h4>5단계 웹 API·대시보드</h4>
 <p>API는 기본적으로 <code>dev-only-key</code>를 사용한다. 공유·배포 전에는 <code>GUARDRAIL_API_KEY</code>를 반드시 변경하고, 저장 위치는 <code>GUARDRAIL_DB_PATH</code>로 지정한다.</p>
-<pre><code>export GUARDRAIL_API_KEY=&#x27;change-me&#x27;
-uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000</code></pre>
+<div class="codebox"><pre><code>export GUARDRAIL_API_KEY=&#x27;change-me&#x27;
+uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000</code></pre><button class="copybtn" type="button">복사</button></div>
 <ul><li>Swagger: <code>http://127.0.0.1:8000/docs</code></li><li>웹 대시보드: <code>http://127.0.0.1:8000/dashboard</code></li><li>저장소: 기본 <code>05_security_dashboard_alerts/results/security_events.db</code> SQLite</li></ul>
 <p>대시보드 화면의 API Key 입력란에 동일한 키를 입력한다. 이벤트 등록 시에는 <code>X-API-Key</code> 헤더를 사용한다.</p>
-<pre><code>curl -X POST http://127.0.0.1:8000/events \
+<div class="codebox"><pre><code>curl -X POST http://127.0.0.1:8000/events \
   -H &#x27;Content-Type: application/json&#x27; \
   -H &#x27;X-API-Key: dev-only-key&#x27; \
-  --data @04_risk_rating_system/results/step04-security-event.json</code></pre>
+  --data @04_risk_rating_system/results/step04-security-event.json</code></pre><button class="copybtn" type="button">복사</button></div>
 <p><code>OLLAMA_BASE_URL</code>로 다른 로컬 Ollama 주소를 지정할 수 있다. 서버가 없거나 호출에 실패하면 더미 응답으로 자동 대체되며, 모델 응답도 동일하게 <code>safe_response()</code>의 입력·출력 가드레일을 통과한다.</p>
 <p>실행 예제는 다음을 확인한다.</p>
 <ul><li>정상 요청은 허용된다.</li><li>프롬프트 인젝션·비밀정보 탈취 요청은 차단된다.</li><li>이메일·API 키 등 민감한 출력은 마스킹된다.</li><li>Critical 이벤트는 알림 payload로 생성된다.</li><li>차단 건수와 위험 등급 분포가 리포트 지표로 집계된다.</li></ul>
@@ -401,8 +401,8 @@ uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000<
 <p>탐지 건수, 차단율, 검토 건수, 미대응 이슈를 주간·월간 리포트로 정리하고 전체 처리 흐름을 통합 실행한다.</p>
 <h3>SVG 작성 및 검수 규칙</h3>
 <ul><li>캔버스는 <code>viewBox=&quot;0 0 1280 720&quot;</code>으로 작성한다.</li><li><code>&lt;title&gt;</code>, <code>&lt;desc&gt;</code>, <code>role=&quot;img&quot;</code>, <code>aria-labelledby</code>를 포함한다.</li><li>색상은 CSS 클래스와 다크 모드 규칙으로 관리한다.</li><li>챕터 표시, 제목, 요약, 본문 도식, 우측 하단 페이지 푸터를 포함한다.</li><li>외부 폰트·이미지·스크립트·링크를 사용하지 않는다.</li><li>완성 후 XML 검증과 PNG 렌더링 확인을 수행한다.</li></ul>
-<pre><code>xmllint --noout slides/00-course-flow.svg ../01_guardrail_concept_architecture/slides/s01-guardrail-flow.svg
-qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre>
+<div class="codebox"><pre><code>xmllint --noout slides/00-course-flow.svg ../01_guardrail_concept_architecture/slides/s01-guardrail-flow.svg
+qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>주의사항</h3>
 <p>각 단계 폴더의 <code>src/</code> 구현은 학습용 휴리스틱이다. 5단계는 SQLite·API Key·웹 대시보드까지 포함하지만, 실제 운영 환경에서는 PostgreSQL 또는 이벤트 스트림, 강한 인증·권한 관리, 감사 로그 보존, 정책 버전 관리, 오탐·미탐 평가를 별도로 검증해야 한다.</p>
 <h3>최상위 파일·디렉터리 역할</h3>
@@ -478,7 +478,24 @@ document.addEventListener('click',e=>{
   e.preventDefault();openViewer(href,href.split('/').pop());
 });
 // ===== 명령어 복사 =====
-/* TODO: copy_cmd_js — copyCmd 버튼 핸들러 */
+// 모든 .copybtn — 형제 pre의 텍스트를 클립보드에 복사 (readme 코드 블록 개별 복사)
+document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('.copybtn');
+  if(!b||b.id==='copyCmd')return;
+  const box=b.closest('.codebox');
+  const pre=box&&box.querySelector('pre');
+  if(!pre)return;
+  const text=pre.innerText;
+  const done=()=>{const o=b.textContent;b.textContent='복사됨';setTimeout(()=>{b.textContent=o},1500)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>{});
+  }else{
+    const ta=document.createElement('textarea');ta.value=text;
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');done()}catch(_){}
+    ta.remove();
+  }
+});
 
 $('openReadme').onclick=()=>openViewer('readme.md','readme.md');
 </script>

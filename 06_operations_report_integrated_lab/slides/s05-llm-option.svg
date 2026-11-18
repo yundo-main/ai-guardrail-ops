@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="t d">
+<title id="t">6단계 · USE_LLM 실행 차이</title>
+<desc id="d">기본 fixture 실행과 USE_LLM=1 Ollama 실행의 차이 비교</desc>
+<style>
+:root{--bg:#0b1220;--ink:#f8fafc;--muted:#b5c2d1;--panel:#152235;--line:#496078;--accent:#65dfa0;--blue:#60aef5;--orange:#f5b45c}
+*{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+.bg{fill:var(--bg)}
+.title{fill:var(--ink);font-size:56px;font-weight:700}
+.sub{fill:var(--muted);font-size:30px}
+.panel{fill:var(--panel);stroke:var(--line);stroke-width:3}
+.h{fill:var(--ink);font-weight:700}
+.p{fill:var(--muted);font-size:23px}
+.p14{fill:var(--muted);font-size:20px}
+.code{fill:var(--accent);font-family:Menlo,Consolas,"Courier New",monospace}
+.codebox{fill:var(--bg);stroke:var(--line);stroke-width:2}
+.num{fill:var(--ink);font-size:36px;font-weight:700}
+.tag{font-size:24px;font-weight:700}
+.tag-off{fill:var(--blue)}
+.tag-on{fill:var(--orange)}
+.foot{fill:var(--muted);font-size:21px}
+@media(prefers-color-scheme:light){:root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--panel:#edf3f8;--line:#c9d5e1;--accent:#16704a;--blue:#1769aa;--orange:#b45309}}
+</style>
+<rect class="bg" width="1920" height="1080"/>
+<text class="title" x="90" y="140">6단계 · USE_LLM 실행 차이</text>
+<text class="sub" x="90" y="195">기본 실행과 LLM 연동 실행 — 무엇이 달라지는가</text>
+
+<!-- 좌측: 기본 fixture 실행 -->
+<rect class="panel" x="90" y="240" width="840" height="720" rx="24"/>
+<rect x="90" y="240" width="15" height="720" rx="7" fill="var(--blue)"/>
+<text class="tag tag-off" x="135" y="305" font-size="24">기본 실행 — USE_LLM 미설정</text>
+<text class="h" x="135" y="370" font-size="34">결정론적 fixture 응답</text>
+
+<text class="num" x="135" y="480" font-size="30" dominant-baseline="central">①</text>
+<text class="p" x="180" y="474" font-size="23">응답 생성: src/llm.py의 고정 fixture 3건</text>
+<text class="p14" x="180" y="502" font-size="20">samples별 사전 정의 응답 — 모델 호출 없음</text>
+
+<text class="num" x="135" y="600" font-size="30" dominant-baseline="central">②</text>
+<text class="p" x="180" y="594" font-size="23">재현성: 매번 동일한 리포트</text>
+<text class="p14" x="180" y="622" font-size="20">결과 JSON을 비교·검증하기에 적합</text>
+
+<text class="num" x="135" y="720" font-size="30" dominant-baseline="central">③</text>
+<text class="p" x="180" y="714" font-size="23">검증 대상: 가드레일 파이프라인 전체</text>
+<text class="p14" x="180" y="742" font-size="20">입력 판정 → 출력 마스킹 → 이벤트 → 리포트</text>
+
+<text class="num" x="135" y="840" font-size="30" dominant-baseline="central">④</text>
+<text class="p" x="180" y="834" font-size="23">의존성: Ollama 불필요 — 완전 오프라인</text>
+<text class="p14" x="180" y="862" font-size="20">서버·모델 다운로드 없이 커리큘럼 전체 실행</text>
+
+<rect class="codebox" x="142" y="890" width="720" height="64" rx="14"/>
+<text class="code" x="180" y="932" font-size="19">python3 06_operations_report_integrated_lab/src/app.py</text>
+
+<!-- 우측: USE_LLM=1 Ollama 실행 -->
+<rect class="panel" x="990" y="240" width="840" height="720" rx="24"/>
+<rect x="990" y="240" width="15" height="720" rx="7" fill="var(--orange)"/>
+<text class="tag tag-on" x="1035" y="305" font-size="24">선택 실행 — USE_LLM=1</text>
+<text class="h" x="1035" y="370" font-size="34">실제 모델 응답 경로</text>
+
+<text class="num" x="1035" y="480" font-size="30" dominant-baseline="central">①</text>
+<text class="p" x="1080" y="474" font-size="23">응답 생성: 로컬 Ollama /api/chat 호출</text>
+<text class="p14" x="1080" y="502" font-size="20">OLLAMA_MODEL(기본 qwen2.5:3b) · localhost:11434</text>
+
+<text class="num" x="1035" y="600" font-size="30" dominant-baseline="central">②</text>
+<text class="p" x="1080" y="594" font-size="23">결과: 모델 버전·파라미터에 따라 응답이 달라짐</text>
+<text class="p14" x="1080" y="622" font-size="20">실제 LLM 출력이 가드레일을 통과하는지 확인</text>
+
+<text class="num" x="1035" y="720" font-size="30" dominant-baseline="central">③</text>
+<text class="p" x="1080" y="714" font-size="23">검증 대상: 엔드투엔드 통제 경로</text>
+<text class="p14" x="1080" y="742" font-size="20">실제 응답 → safe_response() 판정·마스킹 → 이벤트</text>
+
+<text class="num" x="1035" y="840" font-size="30" dominant-baseline="central">④</text>
+<text class="p" x="1080" y="834" font-size="23">폴백: Ollama 실패 시 fixture로 자동 전환</text>
+<text class="p14" x="1080" y="862" font-size="20">실행은 중단되지 않고 리포트에 폴백 표시</text>
+
+<rect class="codebox" x="1042" y="890" width="720" height="64" rx="14"/>
+<text class="code" x="1080" y="924" font-size="19">USE_LLM=1 python3 src/app.py</text>
+<text class="code" x="1080" y="948" font-size="17" fill="var(--muted)"># 06 폴더에서 실행 · Ollama 서버 필요</text>
+
+<text class="p14" x="90" y="1015" font-size="21">※ 두 모드 모두 같은 안전 경로(safe_response → SecurityEvent → metrics)를 거치며, 달라지는 것은 응답 생성 단계뿐이다.</text>
+<text class="foot" x="90" y="1060" font-size="21">6단계 · USE_LLM 실행 차이 · 5 / 8</text>
+</svg>

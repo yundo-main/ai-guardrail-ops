@@ -6,11 +6,13 @@
 | s02 | 운영 리포트 이론 | 주간·월간 지표와 개선 계획 |
 | s03 | 통합 실습 소스코드 | `app.py` 통합 실행 흐름 |
 | s04 | 실습 순서 | app.py 통합 실행·USE_LLM 옵션 |
-| s05 | 복습 체크리스트 | 리포트·추적·개선 확인 |
-| s06 | 핵심 요약과 실습 질문 | 학습 내용과 완료 확인 |
+| s05 | USE_LLM 실행 차이 | 기본 fixture vs Ollama 실행 비교 |
+| s06 | 실행 흐름 Flow 도식 | app.py 샘플→safe_response→집계→리포트 생성 (1920×1080) |
+| s07 | 복습 체크리스트 | 리포트·추적·개선 확인 |
+| s08 | 핵심 요약과 실습 질문 | 학습 내용과 완료 확인 |
 
 기술 사양: [s00-tech-spec.svg](s00-tech-spec.svg)
 
-실제 슬라이드: [s01-integrated-report.svg](s01-integrated-report.svg), [s02-report-theory.svg](s02-report-theory.svg), [s03-integrated-source.svg](s03-integrated-source.svg), [s04-practice-order.svg](s04-practice-order.svg), [s05-report-checklist.svg](s05-report-checklist.svg), [s06-summary.svg](s06-summary.svg)
+실제 슬라이드: [s01-integrated-report.svg](s01-integrated-report.svg), [s02-report-theory.svg](s02-report-theory.svg), [s03-integrated-source.svg](s03-integrated-source.svg), [s04-practice-order.svg](s04-practice-order.svg), [s05-llm-option.svg](s05-llm-option.svg), [s06-flow.svg](s06-flow.svg), [s07-report-checklist.svg](s07-report-checklist.svg), [s08-summary.svg](s08-summary.svg)
 
-`s00-tech-spec.svg`는 `app.py`와 선택적 Ollama의 참고 기술 사양이다. `s01`~`s06`는 발표용 SVG이며, `s03-integrated-source.svg`는 `src/app.py`와 `src/llm.py`의 연결을 설명한다.
+`s00-tech-spec.svg`는 `app.py`와 선택적 Ollama의 참고 기술 사양이다. `s01`~`s08`는 발표용 SVG이며, `s06-flow.svg`는 소스 실행 흐름 Flow 도식(1920×1080)이다., `s03-integrated-source.svg`는 `src/app.py`와 `src/llm.py`의 연결을 설명한다.

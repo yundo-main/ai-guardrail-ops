@@ -166,7 +166,7 @@ python3 03_policy_blocking_output_filtering/src/guardrail.py
 
 # 3) 결과 확인
 python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
-open 03_policy_blocking_output_filtering/results/step03-guardrail-result.html</code></pre></div>
+open 03_policy_blocking_output_filtering/results/step03-guardrail-result.html</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>소스 구조</h3>
 <h3>파일·디렉터리 역할</h3><table><tr><th>경로</th><th>역할</th></tr><tr><td><code>src/policy.py</code></td><td>정책 규칙 로딩·입력 탐지·위험 등급 계산</td></tr><tr><td><code>src/guardrail.py</code></td><td>입력 차단·출력 마스킹·결과 JSON+HTML 생성</td></tr><tr><td><code>src/report.py</code></td><td>판정 결과 JSON을 독립 HTML 보고서로 렌더링</td></tr><tr><td><code>policy-rules.json</code></td><td>규칙 ID·정규식·사유·위험·판정 설정</td></tr><tr><td><code>slides/s00-tech-spec.svg</code></td><td>3단계 기술·정책 파일·결과 규약 사양</td></tr><tr><td><code>slides/s01-policy-filtering.svg</code></td><td>정책 차단과 출력 검열 전체 흐름</td></tr><tr><td><code>slides/s02-policy-theory.svg</code></td><td>판정·마스킹 이론</td></tr><tr><td><code>slides/s03-policy-source.svg</code></td><td><code>policy.py</code>·<code>guardrail.py</code> 소스 설명</td></tr><tr><td><code>slides/s04-runtime-flow.svg</code></td><td>코드 실행 흐름도 — guardrail.py 호출 순서·판정 분기</td></tr><tr><td><code>slides/s05-policy-structure.svg</code></td><td>정책 규칙 구조 — policy-rules.json 필드·매칭 흐름</td></tr><tr><td><code>slides/s06-practice-order.svg</code></td><td>실습 순서 — guardrail.py 실행·결과 확인 명령</td></tr><tr><td><code>slides/s07-flow.svg</code></td><td>실습 Flow 도식 — 실행부터 결과 JSON·4단계 전달까지 전체 절차</td></tr><tr><td><code>slides/s08-policy-checklist.svg</code></td><td>정책·검열 실습 체크리스트</td></tr><tr><td><code>slides/s09-no-llm.svg</code></td><td>LLM 없이 가능한 실습 — 결정론적 정책·마스킹 안내</td></tr><tr><td><code>slides/s10-summary.svg</code></td><td>3단계 핵심 요약과 질문</td></tr><tr><td><code>slides/readme.md</code></td><td>슬라이드 순서·제목·산출물 목록</td></tr></table>
 <p class="sub" style="margin-top:.8rem">※ 브라우저에서는 실행할 수 없습니다 — 명령을 복사해 터미널에 붙여넣으세요.</p>
@@ -215,7 +215,7 @@ open 03_policy_blocking_output_filtering/results/step03-guardrail-result.html</c
 <p>정책 기반 휴리스틱은 빠르고 설명 가능하지만 표현 변형과 문맥을 모두 이해하지 못한다. 운영 전에는 정상·위험·경계 사례로 오탐과 미탐을 측정해야 한다.</p>
 <h3>실습</h3>
 <blockquote style="border-left:3px solid var(--accent);margin:.6rem 0;padding:.3rem .9rem;color:var(--muted);background:#f8fafc;border-radius:0 8px 8px 0"></blockquote>
-<pre><code># 1) 3단계 단위 테스트 (선택)
+<div class="codebox"><pre><code># 1) 3단계 단위 테스트 (선택)
 python3 -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
 
 # 2) 3단계 실행 — 입력 차단·출력 검열 데모
@@ -224,7 +224,7 @@ python3 03_policy_blocking_output_filtering/src/guardrail.py
 
 # 3) 결과 확인
 python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
-open 03_policy_blocking_output_filtering/results/step03-guardrail-result.html</code></pre>
+open 03_policy_blocking_output_filtering/results/step03-guardrail-result.html</code></pre><button class="copybtn" type="button">복사</button></div>
 <p><code>src/policy.py</code>와 <code>src/guardrail.py</code>의 입력 차단·출력 검열 흐름을 실행한다. 직접 실행하면 <code>results/step03-guardrail-result.json</code>과 같은 이름의 <code>.html</code> 보고서가 함께 생성되고, 위 명령으로 결과를 확인할 수 있다.</p>
 <h3>산출물</h3>
 <ul><li>정책 규칙표</li><li>입력 차단 테스트 결과</li><li>출력 마스킹 전·후 비교</li><li><code>results/step03-guardrail-result.json</code> 다음 단계 전달 파일</li><li><code>results/step03-guardrail-result.html</code> 판정·매칭 내역을 사람이 읽기 쉬운 보고서</li></ul>
@@ -309,7 +309,24 @@ document.addEventListener('click',e=>{
   e.preventDefault();openViewer(href,href.split('/').pop());
 });
 // ===== 명령어 복사 =====
-/* TODO: copy_cmd_js — copyCmd 버튼 핸들러 */
+// 모든 .copybtn — 형제 pre의 텍스트를 클립보드에 복사 (readme 코드 블록 개별 복사)
+document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('.copybtn');
+  if(!b||b.id==='copyCmd')return;
+  const box=b.closest('.codebox');
+  const pre=box&&box.querySelector('pre');
+  if(!pre)return;
+  const text=pre.innerText;
+  const done=()=>{const o=b.textContent;b.textContent='복사됨';setTimeout(()=>{b.textContent=o},1500)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>{});
+  }else{
+    const ta=document.createElement('textarea');ta.value=text;
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');done()}catch(_){}
+    ta.remove();
+  }
+});
 
 const COPY_CMD='python3 03_policy_blocking_output_filtering/src/guardrail.py';$('copyCmd').onclick=()=>{navigator.clipboard.writeText(COPY_CMD).then(()=>{$('copyMsg').textContent='복사됨 — 터미널에 붙여넣기 (⌘V)'}).catch(()=>{$('copyMsg').textContent='복사 실패 — 직접 입력'})};const _or=$('openReadme');if(_or)_or.onclick=()=>openViewer('readme.md','readme.md');const _os=$('openSlidesReadme');if(_os)_os.onclick=()=>openViewer('slides/readme.md','slides/readme.md');</script>
 </body></html>

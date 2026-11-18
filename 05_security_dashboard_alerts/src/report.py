@@ -105,7 +105,35 @@ def _alert_rows(alerts: list[dict[str, Any]]) -> str:
     )
 
 
-def render_html(payload: dict[str, Any]) -> str:
+def _event_rows(events: list, limit: int = 30) -> str:
+    """Render the most recent events as a table for the HTML report."""
+    # 대시보드의 이벤트 목록에 해당하는 상세 표 — 최신순(limit)으로 제한해 리포트 크기를 관리한다.
+    # detail은 Critical 알림 표와 동일하게 120자로 잘라 원문 과다 노출을 막는다.
+    rows = events[:limit]
+    if not rows:
+        return '<p class="summary">등록된 이벤트가 없습니다.</p>'
+    body = []
+    for e in rows:
+        body.append(
+            "<tr>"
+            f'<td>{escape(str(e.event_id))}</td>'
+            f'<td>{escape(str(e.timestamp)[:19].replace("T", " "))}</td>'
+            f'<td>{escape(str(e.decision.value))}</td>'
+            f'<td>{escape(str(e.risk.value))}</td>'
+            f'<td>{escape(str(e.category))}</td>'
+            f'<td>{escape(str(e.status))}</td>'
+            f'<td>{escape(str(e.detail)[:120])}</td>'
+            "</tr>"
+        )
+    more = f'<p class="summary">최근 {len(rows)}건 표시 — 전체 {len(events)}건은 <code>GET /events</code> 또는 DB에서 확인하세요.</p>' if len(events) > limit else ""
+    return (
+        '<table><tr><th>이벤트 ID</th><th>시각</th><th>판정</th><th>위험</th>'
+        '<th>카테고리</th><th>상태</th><th>상세</th></tr>'
+        + "".join(body) + "</table>" + more
+    )
+
+
+def render_html(payload: dict[str, Any], events: list | None = None) -> str:
     """Return a self-contained HTML operations report for step05 metrics."""
     metrics = {k: v for k, v in payload.items() if k not in {
         "schema_version", "source_stage", "next", "generated_at", "critical_alerts"}}
@@ -199,6 +227,8 @@ def render_html(payload: dict[str, Any]) -> str:
   .note {{ color: var(--muted); font-size: .85rem; margin-top: 1.6rem;
           padding-top: 1rem; border-top: 1px solid var(--line); }}
   footer {{ color: var(--muted); font-size: .78rem; text-align: center; margin-top: 1.4rem; }}
+  details.raw-json summary {{ cursor: pointer; color: var(--accent); font-weight: 600; font-size: .9rem; }}
+  details.raw-json[open] summary {{ margin-bottom: .5rem; }}
 </style>
 </head>
 <body>
@@ -225,17 +255,26 @@ def render_html(payload: dict[str, Any]) -> str:
   </div>
 
   <h2><span class="no">3.</span>지표 상세</h2>
-  <table>{_metric_rows(metrics)}</table>
-  {_dist_table("위험 등급 분포 (by_risk)", metrics.get("by_risk") or {})}
-  {_dist_table("카테고리 분포 (by_category)", metrics.get("by_category") or {})}
+  <details class="raw-json">
+    <summary>지표 표·분포 보기</summary>
+    <table>{_metric_rows(metrics)}</table>
+    {_dist_table("위험 등급 분포 (by_risk)", metrics.get("by_risk") or {})}
+    {_dist_table("카테고리 분포 (by_category)", metrics.get("by_category") or {})}
+  </details>
 
   <h2><span class="no">4.</span>Critical 알림 목록 <span class="tag">{critical_count}건</span></h2>
   {_alert_rows(alerts)}
 
-  <h2><span class="no">5.</span>결과 규약 원본</h2>
-  {_pre(payload)}
+  <h2><span class="no">5.</span>최근 이벤트 목록</h2>
+  {_event_rows(events or [])}
 
-  <h2><span class="no">6.</span>결론 및 다음 단계</h2>
+  <h2><span class="no">6.</span>결과 규약 원본</h2>
+  <details class="raw-json">
+    <summary>규약 원본 JSON 보기</summary>
+    {_pre(payload)}
+  </details>
+
+  <h2><span class="no">7.</span>결론 및 다음 단계</h2>
   <div class="conclusion">
     이 보고서는 <b>5단계 관제 계층의 스냅샷</b>입니다.<br>
     Critical 이벤트는 등록 시점에 Discord 웹훅으로도 발송되며(<code>WEBHOOK_URL</code> 설정 시),<br>
@@ -251,11 +290,11 @@ def render_html(payload: dict[str, Any]) -> str:
 """
 
 
-def write_report(payload: dict[str, Any], path: str | Path) -> Path:
+def write_report(payload: dict[str, Any], path: str | Path, events: list | None = None) -> Path:
     """Write the HTML report for ``payload`` and return the written path."""
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(render_html(payload), encoding="utf-8")
+    target.write_text(render_html(payload, events=events), encoding="utf-8")
     return target
 
 
@@ -266,7 +305,7 @@ def write_metrics_result(events, directory: str | Path) -> tuple[Path, Path]:
     payload = metrics_payload(events)
     json_path = target_dir / "step05-metrics.json"
     json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-    html_path = write_report(payload, json_path.with_suffix(".html"))
+    html_path = write_report(payload, json_path.with_suffix(".html"), events=list(events))
     return json_path, html_path
 
 

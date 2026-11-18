@@ -92,7 +92,9 @@ def render_html(payload: dict[str, Any]) -> str:
     ]
 
     upstream_block = (
-        f'<h2><span class="no">5.</span>5단계 지표 (upstream_metrics)</h2>\n{_pre(upstream)}'
+        f'<h2><span class="no">5.</span>5단계 지표 (upstream_metrics)</h2>\n'
+        '  <details class="raw-json">\n    <summary>upstream_metrics 원본 보기</summary>\n'
+        f'    {_pre(upstream)}\n  </details>'
         if upstream else
         '<h2><span class="no">5.</span>5단계 지표 (upstream_metrics)</h2>\n'
         '<p class="summary">5단계 <code>results/step05-metrics.json</code>이 없어 비어 있습니다.</p>'
@@ -171,6 +173,8 @@ def render_html(payload: dict[str, Any]) -> str:
   .note {{ color: var(--muted); font-size: .85rem; margin-top: 1.6rem;
           padding-top: 1rem; border-top: 1px solid var(--line); }}
   footer {{ color: var(--muted); font-size: .78rem; text-align: center; margin-top: 1.4rem; }}
+  details.raw-json summary {{ cursor: pointer; color: var(--accent); font-weight: 600; font-size: .9rem; }}
+  details.raw-json[open] summary {{ margin-bottom: .5rem; }}
 </style>
 </head>
 <body>
@@ -198,7 +202,10 @@ def render_html(payload: dict[str, Any]) -> str:
   </div>
 
   <h2><span class="no">3.</span>집계 지표</h2>
-  <table>{_metric_rows(metrics)}</table>
+  <details class="raw-json">
+    <summary>지표 표 보기</summary>
+    <table>{_metric_rows(metrics)}</table>
+  </details>
 
   <h2><span class="no">4.</span>이벤트 내역 <span class="tag">{total}건</span></h2>
   {_event_rows(events)}
@@ -206,7 +213,10 @@ def render_html(payload: dict[str, Any]) -> str:
   {upstream_block}
 
   <h2><span class="no">6.</span>결과 규약 원본</h2>
-  {_pre(payload)}
+  <details class="raw-json">
+    <summary>규약 원본 JSON 보기</summary>
+    {_pre(payload)}
+  </details>
 
   <h2><span class="no">7.</span>결론</h2>
   <div class="conclusion">

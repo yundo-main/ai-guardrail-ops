@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="t d">
+<title id="t">6단계 · 복습 체크리스트</title>
+<desc id="d">통합 실습 실행 확인과 운영 리포트 점검 항목</desc>
+<style>
+:root{--bg:#0b1220;--ink:#f8fafc;--muted:#b5c2d1;--panel:#152235;--line:#496078;--accent:#65dfa0;--blue:#60aef5}
+*{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+.bg{fill:var(--bg)}
+.title{fill:var(--ink);font-size:38px;font-weight:700}
+.sub{fill:var(--muted);font-size:20px}
+.panel{fill:var(--panel);stroke:var(--line);stroke-width:2}
+.h{fill:var(--ink);font-weight:700}
+.p{fill:var(--muted);font-size:19px}
+.p2{fill:var(--muted);font-size:17px}
+.mark{fill:var(--accent);font-size:24px;font-weight:700}
+.foot{fill:var(--muted);font-size:14px}
+@media(prefers-color-scheme:light){:root{--bg:#f8fafc;--ink:#122033;--muted:#516174;--panel:#edf3f8;--line:#c9d5e1;--accent:#16704a;--blue:#1769aa}}
+</style>
+<rect class="bg" width="1280" height="720"/>
+<text class="title" x="60" y="105">6단계 · 복습 체크리스트</text>
+<text class="sub" x="60" y="145">통합 결과를 근거 있는 운영 리포트로 만들었는가</text>
+
+<rect class="panel" x="80" y="190" width="540" height="420" rx="16"/>
+<rect x="80" y="190" width="10" height="420" rx="5" fill="var(--blue)"/>
+<text class="h" x="120" y="240" font-size="22" fill="var(--blue)">실행 확인</text>
+
+<text class="mark" x="120" y="300">✓</text>
+<text class="p" x="160" y="290" font-size="18">app.py 통합 실행으로</text>
+<text class="p" x="160" y="314" font-size="18">step06-report.json·.html 생성</text>
+
+<text class="mark" x="120" y="370">✓</text>
+<text class="p" x="160" y="360" font-size="18">05단계 metrics·events를</text>
+<text class="p" x="160" y="384" font-size="18">upstream으로 집계에 반영</text>
+
+<text class="mark" x="120" y="440">✓</text>
+<text class="p" x="160" y="430" font-size="18">USE_LLM=1 옵션은 선택 —</text>
+<text class="p" x="160" y="454" font-size="18">미설정 시 결정론적 폴백 동작</text>
+
+<text class="mark" x="120" y="510">✓</text>
+<text class="p" x="160" y="500" font-size="18">결과 파일을 브라우저로 열어</text>
+<text class="p" x="160" y="524" font-size="18">리포트 렌더링 확인</text>
+
+<rect class="panel" x="660" y="190" width="540" height="420" rx="16"/>
+<rect x="660" y="190" width="10" height="420" rx="5" fill="var(--accent)"/>
+<text class="h" x="700" y="240" font-size="22">리포트 점검</text>
+
+<text class="mark" x="700" y="300">✓</text>
+<text class="p" x="740" y="290" font-size="18">탐지·차단율·미대응 이슈를</text>
+<text class="p" x="740" y="314" font-size="18">기간별로 집계한다</text>
+
+<text class="mark" x="700" y="370">✓</text>
+<text class="p" x="740" y="360" font-size="18">정책 코드부터 알림까지</text>
+<text class="p" x="740" y="384" font-size="18">이벤트 ID로 추적한다</text>
+
+<text class="mark" x="700" y="440">✓</text>
+<text class="p" x="740" y="430" font-size="18">다음 개선 과제와</text>
+<text class="p" x="740" y="454" font-size="18">측정 기준을 리포트에 남긴다</text>
+
+<text class="mark" x="700" y="510">✓</text>
+<text class="p" x="740" y="500" font-size="18">민감정보 원문 없이</text>
+<text class="p" x="740" y="524" font-size="18">마스킹된 증거만 포함한다</text>
+
+<text class="foot" x="60" y="666">6단계 · 복습 체크리스트 · 6 / 8</text>
+</svg>

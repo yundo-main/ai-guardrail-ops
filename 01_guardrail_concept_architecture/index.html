@@ -197,10 +197,10 @@ monitoring: 항상 — 이벤트 기록과 대응 연결
 <p>실습 코드는 <code>src/architecture.py</code>에서 실행한다. 1단계는 실제 LLM을 호출하지 않고</p>
 <p>결정적인 더미 모델로 입력 → 모델 → 출력 → 관제의 삽입 지점을 실행한다. 이후 단계는</p>
 <p>이 파이프라인의 각 위치를 실제 provider·정책·관제 기능으로 확장한다.</p>
-<pre><code>python3 01_guardrail_concept_architecture/src/architecture.py
+<div class="codebox"><pre><code>python3 01_guardrail_concept_architecture/src/architecture.py
 
 # 단위 테스트 (선택, 오프라인)
-python3 -m unittest discover -s 01_guardrail_concept_architecture/tests -v</code></pre>
+python3 -m unittest discover -s 01_guardrail_concept_architecture/tests -v</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>산출물</h3>
 <ul><li>Guardrail 아키텍처 요약</li><li>입력·출력 검사 지점 표</li><li>위협 시나리오별 통제 지점</li></ul>
 <h3>단계 간 연결</h3>
@@ -285,7 +285,24 @@ document.addEventListener('click',e=>{
   e.preventDefault();openViewer(href,href.split('/').pop());
 });
 // ===== 명령어 복사 =====
-/* TODO: copy_cmd_js — copyCmd 버튼 핸들러 */
+// 모든 .copybtn — 형제 pre의 텍스트를 클립보드에 복사 (readme 코드 블록 개별 복사)
+document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('.copybtn');
+  if(!b||b.id==='copyCmd')return;
+  const box=b.closest('.codebox');
+  const pre=box&&box.querySelector('pre');
+  if(!pre)return;
+  const text=pre.innerText;
+  const done=()=>{const o=b.textContent;b.textContent='복사됨';setTimeout(()=>{b.textContent=o},1500)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>{});
+  }else{
+    const ta=document.createElement('textarea');ta.value=text;
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');done()}catch(_){}
+    ta.remove();
+  }
+});
 
 const COPY_CMD='python3 01_guardrail_concept_architecture/src/architecture.py';$('copyCmd').onclick=()=>{navigator.clipboard.writeText(COPY_CMD).then(()=>{$('copyMsg').textContent='복사됨 — 터미널에 붙여넣기 (⌘V)'}).catch(()=>{$('copyMsg').textContent='복사 실패 — 직접 입력'})};const _or=$('openReadme');if(_or)_or.onclick=()=>openViewer('readme.md','readme.md');const _os=$('openSlidesReadme');if(_os)_os.onclick=()=>openViewer('slides/readme.md','slides/readme.md');</script>
 </body></html>

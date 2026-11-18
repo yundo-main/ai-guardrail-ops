@@ -71,6 +71,8 @@
   .note { color: var(--muted); font-size: .85rem; margin-top: 1.6rem;
           padding-top: 1rem; border-top: 1px solid var(--line); }
   footer { color: var(--muted); font-size: .78rem; text-align: center; margin-top: 1.4rem; }
+  details.raw-json summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .9rem; }
+  details.raw-json[open] summary { margin-bottom: .5rem; }
 </style>
 </head>
 <body>
@@ -79,53 +81,90 @@
   <div class="doc-head">
     <div class="eyebrow">Step 05 · 실행 보고서</div>
     <h1>보안 대시보드·알림 운영 보고서</h1>
-    <div class="doc-sub">SQLite 이벤트 저장소 → 지표 집계·Critical 알림 — 생성 2026-11-17T23:20:36.226975+00:00</div>
+    <div class="doc-sub">SQLite 이벤트 저장소 → 지표 집계·Critical 알림 — 생성 2026-11-18T20:56:47.873684+00:00</div>
   </div>
 
   <h2><span class="no">1.</span>보고서 정보</h2>
   <table>
     <tr><th>스키마 버전</th><td>1.0</td></tr>
     <tr><th>단계</th><td>step05 → 06_operations_report_integrated_lab</td></tr>
-    <tr><th>생성 시각</th><td>2026-11-17T23:20:36.226975+00:00</td></tr>
-    <tr><th>알림 채널</th><td>Discord webhook (<code>DISCORD_WEBHOOK_URL</code>) · 대시보드 <code>/dashboard</code></td></tr>
+    <tr><th>생성 시각</th><td>2026-11-18T20:56:47.873684+00:00</td></tr>
+    <tr><th>알림 채널</th><td>Discord webhook (<code>discord.py WEBHOOK_URL</code>) · 대시보드 <code>/dashboard</code></td></tr>
   </table>
 
   <h2><span class="no">2.</span>운영 지표 요약</h2>
   <div class="verdict-row">
-    <span class="verdict warn"><span class="dot"></span>EVENTS · 0</span><span class="verdict ok"><span class="dot"></span>CRITICAL · 0</span><span class="verdict ok"><span class="dot"></span>BLOCK RATE · 0.0%</span>
-    <span class="summary">저장된 보안 이벤트 0건을 집계했습니다.<br>Critical 알림 0건 — 즉시 대응이 필요한 이벤트는 없습니다.<br>최종 운영 리포트는 6단계가 이 지표를 upstream_metrics로 읽어 작성합니다.</span>
+    <span class="verdict warn"><span class="dot"></span>EVENTS · 3</span><span class="verdict bad"><span class="dot"></span>CRITICAL · 1</span><span class="verdict ok"><span class="dot"></span>BLOCK RATE · 33.3%</span>
+    <span class="summary">저장된 보안 이벤트 3건을 집계했습니다.<br>Critical 알림 1건 — Discord 웹훅·대시보드 확인이 필요합니다.<br>최종 운영 리포트는 6단계가 이 지표를 upstream_metrics로 읽어 작성합니다.</span>
   </div>
 
   <h2><span class="no">3.</span>지표 상세</h2>
-  <table><tr><th>전체 이벤트</th><td>0</td></tr><tr><th>차단</th><td>0</td></tr><tr><th>검토</th><td>0</td></tr><tr><th>차단율</th><td>0.0%</td></tr><tr><th>검토율</th><td>0.0%</td></tr><tr><th>미처리(open)</th><td>0</td></tr><tr><th>확인됨(ack)</th><td>0</td></tr></table>
-  <h3 style="font-size:.9rem;color:var(--muted);margin:.8rem 0 .2rem">위험 등급 분포 (by_risk) — 기록 없음</h3>
-  <h3 style="font-size:.9rem;color:var(--muted);margin:.8rem 0 .2rem">카테고리 분포 (by_category) — 기록 없음</h3>
+  <details class="raw-json">
+    <summary>지표 표·분포 보기</summary>
+    <table><tr><th>전체 이벤트</th><td>3</td></tr><tr><th>차단</th><td>1</td></tr><tr><th>검토</th><td>1</td></tr><tr><th>차단율</th><td>33.3%</td></tr><tr><th>검토율</th><td>33.3%</td></tr><tr><th>미처리(open)</th><td>3</td></tr><tr><th>확인됨(ack)</th><td>0</td></tr></table>
+    <h3 style="font-size:.9rem;color:var(--muted);margin:.8rem 0 .2rem">위험 등급 분포 (by_risk)</h3><table><tr><th>항목</th><th style="text-align:right">건수</th></tr><tr><td>Critical</td><td style="text-align:right">1</td></tr><tr><td>Low</td><td style="text-align:right">1</td></tr><tr><td>High</td><td style="text-align:right">1</td></tr></table>
+    <h3 style="font-size:.9rem;color:var(--muted);margin:.8rem 0 .2rem">카테고리 분포 (by_category)</h3><table><tr><th>항목</th><th style="text-align:right">건수</th></tr><tr><td>prompt_injection</td><td style="text-align:right">1</td></tr><tr><td>normal</td><td style="text-align:right">1</td></tr><tr><td>data_leakage</td><td style="text-align:right">1</td></tr></table>
+  </details>
 
-  <h2><span class="no">4.</span>Critical 알림 목록 <span class="tag">0건</span></h2>
-  <p class="summary">Critical 알림이 없습니다.</p>
+  <h2><span class="no">4.</span>Critical 알림 목록 <span class="tag">1건</span></h2>
+  <table><tr><th>이벤트 ID</th><th>카테고리</th><th>상세</th><th>시각</th></tr><tr><td>e1</td><td>prompt_injection</td><td>ignore previous instructions</td><td>2026-11-18T19:52:41.460557+00:00</td></tr></table>
 
-  <h2><span class="no">5.</span>결과 규약 원본</h2>
-  <pre class="json">{
+  <h2><span class="no">5.</span>최근 이벤트 목록</h2>
+  <table><tr><th>이벤트 ID</th><th>시각</th><th>판정</th><th>위험</th><th>카테고리</th><th>상태</th><th>상세</th></tr><tr><td>e1</td><td>2026-11-18 19:52:41</td><td>block</td><td>Critical</td><td>prompt_injection</td><td>open</td><td>ignore previous instructions</td></tr><tr><td>e3</td><td>2026-11-18 19:52:28</td><td>allow</td><td>Low</td><td>normal</td><td>open</td><td>hello</td></tr><tr><td>e2</td><td>2026-11-18 19:52:28</td><td>review</td><td>High</td><td>data_leakage</td><td>open</td><td>email detected</td></tr></table>
+
+  <h2><span class="no">6.</span>결과 규약 원본</h2>
+  <details class="raw-json">
+    <summary>규약 원본 JSON 보기</summary>
+    <pre class="json">{
   &quot;schema_version&quot;: &quot;1.0&quot;,
   &quot;source_stage&quot;: &quot;step05&quot;,
   &quot;next&quot;: &quot;06_operations_report_integrated_lab&quot;,
-  &quot;generated_at&quot;: &quot;2026-11-17T23:20:36.226975+00:00&quot;,
-  &quot;total_events&quot;: 0,
-  &quot;blocked_events&quot;: 0,
-  &quot;review_events&quot;: 0,
-  &quot;block_rate&quot;: 0.0,
-  &quot;review_rate&quot;: 0.0,
-  &quot;by_category&quot;: {},
-  &quot;by_risk&quot;: {},
-  &quot;open_events&quot;: 0,
+  &quot;generated_at&quot;: &quot;2026-11-18T20:56:47.873684+00:00&quot;,
+  &quot;total_events&quot;: 3,
+  &quot;blocked_events&quot;: 1,
+  &quot;review_events&quot;: 1,
+  &quot;block_rate&quot;: 0.3333,
+  &quot;review_rate&quot;: 0.3333,
+  &quot;by_category&quot;: {
+    &quot;prompt_injection&quot;: 1,
+    &quot;normal&quot;: 1,
+    &quot;data_leakage&quot;: 1
+  },
+  &quot;by_risk&quot;: {
+    &quot;Critical&quot;: 1,
+    &quot;Low&quot;: 1,
+    &quot;High&quot;: 1
+  },
+  &quot;open_events&quot;: 3,
   &quot;acknowledged_events&quot;: 0,
-  &quot;critical_alerts&quot;: []
+  &quot;critical_alerts&quot;: [
+    {
+      &quot;severity&quot;: &quot;critical&quot;,
+      &quot;title&quot;: &quot;AI 보안 Critical 이벤트&quot;,
+      &quot;event&quot;: {
+        &quot;event_id&quot;: &quot;e1&quot;,
+        &quot;decision&quot;: &quot;block&quot;,
+        &quot;risk&quot;: &quot;Critical&quot;,
+        &quot;category&quot;: &quot;prompt_injection&quot;,
+        &quot;detail&quot;: &quot;ignore previous instructions&quot;,
+        &quot;timestamp&quot;: &quot;2026-11-18T19:52:41.460557+00:00&quot;,
+        &quot;schema_version&quot;: &quot;1.0&quot;,
+        &quot;trace_id&quot;: &quot;t1&quot;,
+        &quot;source_stage&quot;: &quot;step04&quot;,
+        &quot;policy_version&quot;: &quot;policy-1&quot;,
+        &quot;model_name&quot;: null,
+        &quot;status&quot;: &quot;open&quot;,
+        &quot;acknowledged_at&quot;: null
+      }
+    }
+  ]
 }</pre>
+  </details>
 
-  <h2><span class="no">6.</span>결론 및 다음 단계</h2>
+  <h2><span class="no">7.</span>결론 및 다음 단계</h2>
   <div class="conclusion">
     이 보고서는 <b>5단계 관제 계층의 스냅샷</b>입니다.<br>
-    Critical 이벤트는 등록 시점에 Discord 웹훅으로도 발송되며(<code>DISCORD_WEBHOOK_URL</code> 설정 시),<br>
+    Critical 이벤트는 등록 시점에 Discord 웹훅으로도 발송되며(<code>WEBHOOK_URL</code> 설정 시),<br>
     이 JSON은 <code>06_operations_report_integrated_lab</code> 단계가 <code>upstream_metrics</code>로 읽어 최종 운영 리포트를 작성합니다.
   </div>
 

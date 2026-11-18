@@ -73,6 +73,8 @@ python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.j
 | `slides/s02-report-theory.svg` | 주간·월간 운영 리포트 이론 |
 | `slides/s03-integrated-source.svg` | `app.py`·`llm.py` 통합 소스 설명 |
 | `slides/s04-practice-order.svg` | 실습 순서 — app.py 통합 실행·USE_LLM 옵션 |
-| `slides/s05-report-checklist.svg` | 6단계 운영 리포트 체크리스트 |
-| `slides/s06-summary.svg` | 6단계 핵심 요약과 질문 |
+| `slides/s05-llm-option.svg` | USE_LLM 실행 차이 — fixture vs Ollama 비교 |
+| `slides/s06-flow.svg` | 실행 흐름 Flow 도식 — app.py 호출 순서·분기 규칙·결과 계약 |
+| `slides/s07-report-checklist.svg` | 6단계 운영 리포트 체크리스트 |
+| `slides/s08-summary.svg` | 6단계 핵심 요약과 질문 |
 | `slides/readme.md` | 슬라이드 순서·제목·산출물 목록 |
