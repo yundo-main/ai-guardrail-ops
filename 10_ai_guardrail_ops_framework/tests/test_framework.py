@@ -14,13 +14,17 @@ from observe.metrics import critical_alert, metrics, stage_latency  # noqa: E402
 from observe.report import period_report  # noqa: E402
 from observe.store import EventStore  # noqa: E402
 from providers.classifier import parse_guard_output  # noqa: E402
-from providers.model import dummy_model  # noqa: E402
 from risk.classify import to_event  # noqa: E402
+
+
+def stub_model(prompt: str, history=None) -> str:
+    """Deterministic stand-in so tests never touch the network."""
+    return f"테스트 응답: {prompt}"
 
 
 class FrameworkTest(unittest.TestCase):
     def setUp(self):
-        self.pipe = Pipeline(model=dummy_model)
+        self.pipe = Pipeline(model=stub_model)
         self.store = EventStore(":memory:")
 
     def tearDown(self):
@@ -49,7 +53,7 @@ class FrameworkTest(unittest.TestCase):
 
     def test_classifier_fail_closed(self):
         def boom(*_): raise RuntimeError("down")
-        r = Pipeline(model=dummy_model, classifier=boom).run("hello")
+        r = Pipeline(model=stub_model, classifier=boom).run("hello")
         self.assertEqual(r.decision, Decision.BLOCK)
         self.assertEqual(r.category, "provider_error")
         self.assertFalse(parse_guard_output("weird")["safe"])
@@ -77,14 +81,14 @@ class FrameworkTest(unittest.TestCase):
 
     def test_review_rule_proceeds_but_never_allows(self):
         rules = (("T-1", re.compile("hello", re.I), "greeting review", RiskLevel.LOW, Decision.REVIEW, False),)
-        r = Pipeline(model=dummy_model, rules=rules).run("hello there")
+        r = Pipeline(model=stub_model, rules=rules).run("hello there")
         self.assertEqual(r.decision, Decision.REVIEW)
         self.assertEqual(r.category, "greeting review")
         self.assertEqual([s.stage for s in r.spans], ["input_guardrail", "model", "output_guardrail"])
 
     def test_block_rule_still_blocks_before_model(self):
         rules = (("T-2", re.compile("hello", re.I), "greeting block", RiskLevel.HIGH, Decision.BLOCK, False),)
-        r = Pipeline(model=dummy_model, rules=rules).run("hello there")
+        r = Pipeline(model=stub_model, rules=rules).run("hello there")
         self.assertEqual(r.decision, Decision.BLOCK)
         self.assertEqual([s.stage for s in r.spans], ["input_guardrail"])
 
@@ -140,7 +144,7 @@ class FrameworkTest(unittest.TestCase):
 
     def test_dialogue_rail_stage(self):
         rail = lambda u, a=None: {"on_topic": False, "category": "off_scope"}
-        r = Pipeline(model=dummy_model, rail=rail).run("hello")
+        r = Pipeline(model=stub_model, rail=rail).run("hello")
         self.assertEqual(r.decision, Decision.REVIEW)
         self.assertEqual(r.category, "off_scope")
         self.assertIn("dialogue_rail", [s.stage for s in r.spans])

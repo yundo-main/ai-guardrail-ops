@@ -65,13 +65,10 @@
   <text class="t" x="665" y="110" text-anchor="middle">LLM 모델</text>
   <text class="s" x="665" y="128" text-anchor="middle">providers/model.py</text>
   <text class="s" x="665" y="144" text-anchor="middle">Ollama · DeepSeek</text>
-  <text class="s" x="665" y="160" text-anchor="middle">· dummy</text>
   <rect class="out" x="592" y="178" width="146" height="22" rx="6"/>
   <text class="outT og" x="665" y="193" text-anchor="middle">응답 생성</text>
   <rect class="out" x="592" y="206" width="146" height="22" rx="6"/>
-  <text class="outT ob" x="665" y="221" text-anchor="middle">호출 실패 → dummy 폴백</text>
-  <rect class="out" x="592" y="234" width="146" height="22" rx="6"/>
-  <text class="outT og" x="665" y="249" text-anchor="middle">USE_LLM=0 → 더미 응답</text>
+  <text class="outT ob" x="665" y="221" text-anchor="middle">호출 실패 → 에러 응답</text>
   <rect class="out" x="592" y="262" width="146" height="22" rx="6"/>
   <text class="outT ob" x="665" y="277" text-anchor="middle">span: model/ok·error</text>
 

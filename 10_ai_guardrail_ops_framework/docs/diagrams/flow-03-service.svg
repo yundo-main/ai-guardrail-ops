@@ -153,7 +153,7 @@
   <rect class="box boxR" x="700" y="730" width="240" height="40" style="stroke:#7c3aed;stroke-width:2"/>
   <text class="ts" x="820" y="755" text-anchor="middle" style="font-size:12px">외부 LLM — Ollama(localhost:11434) · DeepSeek API</text>
   <path class="edge" d="M925,622 C925,680 880,720 840,730"/>
-  <text class="s" x="895" y="680" text-anchor="middle">model 호출 (실패 시 dummy 폴백)</text>
+  <text class="s" x="895" y="680" text-anchor="middle">model 호출 (실패 시 에러 응답)</text>
 
   <!-- legend -->
   <text class="s" x="20" y="760">실선 = HTTP/데이터 흐름 · 파란 굵은 선 = 페이지→API · 점선 = 별도 프로세스·미연결 · 회색 lane = 계층 경계</text>

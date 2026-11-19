@@ -182,7 +182,7 @@ __LLMW_CSS__</style></head><body>
 <tr id="t-span"><td><b>Span</b></td><td>파이프라인 각 단계(input_guardrail, dialogue_rail, model, classifier, output_guardrail)의 소요 시간·결과 기록.</td></tr>
 <tr id="t-secret"><td><b>시크릿 유출</b></td><td>시스템 프롬프트·API 키·자격증명을 출력하라는 요청. EXF 규칙이 차단한다.</td></tr>
 <tr id="t-event"><td><b>이벤트 (SecurityEvent)</b></td><td>판정·등급·카테고리·단계별 지연이 담긴 관제 기록. 프롬프트 원문은 저장하지 않는다.</td></tr>
-<tr id="t-ollama"><td><b>Ollama</b></td><td>로컬 LLM 서버(localhost:11434). USE_LLM=0이면 연결 없이 더미 모델이 응답한다.</td></tr>
+<tr id="t-ollama"><td><b>Ollama</b></td><td>로컬 LLM 서버(localhost:11434). 연결 실패 시 고정 에러 응답을 반환한다.</td></tr>
 <tr id="t-ack"><td><b>Ack</b></td><td>open 이벤트를 처리 완료로 표시. 처리자·사유를 입력하면 감사 로그에 남는다.</td></tr>
 <tr id="t-score"><td><b>점수 분류</b></td><td>impact+exploitability+exposure(각 0~3) 합산 0~9를 등급으로 변환. ≥8 Critical, ≥6 High, ≥3 Medium.</td></tr>
 <tr id="t-classifier"><td><b>Classifier</b></td><td>Llama Guard 3 안전성 분류기(--classifier). safe/unsafe와 위험 범주를 반환하며 실패 시 차단(fail closed)한다.</td></tr>
@@ -666,7 +666,7 @@ LLM 요청이 정책·레일·분류기·마스킹을 통과하는 파이프라�
 <tr id="t-span"><td><b>Span</b></td><td>파이프라인 각 단계(input_guardrail, dialogue_rail, model, classifier, output_guardrail)의 소요 시간·결과 기록.</td></tr>
 <tr id="t-secret"><td><b>시크릿 유출</b></td><td>시스템 프롬프트·API 키·자격증명을 출력하라는 요청. EXF 규칙이 차단한다.</td></tr>
 <tr id="t-event"><td><b>이벤트 (SecurityEvent)</b></td><td>판정·등급·카테고리·단계별 지연이 담긴 관제 기록. 프롬프트 원문은 저장하지 않는다.</td></tr>
-<tr id="t-ollama"><td><b>Ollama</b></td><td>로컬 LLM 서버(localhost:11434). USE_LLM=0이면 연결 없이 더미 모델이 응답한다.</td></tr>
+<tr id="t-ollama"><td><b>Ollama</b></td><td>로컬 LLM 서버(localhost:11434). 연결 실패 시 고정 에러 응답을 반환한다.</td></tr>
 <tr id="t-ack"><td><b>Ack</b></td><td>open 이벤트를 처리 완료로 표시. 처리자·사유를 입력하면 감사 로그에 남는다.</td></tr>
 <tr id="t-score"><td><b>점수 분류</b></td><td>impact+exploitability+exposure(각 0~3) 합산 0~9를 등급으로 변환. ≥8 Critical, ≥6 High, ≥3 Medium.</td></tr>
 <tr id="t-classifier"><td><b>Classifier</b></td><td>Llama Guard 3 안전성 분류기(--classifier). safe/unsafe와 위험 범주를 반환하며 실패 시 차단(fail closed)한다.</td></tr>
@@ -685,11 +685,10 @@ __LLMW_FORM__
 <h3 class="lt-h">설정 파일 · 환경변수</h3>
 <table class="gloss">
 <tr><th style="width:230px">항목</th><th>설명</th></tr>
-<tr><td><code>guardrail-ops/.env</code></td><td>LLM 설정 영속화 — GUI/API 저장 시 자동 기록, 시작 시 복원. <code>LLM_PROVIDER</code>·<code>USE_LLM</code>·<code>OLLAMA_*</code>·<code>DEEPSEEK_*</code> 키만 관리</td></tr>
+<tr><td><code>guardrail-ops/.env</code></td><td>LLM 설정 영속화 — GUI/API 저장 시 자동 기록, 시작 시 복원. <code>LLM_PROVIDER</code>·<code>OLLAMA_*</code>·<code>DEEPSEEK_*</code> 키만 관리</td></tr>
 <tr><td><code>guardrail/config/policy-rules.json</code></td><td>입력 정책 규칙 17개 — <a href="/ops" style="color:var(--accent);font-weight:600">운영 페이지 → 정책 탭</a>에서 JSON 편집·검증 저장</td></tr>
 <tr><td><code>guardrail/config/output-patterns.json</code></td><td>출력 마스킹 패턴 4종 — 정책 탭 "마스킹 JSON 편집"에서 관리</td></tr>
-<tr><td><code>LLM_PROVIDER</code></td><td>모델 프로바이더 선택: <code>ollama</code>(기본) / <code>deepseek</code> / <code>dummy</code></td></tr>
-<tr><td><code>USE_LLM</code></td><td><code>0</code>이면 LLM 호출 없이 더미 모델로 응답 (테스트·오프라인)</td></tr>
+<tr><td><code>LLM_PROVIDER</code></td><td>모델 프로바이더 선택: <code>ollama</code>(기본) / <code>deepseek</code></td></tr>
 <tr><td><code>DEEPSEEK_API_KEY</code></td><td>DeepSeek API 키 — 환경변수 또는 LLM 탭 password 필드로 설정</td></tr>
 <tr><td><code>GUARDRAIL_TOPICS</code></td><td>대화 레일 토픽 JSON <code>{"주제":["키워드"]}</code> — <code>--rail</code> 사용 시</td></tr>
 <tr><td><code>--classifier</code> / <code>--rail</code></td><td>서버 시작 옵션 — Llama Guard 분류기 / 토픽 레일 활성화 (CLI 전용)</td></tr>
@@ -708,7 +707,7 @@ __LLMW_FORM__
                                               core/pipeline.py Pipeline.run(prompt, history)
                                                 │ ① guard/policy.py      입력 규칙 17개
                                                 │ ② providers/dialogue.py 대화 레일(선택)
-                                                │ ③ providers/model.py   Ollama/DeepSeek/dummy
+                                                │ ③ providers/model.py   Ollama/DeepSeek
                                                 │    └─ history → messages 배열 (멀티턴)
                                                 │ ④ providers/classifier.py Llama Guard(선택)
                                                 │ ⑤ guard/output.py      출력 마스킹 4종
@@ -732,7 +731,7 @@ __LLMW_FORM__
 <li>관측 — trace_id·span 지연·SQLite 저장·주간/월간 리포트</li>
 <li>감사 — ack/변경 시 actor·reason·변경 전후 값을 별도 기록</li>
 <li>멀티턴 챗봇 — 대화 맥락을 유지하는 가드레일 채팅 (/chat)</li>
-<li>LLM 선택 — Ollama(로컬) / DeepSeek(API) / dummy, .env 영속화</li>
+<li>LLM 선택 — Ollama(로컬) / DeepSeek(API), .env 영속화</li>
 <li>웹 GUI — 운영 7개 탭 + 챗봇 페이지, 정책·마스킹·LLM 편집기</li>
 </ul>
 </section>
@@ -775,11 +774,10 @@ LLM_WIDGET_CSS = """
 LLM_WIDGET_STATUS = """<div class="lw-status" id="lwStatus"><span class="lwmsg">LLM 상태 대기 중…</span></div>"""
 
 LLM_WIDGET_FORM = """<div class="lwgrid">
-<label class="lwrow"><span>프로바이더</span><select id="lwProv"><option value="ollama">Ollama (로컬)</option><option value="deepseek">DeepSeek (API)</option><option value="dummy">Dummy (테스트)</option></select></label>
+<label class="lwrow"><span>프로바이더</span><select id="lwProv"><option value="ollama">Ollama (로컬)</option><option value="deepseek">DeepSeek (API)</option></select></label>
 <label class="lwrow"><span>모델</span><input type="text" id="lwModel" placeholder="ollama: qwen2.5:3b / deepseek: deepseek-chat"></label>
 <label class="lwrow"><span>Base URL</span><input type="text" id="lwBase"></label>
 <label class="lwrow" id="lwKeyRow"><span>DeepSeek API Key</span><input type="password" id="lwKey" placeholder="설정됨 — 변경 시에만 입력"></label>
-<label class="lwrow lwcheck"><input type="checkbox" id="lwUse"><span>LLM 사용 (끄면 더미 모델)</span></label>
 </div>
 <div class="lwrow" style="margin-top:.7rem;flex-direction:row;align-items:center;gap:.8rem"><button class="lwbtn" id="lwSave" type="button">설정 저장</button><span class="lwmsg" id="lwMsg"></span></div>"""
 
@@ -795,21 +793,20 @@ if($('lwProv')){$('lwProv').value=i.provider||'ollama';
 $('lwModel').value=i.provider==='deepseek'?i.deepseek_model:i.model;
 $('lwBase').value=i.provider==='deepseek'?i.deepseek_base_url:i.base_url;
 $('lwKey').value='';$('lwKey').placeholder=i.deepseek_key_set?'설정됨 — 변경 시에만 입력':'DeepSeek API Key';
-$('lwUse').checked=!!i.use_llm;lwToggle()}
-if(st){const provLabel={ollama:'Ollama',deepseek:'DeepSeek',dummy:'Dummy'}[i.provider]||i.provider;
+lwToggle()}
+if(st){const provLabel={ollama:'Ollama',deepseek:'DeepSeek'}[i.provider]||i.provider;
 const provState=i.provider==='ollama'?((i.ollama&&i.ollama.reachable)?'연결됨':'연결 안 됨'):i.provider==='deepseek'?(i.deepseek_key_set?'API 키 설정됨':'API 키 없음'):'항상 사용 가능';
 const rows=[['프로바이더',esc(provLabel)],
 ['상태',i.reachable?'<b style="color:#166534">연결됨</b>':'<b style="color:#991b1b">연결 안 됨</b>'],
 ['모델',esc(i.provider==='deepseek'?i.deepseek_model:i.model)],
 ['Base URL',esc(i.provider==='deepseek'?i.deepseek_base_url:i.base_url)],
-['LLM 사용',i.use_llm?'예':'아니오 (더미 모델)'],
 ['Classifier',i.classifier?'Llama Guard':'없음'],
 ['Rail',esc(i.rail||'없음')],
 ['Ollama 설치 모델',(i.ollama&&i.ollama.installed_models||[]).map(esc).join(', ')||'-']];
 st.innerHTML='<table class="lwtab"><tr><th>항목</th><th>값</th></tr>'+rows.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>').join('')+'</table>'}
 }catch(e){if(st)st.innerHTML='<span class="lwmsg">LLM 상태를 불러오지 못했습니다: '+esc(e)+'</span>'}};
 window.lwSave=async function(){const msg=$('lwMsg');if(!msg)return;msg.textContent='저장 중…';const p=$('lwProv').value;
-const body={use_llm:$('lwUse').checked,provider:p,model:$('lwModel').value.trim(),base_url:$('lwBase').value.trim()};
+const body={provider:p,model:$('lwModel').value.trim(),base_url:$('lwBase').value.trim()};
 if(p==='deepseek'){body.deepseek_model=body.model;body.deepseek_base_url=body.base_url;if($('lwKey').value.trim())body.api_key=$('lwKey').value.trim()}
 try{const r=await lwApi('POST','/settings',body);
 if(r.error){msg.textContent='오류: '+r.error;return}

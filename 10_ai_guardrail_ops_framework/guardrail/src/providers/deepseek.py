@@ -8,7 +8,7 @@ from typing import Callable
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from providers.model import Model, chat_messages, dummy_model
+from providers.model import MODEL_ERROR_RESPONSE, Model, chat_messages
 
 
 def deepseek_model(api_key: str | None = None, model: str | None = None,
@@ -20,7 +20,7 @@ def deepseek_model(api_key: str | None = None, model: str | None = None,
 
     def call(prompt: str, history=None) -> str:
         if not key:
-            return dummy_model(prompt)
+            return MODEL_ERROR_RESPONSE
         body = json.dumps({
             "model": model,
             "messages": chat_messages(history, prompt),
@@ -33,9 +33,9 @@ def deepseek_model(api_key: str | None = None, model: str | None = None,
         try:
             with urlopen(req, timeout=timeout) as resp:
                 data = json.loads(resp.read().decode())
-            return data["choices"][0]["message"]["content"] or dummy_model(prompt)
+            return data["choices"][0]["message"]["content"] or MODEL_ERROR_RESPONSE
         except (HTTPError, URLError, TimeoutError, OSError, ValueError, KeyError, IndexError):
-            return dummy_model(prompt)
+            return MODEL_ERROR_RESPONSE
 
     call.model_name = f"deepseek:{model}"  # type: ignore[attr-defined]
     return call

@@ -46,9 +46,9 @@ OPENAPI = {
         "/audit": {"get": {"summary": "grade/status change audit trail", "parameters": [
             {"name": "event_id", "in": "query", "schema": {"type": "string"}}]}},
         "/llm": {"get": {"summary": "LLM/Ollama connection status + installed models"}},
-        "/settings": {"post": {"summary": "update LLM settings (use_llm, model, base_url); pipeline rebuilt", "requestBody": {"content": {
+        "/settings": {"post": {"summary": "update LLM settings (provider, model, base_url); pipeline rebuilt", "requestBody": {"content": {
             "application/json": {"schema": {"type": "object", "properties": {
-                "use_llm": {"type": "boolean"}, "provider": {"type": "string", "enum": ["ollama", "deepseek", "dummy"]},
+                "provider": {"type": "string", "enum": ["ollama", "deepseek"]},
                 "model": {"type": "string"}, "base_url": {"type": "string"},
                 "api_key": {"type": "string"}, "deepseek_model": {"type": "string"},
                 "deepseek_base_url": {"type": "string"}}}}}}}},
@@ -184,8 +184,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8000, db: str | None = None,
                 from urllib.request import urlopen
                 provider = os.getenv("LLM_PROVIDER", "ollama")
                 base = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
-                info = {"use_llm": os.getenv("USE_LLM", "1") != "0",
-                        "provider": provider,
+                info = {"provider": provider,
                         "model": os.getenv("OLLAMA_MODEL", "qwen2.5:3b"),
                         "base_url": base,
                         "deepseek_model": os.getenv("DEEPSEEK_MODEL", "deepseek-chat"),
@@ -256,9 +255,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8000, db: str | None = None,
             if path == "/settings":
                 import os
                 updates = {}
-                if "use_llm" in body:
-                    updates["USE_LLM"] = "0" if body["use_llm"] in (False, "0", 0) else "1"
-                if body.get("provider") in ("ollama", "deepseek", "dummy"):
+                if body.get("provider") in ("ollama", "deepseek"):
                     updates["LLM_PROVIDER"] = body["provider"]
                 if body.get("model"):
                     updates["OLLAMA_MODEL"] = str(body["model"])
@@ -276,7 +273,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8000, db: str | None = None,
                     save_runtime(updates)
                 with lock:
                     rebuild_pipeline()
-                return self._json(200, {"saved": True, "use_llm": os.getenv("USE_LLM", "1") != "0",
+                return self._json(200, {"saved": True,
                                         "provider": os.getenv("LLM_PROVIDER", "ollama"),
                                         "model": os.getenv("OLLAMA_MODEL", "qwen2.5:3b"),
                                         "base_url": os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")})

@@ -119,7 +119,7 @@
   <rect class="box boxR" x="811" y="420" width="180" height="34" style="stroke:#7c3aed;stroke-width:2"/>
   <text class="t" x="901" y="442" text-anchor="middle" style="font-size:11px">외부 LLM — Ollama · DeepSeek</text>
   <path class="edgeP" d="M901,420 L901,390 L861,390 L861,210"/>
-  <text class="s" x="935" y="350" text-anchor="middle" style="fill:#7c3aed">모델 호출 (실패→dummy)</text>
+  <text class="s" x="935" y="350" text-anchor="middle" style="fill:#7c3aed">모델 호출 (실패→에러 응답)</text>
 
   <!-- ===== right side: results / observe ===== -->
   <rect class="lane laneR" x="1180" y="40" width="0" height="0" fill="none" stroke="none"/>

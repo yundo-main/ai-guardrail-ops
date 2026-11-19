@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | ① 입력 정책 | `guard/policy.py` | 규칙 17개(한/영) 매칭 — block 규칙은 모델 호출 없이 차단, review 규칙은 최종 REVIEW 보장 |
 | ② 대화 레일 | `providers/dialogue.py` | 토픽 게이트 (`--rail`, 선택) — 주제 이탈 시 모델 호출 전 REVIEW |
-| ③ LLM 모델 | `providers/model.py` | Ollama / DeepSeek / dummy (`LLM_PROVIDER`) |
+| ③ LLM 모델 | `providers/model.py` | Ollama / DeepSeek (`LLM_PROVIDER`) — 실패 시 고정 에러 응답 |
 | ④ 안전 분류기 | `providers/classifier.py` | Llama Guard 3 (`--classifier`, 선택) — 실패 시 fail closed |
 | ⑤ 출력 마스킹 | `guard/output.py` | 이메일·전화·API 키·비밀번호 자동 검열 |
 
@@ -77,8 +77,7 @@ python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --port 8000
 
 | 환경변수/옵션 | 설명 | 기본값 |
 | --- | --- | --- |
-| `LLM_PROVIDER` | 모델 백엔드 선택: `ollama`(기본) / `deepseek` / `dummy` | `ollama` |
-| `USE_LLM=0` | LLM 대신 더미 모델 사용 | LLM 사용 |
+| `LLM_PROVIDER` | 모델 백엔드 선택: `ollama`(기본) / `deepseek` | `ollama` |
 | `OLLAMA_BASE_URL` | Ollama 엔드포인트 | `http://localhost:11434` |
 | `OLLAMA_MODEL` | 사용할 Ollama 모델 | `qwen2.5:3b` |
 | `DEEPSEEK_API_KEY` | DeepSeek API 키 (provider=deepseek 시) | 없음 |
@@ -91,7 +90,21 @@ python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --port 8000
 | `--rail nemo` | NeMo Guardrails 레일 | 꺼짐 (nemoguardrails 필요) |
 | `GUARDRAIL_OPS_DB` / `--db` | 이벤트 DB 경로 | `results/events.db` |
 
+모델 호출이 실패하면(Ollama·DeepSeek 연결 불가·빈 응답) 더미 응답 대신 고정 에러 문구(`MODEL_ERROR_RESPONSE`)를 반환한다.
+
 이벤트 DB는 `guardrail-ops/results/events.db`, Critical 알림 로그는 `guardrail-ops/results/alerts.jsonl`에 생성된다.
+
+### Llama Guard 분류기 활성화 (`--classifier`)
+
+분류기는 Ollama 서버가 먼저 떠 있어야 동작한다. 순서:
+
+```bash
+ollama serve                      # 1) Ollama 서버 실행 (macOS 앱 또는)
+ollama pull llama-guard3:1b       # 2) 가드 모델 다운로드 (최초 1회)
+python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --classifier
+```
+
+주의: `--classifier`를 켠 상태에서 Ollama가 꺼져 있으면 **모든 요청이 차단**된다 — 분류기 호출 실패 시 fail-closed(unsafe → BLOCK) 정책이기 때문이다. 평소에는 `serve`만 실행하고, Llama Guard 실습 시에만 이 조합을 사용한다. 분류기 모델은 `OLLAMA_GUARD_MODEL`, 엔드포인트는 `OLLAMA_BASE_URL`로 변경할 수 있다.
 
 ## 구조
 
@@ -117,7 +130,7 @@ python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --port 8000
 │       │   ├── policy.py         #     입력 정책 — JSON 규칙, fail-closed
 │       │   └── output.py         #     출력 검열 — 민감정보 마스킹
 │       ├── providers/
-│       │   ├── model.py          #     모델 백엔드 (기본 결정론적, USE_LLM 시 Ollama)
+│       │   ├── model.py          #     모델 백엔드 (Ollama 기본 / DeepSeek)
 │       │   ├── classifier.py     #     Llama Guard 3 분류기 — Ollama (선택)
 │       │   ├── dialogue.py       #     NeMo Guardrails식 주제·대화 레일 (선택)
 │       │   └── deepseek.py       #     DeepSeek API 백엔드 (OpenAI 호환)

@@ -18,7 +18,7 @@ guardrail/src/               # 가드레일 엔진 (판정·분류·마스킹)
 │   ├── classify.py    # RunRecord → SecurityEvent 변환 (원문 미포함)
 │   └── score.py       # classify_risk(impact, exploitability, exposure) 점수 분류
 └── providers/
-    ├── model.py       # LLM_PROVIDER 선택: dummy / Ollama / DeepSeek
+    ├── model.py       # LLM_PROVIDER 선택: ollama / deepseek (실패 시 MODEL_ERROR_RESPONSE)
     ├── deepseek.py    # DeepSeek API (OpenAI 호환, lazy)
     ├── classifier.py  # Llama Guard 3 (Ollama /api/chat, stdlib)
     └── dialogue.py    # 토픽 레일: KeywordTopicRail / NemoGuardrailsRail(lazy)
@@ -47,7 +47,7 @@ input_guardrail → dialogue_rail → model → classifier → output_guardrail
 
 - `input_guardrail`: 정책 규칙 매칭. `block` 규칙이 하나라도 있으면 모델 호출 없이 BLOCK. `review` 규칙만 있으면 진행하되 최종 결과가 ALLOW가 될 수 없다.
 - `dialogue_rail`: `--rail` 지정 시에만 동작. 프롬프트가 허용 주제를 벗어나면 모델 호출 전에 REVIEW 반환 (LLM 비용 절약).
-- `model`: Ollama 호출 실패 시 dummy로 폴백.
+- `model`: Ollama·DeepSeek 호출 실패·빈 응답 시 `MODEL_ERROR_RESPONSE` 고정 문구 반환.
 - `classifier`: `--classifier` 지정 시 Llama Guard. 호출 실패·파싱 불가 → unsafe(fail closed) → BLOCK.
 - `output_guardrail`: 민감 필드 마스킹. 검출 시 REVIEW.
 
@@ -88,7 +88,7 @@ input_guardrail → dialogue_rail → model → classifier → output_guardrail
 
 ## 테스트
 
-`tests/test_framework.py` — 15개. 결정론을 위해 `Pipeline(model=dummy_model)`을 명시한다(기본은 Ollama라 네트워크 의존). 커버 범위: allow/block/review 분기, fail-closed, NORMALIZE 우회, 점수 분류, 기간 필터, spans/audit 영속화, dialogue_rail 단계.
+`tests/test_framework.py` — 15개. 결정론을 위해 테스트 로컬 `stub_model`을 `Pipeline(model=...)`에 명시한다(기본은 Ollama라 네트워크 의존). 커버 범위: allow/block/review 분기, fail-closed, NORMALIZE 우회, 점수 분류, 기간 필터, spans/audit 영속화, dialogue_rail 단계.
 
 ```bash
 python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v
@@ -177,4 +177,5 @@ python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v
 
 - `/settings` 변경은 `guardrail-ops/.env`에 영속화 — 서버·CLI 시작 시 `load_runtime()`이 환경변수로 복원. 화이트리스트 키만 저장되며 `DEEPSEEK_API_KEY` 같은 비밀값도 이 파일에 둔다(gitignore 권장).
 - NeMo Guardrails·Llama Guard는 lazy import — 미설치 시 명확한 에러, 기본 경로에는 영향 없음
+- dummy 백엔드·`USE_LLM` 제거 — 모델 호출 실패·빈 응답 시 `MODEL_ERROR_RESPONSE` 고정 문구 반환 (가짜 응답이 ALLOW로 기록되는 것 방지). 테스트는 로컬 `stub_model` 사용
 - 인증은 의도적으로 미구현 (로컬 `127.0.0.1` 바인딩 전제)

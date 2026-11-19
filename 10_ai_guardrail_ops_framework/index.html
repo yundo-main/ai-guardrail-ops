@@ -109,7 +109,7 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <p>내부 구조·정책 스키마·설계 원칙은 <a href="docs/development.md">docs/development.md</a>를 참고한다.</p>
 <h3>동작 흐름</h3>
 <p>!<a href="docs/diagrams/flow-02-pipeline.svg">파이프라인 흐름도</a></p>
-<table><tr><th>단계</th><th>모듈</th><th>역할</th></tr><tr><td>① 입력 정책</td><td><code>guard/policy.py</code></td><td>규칙 17개(한/영) 매칭 — block 규칙은 모델 호출 없이 차단, review 규칙은 최종 REVIEW 보장</td></tr><tr><td>② 대화 레일</td><td><code>providers/dialogue.py</code></td><td>토픽 게이트 (<code>--rail</code>, 선택) — 주제 이탈 시 모델 호출 전 REVIEW</td></tr><tr><td>③ LLM 모델</td><td><code>providers/model.py</code></td><td>Ollama / DeepSeek / dummy (<code>LLM_PROVIDER</code>)</td></tr><tr><td>④ 안전 분류기</td><td><code>providers/classifier.py</code></td><td>Llama Guard 3 (<code>--classifier</code>, 선택) — 실패 시 fail closed</td></tr><tr><td>⑤ 출력 마스킹</td><td><code>guard/output.py</code></td><td>이메일·전화·API 키·비밀번호 자동 검열</td></tr></table>
+<table><tr><th>단계</th><th>모듈</th><th>역할</th></tr><tr><td>① 입력 정책</td><td><code>guard/policy.py</code></td><td>규칙 17개(한/영) 매칭 — block 규칙은 모델 호출 없이 차단, review 규칙은 최종 REVIEW 보장</td></tr><tr><td>② 대화 레일</td><td><code>providers/dialogue.py</code></td><td>토픽 게이트 (<code>--rail</code>, 선택) — 주제 이탈 시 모델 호출 전 REVIEW</td></tr><tr><td>③ LLM 모델</td><td><code>providers/model.py</code></td><td>Ollama / DeepSeek (<code>LLM_PROVIDER</code>) — 실패 시 고정 에러 응답</td></tr><tr><td>④ 안전 분류기</td><td><code>providers/classifier.py</code></td><td>Llama Guard 3 (<code>--classifier</code>, 선택) — 실패 시 fail closed</td></tr><tr><td>⑤ 출력 마스킹</td><td><code>guard/output.py</code></td><td>이메일·전화·API 키·비밀번호 자동 검열</td></tr></table>
 <p><code>chatbot/</code>의 Gemini RAG/Agent 챗봇은 이 프레임워크와 <b>독립</b>이다. 연동하려면 <code>Pipeline(model=...)</code>에 챗봇 응답 함수를 넣거나, 챗봇 측에서 <code>Pipeline.run()</code>을 호출한다.</p>
 <h3>서비스 흐름도</h3>
 <p>!<a href="docs/diagrams/flow-01-service-pipeline.svg">서비스 파이프라인 흐름도</a></p>
@@ -132,8 +132,15 @@ python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v</code></pr
 <table><tr><th>메서드</th><th>경로</th><th>설명</th></tr><tr><td>GET</td><td><code>/</code></td><td>가드레일 운영 GUI (검사·대시보드·이벤트·LLM·정책·리포트·도움말)</td></tr><tr><td>GET</td><td><code>/chat</code></td><td>챗봇 전용 페이지 (모든 메시지가 가드레일 통과)</td></tr><tr><td>POST</td><td><code>/v1/check</code></td><td><code>{&quot;prompt&quot;: &quot;...&quot;}</code> → 파이프라인 실행 + 이벤트 저장</td></tr><tr><td>GET</td><td><code>/metrics</code> <code>/events</code> <code>/alerts</code> <code>/audit</code></td><td>집계·이벤트·Critical 알림·변경 감사 조회</td></tr><tr><td>GET</td><td>`/report?period=weekly\</td><td>monthly`</td><td>기간별 운영 리포트</td></tr><tr><td>POST</td><td><code>/ack</code> <code>/clear</code></td><td>이벤트 확인 / 전체 삭제(<code>{&quot;confirm&quot;: true}</code> 필요)</td></tr><tr><td>GET</td><td><code>/health</code> <code>/openapi.json</code></td><td>상태·API 명세</td></tr></table>
 <p>보호 장치: 요청 본문 1MB 제한, <code>/v1/check</code> IP당 60초 30회 rate limit.</p>
 <h3>모델·분류기 설정</h3>
-<table><tr><th>환경변수/옵션</th><th>설명</th><th>기본값</th></tr><tr><td><code>LLM_PROVIDER</code></td><td>모델 백엔드 선택: <code>ollama</code>(기본) / <code>deepseek</code> / <code>dummy</code></td><td><code>ollama</code></td></tr><tr><td><code>USE_LLM=0</code></td><td>LLM 대신 더미 모델 사용</td><td>LLM 사용</td></tr><tr><td><code>OLLAMA_BASE_URL</code></td><td>Ollama 엔드포인트</td><td><code>http://localhost:11434</code></td></tr><tr><td><code>OLLAMA_MODEL</code></td><td>사용할 Ollama 모델</td><td><code>qwen2.5:3b</code></td></tr><tr><td><code>DEEPSEEK_API_KEY</code></td><td>DeepSeek API 키 (provider=deepseek 시)</td><td>없음</td></tr><tr><td><code>DEEPSEEK_MODEL</code></td><td>사용할 DeepSeek 모델</td><td><code>deepseek-chat</code></td></tr><tr><td><code>DEEPSEEK_BASE_URL</code></td><td>DeepSeek 엔드포인트</td><td><code>https://api.deepseek.com</code></td></tr><tr><td><code>--classifier</code></td><td>Llama Guard 3 안전성 분류 활성화 (Ollama <code>/api/chat</code>)</td><td>꺼짐 (Ollama 서버 + 가드 모델 필요)</td></tr><tr><td><code>OLLAMA_GUARD_MODEL</code></td><td>분류기 모델</td><td><code>llama-guard3:1b</code></td></tr><tr><td><code>--rail keywords</code></td><td>결정론적 주제 레일</td><td>꺼짐</td></tr><tr><td><code>GUARDRAIL_TOPICS</code></td><td>레일 주제 JSON <code>{&quot;주제&quot;:[&quot;키워드&quot;]}</code></td><td>내장 general 토픽</td></tr><tr><td><code>--rail nemo</code></td><td>NeMo Guardrails 레일</td><td>꺼짐 (nemoguardrails 필요)</td></tr><tr><td><code>GUARDRAIL_OPS_DB</code> / <code>--db</code></td><td>이벤트 DB 경로</td><td><code>results/events.db</code></td></tr></table>
+<table><tr><th>환경변수/옵션</th><th>설명</th><th>기본값</th></tr><tr><td><code>LLM_PROVIDER</code></td><td>모델 백엔드 선택: <code>ollama</code>(기본) / <code>deepseek</code></td><td><code>ollama</code></td></tr><tr><td><code>OLLAMA_BASE_URL</code></td><td>Ollama 엔드포인트</td><td><code>http://localhost:11434</code></td></tr><tr><td><code>OLLAMA_MODEL</code></td><td>사용할 Ollama 모델</td><td><code>qwen2.5:3b</code></td></tr><tr><td><code>DEEPSEEK_API_KEY</code></td><td>DeepSeek API 키 (provider=deepseek 시)</td><td>없음</td></tr><tr><td><code>DEEPSEEK_MODEL</code></td><td>사용할 DeepSeek 모델</td><td><code>deepseek-chat</code></td></tr><tr><td><code>DEEPSEEK_BASE_URL</code></td><td>DeepSeek 엔드포인트</td><td><code>https://api.deepseek.com</code></td></tr><tr><td><code>--classifier</code></td><td>Llama Guard 3 안전성 분류 활성화 (Ollama <code>/api/chat</code>)</td><td>꺼짐 (Ollama 서버 + 가드 모델 필요)</td></tr><tr><td><code>OLLAMA_GUARD_MODEL</code></td><td>분류기 모델</td><td><code>llama-guard3:1b</code></td></tr><tr><td><code>--rail keywords</code></td><td>결정론적 주제 레일</td><td>꺼짐</td></tr><tr><td><code>GUARDRAIL_TOPICS</code></td><td>레일 주제 JSON <code>{&quot;주제&quot;:[&quot;키워드&quot;]}</code></td><td>내장 general 토픽</td></tr><tr><td><code>--rail nemo</code></td><td>NeMo Guardrails 레일</td><td>꺼짐 (nemoguardrails 필요)</td></tr><tr><td><code>GUARDRAIL_OPS_DB</code> / <code>--db</code></td><td>이벤트 DB 경로</td><td><code>results/events.db</code></td></tr></table>
+<p>모델 호출이 실패하면(Ollama·DeepSeek 연결 불가·빈 응답) 더미 응답 대신 고정 에러 문구(<code>MODEL_ERROR_RESPONSE</code>)를 반환한다.</p>
 <p>이벤트 DB는 <code>guardrail-ops/results/events.db</code>, Critical 알림 로그는 <code>guardrail-ops/results/alerts.jsonl</code>에 생성된다.</p>
+<h4>Llama Guard 분류기 활성화 (<code>--classifier</code>)</h4>
+<p>분류기는 Ollama 서버가 먼저 떠 있어야 동작한다. 순서:</p>
+<div class="codebox"><pre><code>ollama serve                      # 1) Ollama 서버 실행 (macOS 앱 또는)
+ollama pull llama-guard3:1b       # 2) 가드 모델 다운로드 (최초 1회)
+python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --classifier</code></pre><button class="copybtn" type="button">복사</button></div>
+<p>주의: <code>--classifier</code>를 켠 상태에서 Ollama가 꺼져 있으면 <b>모든 요청이 차단</b>된다 — 분류기 호출 실패 시 fail-closed(unsafe → BLOCK) 정책이기 때문이다. 평소에는 <code>serve</code>만 실행하고, Llama Guard 실습 시에만 이 조합을 사용한다. 분류기 모델은 <code>OLLAMA_GUARD_MODEL</code>, 엔드포인트는 <code>OLLAMA_BASE_URL</code>로 변경할 수 있다.</p>
 <h3>구조</h3>
 <p>3계층으로 분리되어 있다 — <code>guardrail/</code>(판정 엔진)과 <code>guardrail-ops/</code>(관측·서빙), <code>chatbot/</code>(별도 학습용 챗봇).</p>
 <div class="codebox"><pre><code>10_ai_guardrail_ops_framework/
@@ -155,7 +162,7 @@ python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v</code></pr
 │       │   ├── policy.py         #     입력 정책 — JSON 규칙, fail-closed
 │       │   └── output.py         #     출력 검열 — 민감정보 마스킹
 │       ├── providers/
-│       │   ├── model.py          #     모델 백엔드 (기본 결정론적, USE_LLM 시 Ollama)
+│       │   ├── model.py          #     모델 백엔드 (Ollama 기본 / DeepSeek)
 │       │   ├── classifier.py     #     Llama Guard 3 분류기 — Ollama (선택)
 │       │   ├── dialogue.py       #     NeMo Guardrails식 주제·대화 레일 (선택)
 │       │   └── deepseek.py       #     DeepSeek API 백엔드 (OpenAI 호환)
@@ -196,7 +203,7 @@ python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v</code></pr
 │   ├── classify.py    # RunRecord → SecurityEvent 변환 (원문 미포함)
 │   └── score.py       # classify_risk(impact, exploitability, exposure) 점수 분류
 └── providers/
-    ├── model.py       # LLM_PROVIDER 선택: dummy / Ollama / DeepSeek
+    ├── model.py       # LLM_PROVIDER 선택: ollama / deepseek (실패 시 MODEL_ERROR_RESPONSE)
     ├── deepseek.py    # DeepSeek API (OpenAI 호환, lazy)
     ├── classifier.py  # Llama Guard 3 (Ollama /api/chat, stdlib)
     └── dialogue.py    # 토픽 레일: KeywordTopicRail / NemoGuardrailsRail(lazy)
@@ -217,7 +224,7 @@ guardrail-ops/src/          # 운영 계층 (관측·저장·서빙·CLI)
     └── page.py        # 단일 HTML GUI (vanilla JS + canvas, 8개 탭)</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>파이프라인 단계</h3>
 <div class="codebox"><pre><code>input_guardrail → dialogue_rail → model → classifier → output_guardrail</code></pre><button class="copybtn" type="button">복사</button></div>
-<ul><li><code>input_guardrail</code>: 정책 규칙 매칭. <code>block</code> 규칙이 하나라도 있으면 모델 호출 없이 BLOCK. <code>review</code> 규칙만 있으면 진행하되 최종 결과가 ALLOW가 될 수 없다.</li><li><code>dialogue_rail</code>: <code>--rail</code> 지정 시에만 동작. 프롬프트가 허용 주제를 벗어나면 모델 호출 전에 REVIEW 반환 (LLM 비용 절약).</li><li><code>model</code>: Ollama 호출 실패 시 dummy로 폴백.</li><li><code>classifier</code>: <code>--classifier</code> 지정 시 Llama Guard. 호출 실패·파싱 불가 → unsafe(fail closed) → BLOCK.</li><li><code>output_guardrail</code>: 민감 필드 마스킹. 검출 시 REVIEW.</li></ul>
+<ul><li><code>input_guardrail</code>: 정책 규칙 매칭. <code>block</code> 규칙이 하나라도 있으면 모델 호출 없이 BLOCK. <code>review</code> 규칙만 있으면 진행하되 최종 결과가 ALLOW가 될 수 없다.</li><li><code>dialogue_rail</code>: <code>--rail</code> 지정 시에만 동작. 프롬프트가 허용 주제를 벗어나면 모델 호출 전에 REVIEW 반환 (LLM 비용 절약).</li><li><code>model</code>: Ollama·DeepSeek 호출 실패·빈 응답 시 <code>MODEL_ERROR_RESPONSE</code> 고정 문구 반환.</li><li><code>classifier</code>: <code>--classifier</code> 지정 시 Llama Guard. 호출 실패·파싱 불가 → unsafe(fail closed) → BLOCK.</li><li><code>output_guardrail</code>: 민감 필드 마스킹. 검출 시 REVIEW.</li></ul>
 <p>각 단계는 <code>Span(stage, outcome, ms)</code>으로 기록되고 <code>RunRecord.spans</code> → <code>SecurityEvent.spans_json</code>에 영속화된다.</p>
 <h3>정책 규칙 스키마 (<code>guardrail/config/policy-rules.json</code>)</h3>
 <div class="codebox"><pre><code>{
@@ -235,7 +242,7 @@ guardrail-ops/src/          # 운영 계층 (관측·저장·서빙·CLI)
 <h3>HTTP 계층 (<code>guardrail-ops/src/serve/http.py</code>)</h3>
 <ul><li><code>ThreadingHTTPServer</code> + <code>threading.Lock</code>으로 sqlite 커넥션 직렬화(<code>check_same_thread=False</code>).</li><li>제한: 요청 본문 1MB(413), <code>POST /v1/check</code> IP당 60초 30회(429).</li><li><code>POST /clear</code>는 <code>{&quot;confirm&quot;: true}</code> 필수.</li><li><code>GET /openapi.json</code>에 엔드포인트 명세.</li></ul>
 <h3>테스트</h3>
-<p><code>tests/test_framework.py</code> — 15개. 결정론을 위해 <code>Pipeline(model=dummy_model)</code>을 명시한다(기본은 Ollama라 네트워크 의존). 커버 범위: allow/block/review 분기, fail-closed, NORMALIZE 우회, 점수 분류, 기간 필터, spans/audit 영속화, dialogue_rail 단계.</p>
+<p><code>tests/test_framework.py</code> — 15개. 결정론을 위해 테스트 로컬 <code>stub_model</code>을 <code>Pipeline(model=...)</code>에 명시한다(기본은 Ollama라 네트워크 의존). 커버 범위: allow/block/review 분기, fail-closed, NORMALIZE 우회, 점수 분류, 기간 필터, spans/audit 영속화, dialogue_rail 단계.</p>
 <div class="codebox"><pre><code>python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>설계 원칙</h3>
 <ul><li>표준 라이브러리만 사용(외부 의존은 선택 사항: 실행 중인 Ollama 서버·모델, nemoguardrails 패키지).</li><li>실패는 안전한 쪽으로: 분류기·레일 오류 → 차단/검토, 정책 파일 오류 → 중단.</li><li>이벤트에는 원문을 남기지 않는다.</li><li>단계 폴더(01~06)를 import하지 않는 독립 프레임워크.</li></ul>
@@ -263,7 +270,7 @@ guardrail-ops/src/          # 운영 계층 (관측·저장·서빙·CLI)
 <p><b>LLM 설정 위젯 공통화 (중복 UI 제거)</b></p>
 <ul><li><code>/ops</code> LLM 탭·<code>/chat</code> 설정 카드·<code>/</code> 설정 탭에 각각 복제돼 있던 LLM 폼 HTML/JS를 <code>page.py</code> 하단의 공통 상수로 추출:</li><li><code>LLM_WIDGET_CSS</code> — <code>.lw*</code> 스타일 (<code>&lt;/style&gt;</code> 앞 <code>__LLMW_CSS__</code> 플레이스홀더)</li><li><code>LLM_WIDGET_STATUS</code> — <code>/llm</code> 상태 테이블 영역 (<code>__LLMW_STATUS__</code>)</li><li><code>LLM_WIDGET_FORM</code> — 프로바이더/모델/Base URL/API Key/사용 여부 폼 (<code>__LLMW_FORM__</code>)</li><li><code>LLM_WIDGET_JS</code> — <code>lwLoad()</code>/<code>lwSave()</code>/<code>lwToggle()</code> 공통 로직 (<code>&lt;script&gt;</code> 앞 <code>__LLMW_JS__</code>, 각 페이지 메인 스크립트보다 먼저 로드)</li><li>모듈 하단에서 3개 페이지 상수의 플레이스홀더를 일괄 치환 — 이후 LLM 설정 변경은 위젯 한 곳만 수정하면 전 페이지 반영</li><li>페이지별 역할 유지: <code>/ops</code>는 상태 카드+연결 테스트 버튼, <code>/chat</code>은 헤더 상태 pill + 폼만, <code>/</code>는 탭 진입 시 자동 로드</li><li>구 페이지별 id(<code>llmProvider</code>/<code>cProvider</code>/<code>lProvider</code> 등)와 함수(<code>loadCfg</code>/<code>saveCfg</code>/<code>toggleLKey</code> 등) 전부 제거, <code>/ops</code>의 <code>loadLlm</code>은 <code>lwLoad</code> 별칭으로 호환 유지</li></ul>
 <h4>운영 메모</h4>
-<ul><li><code>/settings</code> 변경은 <code>guardrail-ops/.env</code>에 영속화 — 서버·CLI 시작 시 <code>load_runtime()</code>이 환경변수로 복원. 화이트리스트 키만 저장되며 <code>DEEPSEEK_API_KEY</code> 같은 비밀값도 이 파일에 둔다(gitignore 권장).</li><li>NeMo Guardrails·Llama Guard는 lazy import — 미설치 시 명확한 에러, 기본 경로에는 영향 없음</li><li>인증은 의도적으로 미구현 (로컬 <code>127.0.0.1</code> 바인딩 전제)</li></ul>
+<ul><li><code>/settings</code> 변경은 <code>guardrail-ops/.env</code>에 영속화 — 서버·CLI 시작 시 <code>load_runtime()</code>이 환경변수로 복원. 화이트리스트 키만 저장되며 <code>DEEPSEEK_API_KEY</code> 같은 비밀값도 이 파일에 둔다(gitignore 권장).</li><li>NeMo Guardrails·Llama Guard는 lazy import — 미설치 시 명확한 에러, 기본 경로에는 영향 없음</li><li>dummy 백엔드·<code>USE_LLM</code> 제거 — 모델 호출 실패·빈 응답 시 <code>MODEL_ERROR_RESPONSE</code> 고정 문구 반환 (가짜 응답이 ALLOW로 기록되는 것 방지). 테스트는 로컬 <code>stub_model</code> 사용</li><li>인증은 의도적으로 미구현 (로컬 <code>127.0.0.1</code> 바인딩 전제)</li></ul>
 </section>
 <section class="ltab" id="tab-diagrams" hidden>
 <div class="ltitle">다이어그램 — 서비스·파이프라인 흐름</div>
@@ -558,7 +565,7 @@ python3 src/main.py serve --port 8000</code></pre></div>
 <p>내부 구조·정책 스키마·설계 원칙은 <a href="docs/development.md">docs/development.md</a>를 참고한다.</p>
 <h3>동작 흐름</h3>
 <p>!<a href="docs/diagrams/flow-02-pipeline.svg">파이프라인 흐름도</a></p>
-<table><tr><th>단계</th><th>모듈</th><th>역할</th></tr><tr><td>① 입력 정책</td><td><code>guard/policy.py</code></td><td>규칙 17개(한/영) 매칭 — block 규칙은 모델 호출 없이 차단, review 규칙은 최종 REVIEW 보장</td></tr><tr><td>② 대화 레일</td><td><code>providers/dialogue.py</code></td><td>토픽 게이트 (<code>--rail</code>, 선택) — 주제 이탈 시 모델 호출 전 REVIEW</td></tr><tr><td>③ LLM 모델</td><td><code>providers/model.py</code></td><td>Ollama / DeepSeek / dummy (<code>LLM_PROVIDER</code>)</td></tr><tr><td>④ 안전 분류기</td><td><code>providers/classifier.py</code></td><td>Llama Guard 3 (<code>--classifier</code>, 선택) — 실패 시 fail closed</td></tr><tr><td>⑤ 출력 마스킹</td><td><code>guard/output.py</code></td><td>이메일·전화·API 키·비밀번호 자동 검열</td></tr></table>
+<table><tr><th>단계</th><th>모듈</th><th>역할</th></tr><tr><td>① 입력 정책</td><td><code>guard/policy.py</code></td><td>규칙 17개(한/영) 매칭 — block 규칙은 모델 호출 없이 차단, review 규칙은 최종 REVIEW 보장</td></tr><tr><td>② 대화 레일</td><td><code>providers/dialogue.py</code></td><td>토픽 게이트 (<code>--rail</code>, 선택) — 주제 이탈 시 모델 호출 전 REVIEW</td></tr><tr><td>③ LLM 모델</td><td><code>providers/model.py</code></td><td>Ollama / DeepSeek (<code>LLM_PROVIDER</code>) — 실패 시 고정 에러 응답</td></tr><tr><td>④ 안전 분류기</td><td><code>providers/classifier.py</code></td><td>Llama Guard 3 (<code>--classifier</code>, 선택) — 실패 시 fail closed</td></tr><tr><td>⑤ 출력 마스킹</td><td><code>guard/output.py</code></td><td>이메일·전화·API 키·비밀번호 자동 검열</td></tr></table>
 <p><code>chatbot/</code>의 Gemini RAG/Agent 챗봇은 이 프레임워크와 <b>독립</b>이다. 연동하려면 <code>Pipeline(model=...)</code>에 챗봇 응답 함수를 넣거나, 챗봇 측에서 <code>Pipeline.run()</code>을 호출한다.</p>
 <h3>서비스 흐름도</h3>
 <p>!<a href="docs/diagrams/flow-01-service-pipeline.svg">서비스 파이프라인 흐름도</a></p>
@@ -581,8 +588,15 @@ python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v</code></pr
 <table><tr><th>메서드</th><th>경로</th><th>설명</th></tr><tr><td>GET</td><td><code>/</code></td><td>가드레일 운영 GUI (검사·대시보드·이벤트·LLM·정책·리포트·도움말)</td></tr><tr><td>GET</td><td><code>/chat</code></td><td>챗봇 전용 페이지 (모든 메시지가 가드레일 통과)</td></tr><tr><td>POST</td><td><code>/v1/check</code></td><td><code>{&quot;prompt&quot;: &quot;...&quot;}</code> → 파이프라인 실행 + 이벤트 저장</td></tr><tr><td>GET</td><td><code>/metrics</code> <code>/events</code> <code>/alerts</code> <code>/audit</code></td><td>집계·이벤트·Critical 알림·변경 감사 조회</td></tr><tr><td>GET</td><td>`/report?period=weekly\</td><td>monthly`</td><td>기간별 운영 리포트</td></tr><tr><td>POST</td><td><code>/ack</code> <code>/clear</code></td><td>이벤트 확인 / 전체 삭제(<code>{&quot;confirm&quot;: true}</code> 필요)</td></tr><tr><td>GET</td><td><code>/health</code> <code>/openapi.json</code></td><td>상태·API 명세</td></tr></table>
 <p>보호 장치: 요청 본문 1MB 제한, <code>/v1/check</code> IP당 60초 30회 rate limit.</p>
 <h3>모델·분류기 설정</h3>
-<table><tr><th>환경변수/옵션</th><th>설명</th><th>기본값</th></tr><tr><td><code>LLM_PROVIDER</code></td><td>모델 백엔드 선택: <code>ollama</code>(기본) / <code>deepseek</code> / <code>dummy</code></td><td><code>ollama</code></td></tr><tr><td><code>USE_LLM=0</code></td><td>LLM 대신 더미 모델 사용</td><td>LLM 사용</td></tr><tr><td><code>OLLAMA_BASE_URL</code></td><td>Ollama 엔드포인트</td><td><code>http://localhost:11434</code></td></tr><tr><td><code>OLLAMA_MODEL</code></td><td>사용할 Ollama 모델</td><td><code>qwen2.5:3b</code></td></tr><tr><td><code>DEEPSEEK_API_KEY</code></td><td>DeepSeek API 키 (provider=deepseek 시)</td><td>없음</td></tr><tr><td><code>DEEPSEEK_MODEL</code></td><td>사용할 DeepSeek 모델</td><td><code>deepseek-chat</code></td></tr><tr><td><code>DEEPSEEK_BASE_URL</code></td><td>DeepSeek 엔드포인트</td><td><code>https://api.deepseek.com</code></td></tr><tr><td><code>--classifier</code></td><td>Llama Guard 3 안전성 분류 활성화 (Ollama <code>/api/chat</code>)</td><td>꺼짐 (Ollama 서버 + 가드 모델 필요)</td></tr><tr><td><code>OLLAMA_GUARD_MODEL</code></td><td>분류기 모델</td><td><code>llama-guard3:1b</code></td></tr><tr><td><code>--rail keywords</code></td><td>결정론적 주제 레일</td><td>꺼짐</td></tr><tr><td><code>GUARDRAIL_TOPICS</code></td><td>레일 주제 JSON <code>{&quot;주제&quot;:[&quot;키워드&quot;]}</code></td><td>내장 general 토픽</td></tr><tr><td><code>--rail nemo</code></td><td>NeMo Guardrails 레일</td><td>꺼짐 (nemoguardrails 필요)</td></tr><tr><td><code>GUARDRAIL_OPS_DB</code> / <code>--db</code></td><td>이벤트 DB 경로</td><td><code>results/events.db</code></td></tr></table>
+<table><tr><th>환경변수/옵션</th><th>설명</th><th>기본값</th></tr><tr><td><code>LLM_PROVIDER</code></td><td>모델 백엔드 선택: <code>ollama</code>(기본) / <code>deepseek</code></td><td><code>ollama</code></td></tr><tr><td><code>OLLAMA_BASE_URL</code></td><td>Ollama 엔드포인트</td><td><code>http://localhost:11434</code></td></tr><tr><td><code>OLLAMA_MODEL</code></td><td>사용할 Ollama 모델</td><td><code>qwen2.5:3b</code></td></tr><tr><td><code>DEEPSEEK_API_KEY</code></td><td>DeepSeek API 키 (provider=deepseek 시)</td><td>없음</td></tr><tr><td><code>DEEPSEEK_MODEL</code></td><td>사용할 DeepSeek 모델</td><td><code>deepseek-chat</code></td></tr><tr><td><code>DEEPSEEK_BASE_URL</code></td><td>DeepSeek 엔드포인트</td><td><code>https://api.deepseek.com</code></td></tr><tr><td><code>--classifier</code></td><td>Llama Guard 3 안전성 분류 활성화 (Ollama <code>/api/chat</code>)</td><td>꺼짐 (Ollama 서버 + 가드 모델 필요)</td></tr><tr><td><code>OLLAMA_GUARD_MODEL</code></td><td>분류기 모델</td><td><code>llama-guard3:1b</code></td></tr><tr><td><code>--rail keywords</code></td><td>결정론적 주제 레일</td><td>꺼짐</td></tr><tr><td><code>GUARDRAIL_TOPICS</code></td><td>레일 주제 JSON <code>{&quot;주제&quot;:[&quot;키워드&quot;]}</code></td><td>내장 general 토픽</td></tr><tr><td><code>--rail nemo</code></td><td>NeMo Guardrails 레일</td><td>꺼짐 (nemoguardrails 필요)</td></tr><tr><td><code>GUARDRAIL_OPS_DB</code> / <code>--db</code></td><td>이벤트 DB 경로</td><td><code>results/events.db</code></td></tr></table>
+<p>모델 호출이 실패하면(Ollama·DeepSeek 연결 불가·빈 응답) 더미 응답 대신 고정 에러 문구(<code>MODEL_ERROR_RESPONSE</code>)를 반환한다.</p>
 <p>이벤트 DB는 <code>guardrail-ops/results/events.db</code>, Critical 알림 로그는 <code>guardrail-ops/results/alerts.jsonl</code>에 생성된다.</p>
+<h4>Llama Guard 분류기 활성화 (<code>--classifier</code>)</h4>
+<p>분류기는 Ollama 서버가 먼저 떠 있어야 동작한다. 순서:</p>
+<div class="codebox"><pre><code>ollama serve                      # 1) Ollama 서버 실행 (macOS 앱 또는)
+ollama pull llama-guard3:1b       # 2) 가드 모델 다운로드 (최초 1회)
+python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --classifier</code></pre><button class="copybtn" type="button">복사</button></div>
+<p>주의: <code>--classifier</code>를 켠 상태에서 Ollama가 꺼져 있으면 <b>모든 요청이 차단</b>된다 — 분류기 호출 실패 시 fail-closed(unsafe → BLOCK) 정책이기 때문이다. 평소에는 <code>serve</code>만 실행하고, Llama Guard 실습 시에만 이 조합을 사용한다. 분류기 모델은 <code>OLLAMA_GUARD_MODEL</code>, 엔드포인트는 <code>OLLAMA_BASE_URL</code>로 변경할 수 있다.</p>
 <h3>구조</h3>
 <p>3계층으로 분리되어 있다 — <code>guardrail/</code>(판정 엔진)과 <code>guardrail-ops/</code>(관측·서빙), <code>chatbot/</code>(별도 학습용 챗봇).</p>
 <div class="codebox"><pre><code>10_ai_guardrail_ops_framework/
@@ -604,7 +618,7 @@ python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v</code></pr
 │       │   ├── policy.py         #     입력 정책 — JSON 규칙, fail-closed
 │       │   └── output.py         #     출력 검열 — 민감정보 마스킹
 │       ├── providers/
-│       │   ├── model.py          #     모델 백엔드 (기본 결정론적, USE_LLM 시 Ollama)
+│       │   ├── model.py          #     모델 백엔드 (Ollama 기본 / DeepSeek)
 │       │   ├── classifier.py     #     Llama Guard 3 분류기 — Ollama (선택)
 │       │   ├── dialogue.py       #     NeMo Guardrails식 주제·대화 레일 (선택)
 │       │   └── deepseek.py       #     DeepSeek API 백엔드 (OpenAI 호환)
@@ -641,7 +655,7 @@ python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v</code></pr
 │   ├── classify.py    # RunRecord → SecurityEvent 변환 (원문 미포함)
 │   └── score.py       # classify_risk(impact, exploitability, exposure) 점수 분류
 └── providers/
-    ├── model.py       # LLM_PROVIDER 선택: dummy / Ollama / DeepSeek
+    ├── model.py       # LLM_PROVIDER 선택: ollama / deepseek (실패 시 MODEL_ERROR_RESPONSE)
     ├── deepseek.py    # DeepSeek API (OpenAI 호환, lazy)
     ├── classifier.py  # Llama Guard 3 (Ollama /api/chat, stdlib)
     └── dialogue.py    # 토픽 레일: KeywordTopicRail / NemoGuardrailsRail(lazy)
@@ -662,7 +676,7 @@ guardrail-ops/src/          # 운영 계층 (관측·저장·서빙·CLI)
     └── page.py        # 단일 HTML GUI (vanilla JS + canvas, 8개 탭)</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>파이프라인 단계</h3>
 <div class="codebox"><pre><code>input_guardrail → dialogue_rail → model → classifier → output_guardrail</code></pre><button class="copybtn" type="button">복사</button></div>
-<ul><li><code>input_guardrail</code>: 정책 규칙 매칭. <code>block</code> 규칙이 하나라도 있으면 모델 호출 없이 BLOCK. <code>review</code> 규칙만 있으면 진행하되 최종 결과가 ALLOW가 될 수 없다.</li><li><code>dialogue_rail</code>: <code>--rail</code> 지정 시에만 동작. 프롬프트가 허용 주제를 벗어나면 모델 호출 전에 REVIEW 반환 (LLM 비용 절약).</li><li><code>model</code>: Ollama 호출 실패 시 dummy로 폴백.</li><li><code>classifier</code>: <code>--classifier</code> 지정 시 Llama Guard. 호출 실패·파싱 불가 → unsafe(fail closed) → BLOCK.</li><li><code>output_guardrail</code>: 민감 필드 마스킹. 검출 시 REVIEW.</li></ul>
+<ul><li><code>input_guardrail</code>: 정책 규칙 매칭. <code>block</code> 규칙이 하나라도 있으면 모델 호출 없이 BLOCK. <code>review</code> 규칙만 있으면 진행하되 최종 결과가 ALLOW가 될 수 없다.</li><li><code>dialogue_rail</code>: <code>--rail</code> 지정 시에만 동작. 프롬프트가 허용 주제를 벗어나면 모델 호출 전에 REVIEW 반환 (LLM 비용 절약).</li><li><code>model</code>: Ollama·DeepSeek 호출 실패·빈 응답 시 <code>MODEL_ERROR_RESPONSE</code> 고정 문구 반환.</li><li><code>classifier</code>: <code>--classifier</code> 지정 시 Llama Guard. 호출 실패·파싱 불가 → unsafe(fail closed) → BLOCK.</li><li><code>output_guardrail</code>: 민감 필드 마스킹. 검출 시 REVIEW.</li></ul>
 <p>각 단계는 <code>Span(stage, outcome, ms)</code>으로 기록되고 <code>RunRecord.spans</code> → <code>SecurityEvent.spans_json</code>에 영속화된다.</p>
 <h3>정책 규칙 스키마 (<code>guardrail/config/policy-rules.json</code>)</h3>
 <div class="codebox"><pre><code>{
@@ -680,7 +694,7 @@ guardrail-ops/src/          # 운영 계층 (관측·저장·서빙·CLI)
 <h3>HTTP 계층 (<code>guardrail-ops/src/serve/http.py</code>)</h3>
 <ul><li><code>ThreadingHTTPServer</code> + <code>threading.Lock</code>으로 sqlite 커넥션 직렬화(<code>check_same_thread=False</code>).</li><li>제한: 요청 본문 1MB(413), <code>POST /v1/check</code> IP당 60초 30회(429).</li><li><code>POST /clear</code>는 <code>{&quot;confirm&quot;: true}</code> 필수.</li><li><code>GET /openapi.json</code>에 엔드포인트 명세.</li></ul>
 <h3>테스트</h3>
-<p><code>tests/test_framework.py</code> — 15개. 결정론을 위해 <code>Pipeline(model=dummy_model)</code>을 명시한다(기본은 Ollama라 네트워크 의존). 커버 범위: allow/block/review 분기, fail-closed, NORMALIZE 우회, 점수 분류, 기간 필터, spans/audit 영속화, dialogue_rail 단계.</p>
+<p><code>tests/test_framework.py</code> — 15개. 결정론을 위해 테스트 로컬 <code>stub_model</code>을 <code>Pipeline(model=...)</code>에 명시한다(기본은 Ollama라 네트워크 의존). 커버 범위: allow/block/review 분기, fail-closed, NORMALIZE 우회, 점수 분류, 기간 필터, spans/audit 영속화, dialogue_rail 단계.</p>
 <div class="codebox"><pre><code>python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>설계 원칙</h3>
 <ul><li>표준 라이브러리만 사용(외부 의존은 선택 사항: 실행 중인 Ollama 서버·모델, nemoguardrails 패키지).</li><li>실패는 안전한 쪽으로: 분류기·레일 오류 → 차단/검토, 정책 파일 오류 → 중단.</li><li>이벤트에는 원문을 남기지 않는다.</li><li>단계 폴더(01~06)를 import하지 않는 독립 프레임워크.</li></ul>
@@ -708,7 +722,7 @@ guardrail-ops/src/          # 운영 계층 (관측·저장·서빙·CLI)
 <p><b>LLM 설정 위젯 공통화 (중복 UI 제거)</b></p>
 <ul><li><code>/ops</code> LLM 탭·<code>/chat</code> 설정 카드·<code>/</code> 설정 탭에 각각 복제돼 있던 LLM 폼 HTML/JS를 <code>page.py</code> 하단의 공통 상수로 추출:</li><li><code>LLM_WIDGET_CSS</code> — <code>.lw*</code> 스타일 (<code>&lt;/style&gt;</code> 앞 <code>__LLMW_CSS__</code> 플레이스홀더)</li><li><code>LLM_WIDGET_STATUS</code> — <code>/llm</code> 상태 테이블 영역 (<code>__LLMW_STATUS__</code>)</li><li><code>LLM_WIDGET_FORM</code> — 프로바이더/모델/Base URL/API Key/사용 여부 폼 (<code>__LLMW_FORM__</code>)</li><li><code>LLM_WIDGET_JS</code> — <code>lwLoad()</code>/<code>lwSave()</code>/<code>lwToggle()</code> 공통 로직 (<code>&lt;script&gt;</code> 앞 <code>__LLMW_JS__</code>, 각 페이지 메인 스크립트보다 먼저 로드)</li><li>모듈 하단에서 3개 페이지 상수의 플레이스홀더를 일괄 치환 — 이후 LLM 설정 변경은 위젯 한 곳만 수정하면 전 페이지 반영</li><li>페이지별 역할 유지: <code>/ops</code>는 상태 카드+연결 테스트 버튼, <code>/chat</code>은 헤더 상태 pill + 폼만, <code>/</code>는 탭 진입 시 자동 로드</li><li>구 페이지별 id(<code>llmProvider</code>/<code>cProvider</code>/<code>lProvider</code> 등)와 함수(<code>loadCfg</code>/<code>saveCfg</code>/<code>toggleLKey</code> 등) 전부 제거, <code>/ops</code>의 <code>loadLlm</code>은 <code>lwLoad</code> 별칭으로 호환 유지</li></ul>
 <h4>운영 메모</h4>
-<ul><li><code>/settings</code> 변경은 <code>guardrail-ops/.env</code>에 영속화 — 서버·CLI 시작 시 <code>load_runtime()</code>이 환경변수로 복원. 화이트리스트 키만 저장되며 <code>DEEPSEEK_API_KEY</code> 같은 비밀값도 이 파일에 둔다(gitignore 권장).</li><li>NeMo Guardrails·Llama Guard는 lazy import — 미설치 시 명확한 에러, 기본 경로에는 영향 없음</li><li>인증은 의도적으로 미구현 (로컬 <code>127.0.0.1</code> 바인딩 전제)</li></ul></div>
+<ul><li><code>/settings</code> 변경은 <code>guardrail-ops/.env</code>에 영속화 — 서버·CLI 시작 시 <code>load_runtime()</code>이 환경변수로 복원. 화이트리스트 키만 저장되며 <code>DEEPSEEK_API_KEY</code> 같은 비밀값도 이 파일에 둔다(gitignore 권장).</li><li>NeMo Guardrails·Llama Guard는 lazy import — 미설치 시 명확한 에러, 기본 경로에는 영향 없음</li><li>dummy 백엔드·<code>USE_LLM</code> 제거 — 모델 호출 실패·빈 응답 시 <code>MODEL_ERROR_RESPONSE</code> 고정 문구 반환 (가짜 응답이 ALLOW로 기록되는 것 방지). 테스트는 로컬 <code>stub_model</code> 사용</li><li>인증은 의도적으로 미구현 (로컬 <code>127.0.0.1</code> 바인딩 전제)</li></ul></div>
 <div id="md-chat" hidden><h2>ch01/dxx-app — Gemini API 기반 RAG/Agent 단계별 학습 예제</h2>
 <p>문서 로딩부터 브라우저 GUI 까지, RAG 파이프라인을 8단계로 분해한 교육용 코드베이스.</p>
 <h3>설계 원칙</h3>

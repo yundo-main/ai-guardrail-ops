@@ -12,7 +12,7 @@ from pathlib import Path
 
 ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
 
-KEYS = ("USE_LLM", "LLM_PROVIDER", "OLLAMA_MODEL", "OLLAMA_BASE_URL",
+KEYS = ("LLM_PROVIDER", "OLLAMA_MODEL", "OLLAMA_BASE_URL",
         "DEEPSEEK_API_KEY", "DEEPSEEK_MODEL", "DEEPSEEK_BASE_URL")
 
 
