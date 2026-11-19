@@ -98,7 +98,7 @@ AI 서비스 운영 단계에서 입력·출력 가드레일, 위험 분류, 보
 | --- | --- |
 | SVG (1280×720, CSS 클래스, 다크 모드, `role`/`aria`) | 단계별 발표 슬라이드 |
 | Markdown | readme·용어집·개발 문서 |
-| `python3 -m unittest` | 각 단계 `tests/` 단위 테스트 |
+| `python -m unittest` | 각 단계 `tests/` 단위 테스트 |
 | `xmllint --noout` / `py_compile` / `node --check` | SVG·Python·JS 문법 검증 |
 | `curl` | API 엔드포인트 확인 |
 
@@ -129,28 +129,28 @@ AI 서비스 운영 단계에서 입력·출력 가드레일, 위험 분류, 보
 
 ```bash
 # 최초 환경 구성 (저장소 루트에서 실행)
-python3 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
-python3 -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 
 # 전체 테스트 — 단계별 tests/ 디렉터리에서 실행
-python3 -m unittest discover -s 01_guardrail_concept_architecture/tests -v
-python3 -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v
-python3 -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
-python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v
+python -m unittest discover -s 01_guardrail_concept_architecture/tests -v
+python -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v
+python -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
+python -m unittest discover -s 05_security_dashboard_alerts/tests -v
 
 # 1~4단계 단독 실행 및 결과 생성
-python3 01_guardrail_concept_architecture/src/architecture.py
-python3 02_llama_guard_nemo_guardrails/src/main.py
-python3 03_policy_blocking_output_filtering/src/guardrail.py
-PYTHONPATH=04_risk_rating_system/src python3 04_risk_rating_system/src/risk.py
+python 01_guardrail_concept_architecture/src/architecture.py
+python 02_llama_guard_nemo_guardrails/src/main.py
+python 03_policy_blocking_output_filtering/src/guardrail.py
+PYTHONPATH=04_risk_rating_system/src python 04_risk_rating_system/src/risk.py
 
 # 5단계 API 서버 — 별도 터미널에서 계속 실행
-python3 -m pip install -r 05_security_dashboard_alerts/requirements.txt
+python -m pip install -r 05_security_dashboard_alerts/requirements.txt
 uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 
 # 5단계 API를 종료한 뒤 새 터미널에서 6단계 실행
-python3 06_operations_report_integrated_lab/src/app.py
+python 06_operations_report_integrated_lab/src/app.py
 ```
 
 ### 실행 결과 확인
@@ -159,10 +159,10 @@ python3 06_operations_report_integrated_lab/src/app.py
 
 ```bash
 # JSON을 사람이 읽기 좋은 형식으로 확인
-python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
-python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
-python3 -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
-python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json
+python -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
+python -m json.tool 04_risk_rating_system/results/step04-security-event.json
+python -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
+python -m json.tool 06_operations_report_integrated_lab/results/step06-report.json
 ```
 
 5단계 API는 서버를 켠 별도 터미널에서 다음처럼 확인한다.
@@ -189,7 +189,7 @@ curl -H 'X-API-Key: dev-only-key' http://127.0.0.1:8000/metrics > 05_security_da
 ```bash
 ollama serve
 ollama pull qwen2.5:3b
-USE_LLM=1 OLLAMA_MODEL=qwen2.5:3b python3 06_operations_report_integrated_lab/src/app.py
+USE_LLM=1 OLLAMA_MODEL=qwen2.5:3b python 06_operations_report_integrated_lab/src/app.py
 ```
 
 ### 5단계 웹 API·대시보드

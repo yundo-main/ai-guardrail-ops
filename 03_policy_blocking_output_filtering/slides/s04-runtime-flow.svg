@@ -5,7 +5,7 @@
   <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker></defs>
   <rect class="bg" width="1280" height="720"/>
   <text class="title" x="60" y="90">3단계 · 코드 실행 흐름도</text>
-  <text class="sub" x="60" y="126">python3 src/guardrail.py — __main__에서 결과 저장까지의 호출 순서</text>
+  <text class="sub" x="60" y="126">python src/guardrail.py — __main__에서 결과 저장까지의 호출 순서</text>
 
   <!-- left: call chain -->
   <rect class="panel" x="60" y="160" width="560" height="440" rx="16"/>
@@ -48,7 +48,7 @@
     <text class="val" x="830" y="438">email · api_key · phone · secret_keyword 4종 순회</text>
   </g>
   <rect class="codebox" x="690" y="480" width="500" height="80" rx="10"/>
-  <text class="code" x="712" y="508" font-size="13">실행: python3 03_policy_blocking_output_filtering/src/guardrail.py</text>
+  <text class="code" x="712" y="508" font-size="13">실행: python 03_policy_blocking_output_filtering/src/guardrail.py</text>
   <text class="code" x="712" y="532" font-size="12" fill="var(--muted)">→ results/step03-guardrail-result.json + .html</text>
   <text class="accent" x="690" y="592" font-size="16">4단계로 전달: decision · risk · matches · masked_fields</text>
 

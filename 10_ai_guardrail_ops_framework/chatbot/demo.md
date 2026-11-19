@@ -33,7 +33,7 @@ python -V
 # Python 3.14.6
 ```
 
-> `which python` 이 `/opt/homebrew/bin/python3` 이거나 `python not found` 로 나오면 활성화되지 않은 것이다.
+> `which python` 이 `/opt/homebrew/bin/python` 이거나 `python not found` 로 나오면 활성화되지 않은 것이다.
 > 시스템 파이썬에는 이 예제의 패키지가 없다.
 
 작업을 마치면 해제한다.
@@ -46,7 +46,7 @@ deactivate
 
 ```bash
 cd "/Users/jarrod/Library/CloudStorage/GoogleDrive-meta4rism@gmail.com/내 드라이브/gdrive-project/code-test-check"
-python3 -m venv venv                                  # 최초 1회만
+python -m venv venv                                  # 최초 1회만
 source venv/bin/activate
 pip install -r ch01/dxx-app/requirements.txt
 ```

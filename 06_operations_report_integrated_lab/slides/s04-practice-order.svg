@@ -29,14 +29,14 @@
 <rect class="codebox" x="95" y="225" width="480" height="76" rx="10"/>
 <text class="num" x="122" y="263" text-anchor="middle" dominant-baseline="central">①</text>
 <text class="p" x="148" y="250" font-size="14">통합 실행 (05 metrics 선행)</text>
-<text class="code" x="148" y="276" font-size="12">python3 06_operations_report_integrated_lab/src/app.py</text>
+<text class="code" x="148" y="276" font-size="12">python 06_operations_report_integrated_lab/src/app.py</text>
 <text class="code" x="148" y="294" font-size="11" fill="var(--muted)"># → results/step06-report.json + .html 생성</text>
 
 <rect class="codebox" x="95" y="315" width="480" height="76" rx="10"/>
 <text class="num" x="122" y="353" text-anchor="middle" dominant-baseline="central">②</text>
 <text class="p" x="148" y="340" font-size="14">결과 JSON 확인</text>
 <text class="code" x="148" y="366" font-size="12">cd 06_operations_report_integrated_lab</text>
-<text class="code" x="148" y="384" font-size="12">python3 -m json.tool results/step06-report.json</text>
+<text class="code" x="148" y="384" font-size="12">python -m json.tool results/step06-report.json</text>
 
 <rect class="codebox" x="95" y="405" width="480" height="76" rx="10"/>
 <text class="num" x="122" y="443" text-anchor="middle" dominant-baseline="central">③</text>
@@ -47,7 +47,7 @@
 <rect class="codebox" x="95" y="495" width="480" height="76" rx="10"/>
 <text class="num" x="122" y="533" text-anchor="middle" dominant-baseline="central">④</text>
 <text class="p" x="148" y="520" font-size="14">LLM 응답 (선택)</text>
-<text class="code" x="148" y="546" font-size="12">USE_LLM=1 python3 src/app.py</text>
+<text class="code" x="148" y="546" font-size="12">USE_LLM=1 python src/app.py</text>
 <text class="code" x="148" y="564" font-size="11" fill="var(--muted)"># 06 폴더에서 · Ollama 서버 실행 필요</text>
 
 <rect class="panel" x="660" y="160" width="560" height="470" rx="16"/>
@@ -71,7 +71,7 @@
 <text class="p14" x="715" y="464" font-size="13">더미 응답으로 전체 흐름을 먼저 검증</text>
 
 <text class="p14" x="715" y="540" font-size="13">실행 위치: 저장소 루트(ai-guardrails-ops/)</text>
-<text class="p14" x="715" y="562" font-size="13">테스트: python3 -m unittest discover -s tests -v</text>
+<text class="p14" x="715" y="562" font-size="13">테스트: python -m unittest discover -s tests -v</text>
 <text class="p14" x="715" y="584" font-size="13">※ 다른 단계 폴더를 참조하지 않는 독립 구조</text>
 
 <text class="foot" x="60" y="705">6단계 · 실습 순서 · 4 / 8</text>

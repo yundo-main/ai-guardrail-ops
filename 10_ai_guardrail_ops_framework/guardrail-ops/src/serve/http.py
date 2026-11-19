@@ -34,12 +34,12 @@ REPO_ROOT = _ROOT.parent  # ai-guardrails-ops/ — step folders live here
 RUN_TIMEOUT = 30
 # /run-step whitelist: fixed commands only, no user-supplied shell input
 STEP_COMMANDS = {
-    "01": "python3 01_guardrail_concept_architecture/src/architecture.py",
-    "02": "python3 02_llama_guard_nemo_guardrails/src/main.py",
-    "03": "python3 03_policy_blocking_output_filtering/src/guardrail.py",
-    "04": "PYTHONPATH=04_risk_rating_system/src python3 04_risk_rating_system/src/risk.py",
-    "05": "python3 -m pip install -q -r 05_security_dashboard_alerts/requirements.txt && uvicorn api:app --app-dir 05_security_dashboard_alerts/src --port 8001",
-    "06": "python3 06_operations_report_integrated_lab/src/app.py",
+    "01": "python 01_guardrail_concept_architecture/src/architecture.py",
+    "02": "python 02_llama_guard_nemo_guardrails/src/main.py",
+    "03": "python 03_policy_blocking_output_filtering/src/guardrail.py",
+    "04": "PYTHONPATH=04_risk_rating_system/src python 04_risk_rating_system/src/risk.py",
+    "05": "python -m pip install -q -r 05_security_dashboard_alerts/requirements.txt && uvicorn api:app --app-dir 05_security_dashboard_alerts/src --port 8001",
+    "06": "python 06_operations_report_integrated_lab/src/app.py",
 }
 
 OPENAPI = {

@@ -23,7 +23,7 @@ text{font-family:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic","Helvetica
 
 <rect width="1920" height="1080" fill="#ffffff"/>
 <text class="title" x="60" y="90">6단계 실습 Flow · 통합 실습과 운영 리포트</text>
-<text class="subt" x="60" y="140">python3 src/app.py — 샘플 3건 → safe_response 판정 → 이벤트 집계 → step06-report.json·HTML</text>
+<text class="subt" x="60" y="140">python src/app.py — 샘플 3건 → safe_response 판정 → 이벤트 집계 → step06-report.json·HTML</text>
 
 <!-- 1 샘플 정의 -->
 <rect x="60" y="180" width="900" height="110" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
@@ -91,7 +91,7 @@ text{font-family:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic","Helvetica
 <rect x="1000" y="180" width="10" height="180" rx="5" fill="#1d4ed8"/>
 <text x="1045" y="222" font-size="30" text-anchor="middle" dominant-baseline="central">①</text>
 <text class="h2" x="1080" y="222">실행 조건</text>
-<text class="body" x="1080" y="256">저장소 루트에서 python3 src/app.py 실행</text>
+<text class="body" x="1080" y="256">저장소 루트에서 python src/app.py 실행</text>
 <text class="body" x="1080" y="288">LLM 불필요 — USE_LLM=1일 때만 Ollama 선택 사용</text>
 <text class="body" x="1080" y="320">05 step05-metrics.json은 선행 권장, 없어도 실행됨</text>
 <text class="body" x="1080" y="352">src/는 03·05 복사본 포함 독립 실행 구조</text>
@@ -118,7 +118,7 @@ text{font-family:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic","Helvetica
 <rect x="1000" y="768" width="10" height="180" rx="5" fill="#0f766e"/>
 <text x="1045" y="810" font-size="30" text-anchor="middle" dominant-baseline="central">④</text>
 <text class="h2" x="1080" y="810">검증 기준 (실습 기대값)</text>
-<text class="body" x="1080" y="844">python3 -m json.tool results/step06-report.json 정상</text>
+<text class="body" x="1080" y="844">python -m json.tool results/step06-report.json 정상</text>
 <text class="body" x="1080" y="876">events 3건 · sample ③은 review/Critical 기대</text>
 <text class="body" x="1080" y="908">metrics.total_events=3 · upstream_metrics는 05 파일 있을 때만</text>
 <text class="body" x="1080" y="940">step06-report.html 브라우저 렌더링 확인</text>

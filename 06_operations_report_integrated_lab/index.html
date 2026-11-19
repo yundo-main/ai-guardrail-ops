@@ -141,9 +141,9 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <p class="sub" id="copyMsg" style="margin-top:.4rem"></p>
 <h3>실행 결과 예시</h3><pre><code>[1] input=Decision.ALLOW output=Decision.ALLOW: The policy applies for 30 days.
 [2] input=Decision.BLOCK output=Decision.BLOCK: 요청이 보안 정책에 의해 차단되었습니다.
-ALERT {&quot;severity&quot;: &quot;critical&quot;, &quot;title&quot;: &quot;AI 보안 Critical 이벤트&quot;, &quot;event&quot;: {&quot;event_id&quot;: &quot;demo-2&quot;, &quot;decision&quot;: &quot;block&quot;, &quot;risk&quot;: &quot;Critical&quot;, &quot;category&quot;: &quot;prompt injection&quot;, &quot;detail&quot;: &quot;요청이 보안 정책에 의해 차단되었습니다.&quot;, &quot;timestamp&quot;: &quot;2026-11-18T20:44:10.545448+00:00&quot;, &quot;schema_version&quot;: &quot;1.0&quot;, &quot;trace_id&quot;: &quot;demo-trace-2&quot;, &quot;source_stage&quot;: &quot;step05&quot;, &quot;policy_version&quot;: &quot;policy-1&quot;, &quot;model_name&quot;: &quot;deterministic-fixture&quot;, &quot;status&quot;: &quot;open&quot;, &quot;acknowledged_at&quot;: null}}
+ALERT {&quot;severity&quot;: &quot;critical&quot;, &quot;title&quot;: &quot;AI 보안 Critical 이벤트&quot;, &quot;event&quot;: {&quot;event_id&quot;: &quot;demo-2&quot;, &quot;decision&quot;: &quot;block&quot;, &quot;risk&quot;: &quot;Critical&quot;, &quot;category&quot;: &quot;prompt injection&quot;, &quot;detail&quot;: &quot;요청이 보안 정책에 의해 차단되었습니다.&quot;, &quot;timestamp&quot;: &quot;2026-11-19T01:56:49.929051+00:00&quot;, &quot;schema_version&quot;: &quot;1.0&quot;, &quot;trace_id&quot;: &quot;demo-trace-2&quot;, &quot;source_stage&quot;: &quot;step05&quot;, &quot;policy_version&quot;: &quot;policy-1&quot;, &quot;model_name&quot;: &quot;deterministic-fixture&quot;, &quot;status&quot;: &quot;open&quot;, &quot;acknowledged_at&quot;: null}}
 [3] input=Decision.ALLOW output=Decision.REVIEW: Contact [EMAIL_REDACTED]; api_key=[API_KEY_REDACTED].
-ALERT {&quot;severity&quot;: &quot;critical&quot;, &quot;title&quot;: &quot;AI 보안 Critical 이벤트&quot;, &quot;event&quot;: {&quot;event_id&quot;: &quot;demo-3&quot;, &quot;decision&quot;: &quot;review&quot;, &quot;risk&quot;: &quot;Critical&quot;, &quot;category&quot;: &quot;email&quot;, &quot;detail&quot;: &quot;Contact [EMAIL_REDACTED]; api_key=[API_KEY_REDACTED].&quot;, &quot;timestamp&quot;: &quot;2026-11-18T20:44:10.545489+00:00&quot;, &quot;schema_version&quot;: &quot;1.0&quot;, &quot;trace_id&quot;: &quot;demo-trace-3&quot;, &quot;source_stage&quot;: &quot;step05&quot;, &quot;policy_version&quot;: &quot;policy-1&quot;, &quot;model_name&quot;: &quot;deterministic-fixture&quot;, &quot;status&quot;: &quot;open&quot;, &quot;acknowledged_at&quot;: null}}
+ALERT {&quot;severity&quot;: &quot;critical&quot;, &quot;title&quot;: &quot;AI 보안 Critical 이벤트&quot;, &quot;event&quot;: {&quot;event_id&quot;: &quot;demo-3&quot;, &quot;decision&quot;: &quot;review&quot;, &quot;risk&quot;: &quot;Critical&quot;, &quot;category&quot;: &quot;email&quot;, &quot;detail&quot;: &quot;Contact [EMAIL_REDACTED]; api_key=[API_KEY_REDACTED].&quot;, &quot;timestamp&quot;: &quot;2026-11-19T01:56:49.929100+00:00&quot;, &quot;schema_version&quot;: &quot;1.0&quot;, &quot;trace_id&quot;: &quot;demo-trace-3&quot;, &quot;source_stage&quot;: &quot;step05&quot;, &quot;policy_version&quot;: &quot;policy-1&quot;, &quot;model_name&quot;: &quot;deterministic-fixture&quot;, &quot;status&quot;: &quot;open&quot;, &quot;acknowledged_at&quot;: null}}
 {
   &quot;total_events&quot;: 3,
   &quot;blocked_events&quot;: 1,
@@ -165,10 +165,10 @@ ALERT {&quot;severity&quot;: &quot;critical&quot;, &quot;title&quot;: &quot;AI �
 
 <h3>추가 명령</h3><div class="codebox"><pre><code># 1) 6단계 통합 실행 — 정책·가드레일·이벤트·지표·리포트를 한 번에 수행
 #    → 06_operations_report_integrated_lab/results/ 에 step06-report.json 생성
-python3 06_operations_report_integrated_lab/src/app.py
+python 06_operations_report_integrated_lab/src/app.py
 
 # 2) 결과 확인
-python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre><button class="copybtn" type="button">복사</button></div>
+python -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>소스 구조</h3>
 <h3>파일·디렉터리 역할</h3><table><tr><th>경로</th><th>역할</th></tr><tr><td><code>src/llm.py</code></td><td><code>USE_LLM=1</code>일 때 Ollama <code>/api/chat</code>을 호출하는 선택적 LLM 어댑터</td></tr><tr><td><code>src/app.py</code></td><td>정상·차단·민감 출력 사례를 Guardrail·이벤트·지표·리포트로 통합 실행, JSON+HTML 저장</td></tr><tr><td><code>src/report.py</code></td><td><code>step06-report.json</code> 페이로드를 독립 HTML 운영 리포트로 렌더링</td></tr><tr><td><code>src/step03_report.py</code></td><td>3단계 결과 HTML 렌더러의 로컬 복사본 — <code>report.py</code>와 이름 충돌 방지용</td></tr><tr><td><code>slides/s00-tech-spec.svg</code></td><td>통합 실습과 선택적 Ollama 기술 사양</td></tr><tr><td><code>slides/s01-integrated-report.svg</code></td><td>운영 리포트·통합 실습 전체 흐름</td></tr><tr><td><code>slides/s02-report-theory.svg</code></td><td>주간·월간 운영 리포트 이론</td></tr><tr><td><code>slides/s03-integrated-source.svg</code></td><td><code>app.py</code>·<code>llm.py</code> 통합 소스 설명</td></tr><tr><td><code>slides/s04-practice-order.svg</code></td><td>실습 순서 — app.py 통합 실행·USE_LLM 옵션</td></tr><tr><td><code>slides/s05-llm-option.svg</code></td><td>USE_LLM 실행 차이 — fixture vs Ollama 비교</td></tr><tr><td><code>slides/s06-flow.svg</code></td><td>실행 흐름 Flow 도식 — app.py 호출 순서·분기 규칙·결과 계약</td></tr><tr><td><code>slides/s07-report-checklist.svg</code></td><td>6단계 운영 리포트 체크리스트</td></tr><tr><td><code>slides/s08-summary.svg</code></td><td>6단계 핵심 요약과 질문</td></tr><tr><td><code>slides/readme.md</code></td><td>슬라이드 순서·제목·산출물 목록</td></tr></table>
 <p class="sub" style="margin-top:.8rem">※ 브라우저에서는 실행할 수 없습니다 — 명령을 복사해 터미널에 붙여넣으세요.</p>
@@ -219,10 +219,10 @@ python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.j
 <blockquote style="border-left:3px solid var(--accent);margin:.6rem 0;padding:.3rem .9rem;color:var(--muted);background:#f8fafc;border-radius:0 8px 8px 0"></blockquote>
 <div class="codebox"><pre><code># 1) 6단계 통합 실행 — 정책·가드레일·이벤트·지표·리포트를 한 번에 수행
 #    → 06_operations_report_integrated_lab/results/ 에 step06-report.json 생성
-python3 06_operations_report_integrated_lab/src/app.py
+python 06_operations_report_integrated_lab/src/app.py
 
 # 2) 결과 확인
-python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre><button class="copybtn" type="button">복사</button></div>
+python -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>선택적으로 <code>USE_LLM=1</code>을 지정하면 <code>src/llm.py</code>가 로컬 Ollama의 <code>/api/chat</code>을 호출한다. 모델 응답은 더미 응답과 동일하게 입력 검사와 출력 검열을 거친다.</p>
 <p>실행 결과에서 입력 판정, 출력 검열, 이벤트 생성, Critical 알림, 리포트 지표를 차례로 확인한다.</p>
 <h3>산출물</h3>

@@ -738,7 +738,7 @@ __LLMW_FORM__
 </section>
 <footer>
 <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;align-items:center">
-<span>실행: <code>python3 guardrail-ops/src/main.py serve --port 8000</code> · 표준 라이브러리만 사용 · 인증 없음(로컬 전용)</span>
+<span>실행: <code>python guardrail-ops/src/main.py serve --port 8000</code> · 표준 라이브러리만 사용 · 인증 없음(로컬 전용)</span>
 <span><a href="/ops" style="color:var(--accent);text-decoration:none;font-weight:600">운영 페이지 →</a> · <a href="/chat" style="color:var(--accent);text-decoration:none;font-weight:600">챗봇 →</a></span>
 </div>
 </footer>

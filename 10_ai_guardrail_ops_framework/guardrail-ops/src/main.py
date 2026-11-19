@@ -1,10 +1,10 @@
 """AI Guardrail observability framework — single entry point.
 
-  python3 src/main.py demo                      # sample prompts -> events -> metrics
-  python3 src/main.py run --prompt "..."        # one request, full trace
-  python3 src/main.py metrics | events | report [--period weekly|monthly]
-  python3 src/main.py ack EVENT_ID | clear
-  python3 src/main.py serve [--host H] [--port P]   # HTTP API + web GUI
+  python src/main.py demo                      # sample prompts -> events -> metrics
+  python src/main.py run --prompt "..."        # one request, full trace
+  python src/main.py metrics | events | report [--period weekly|monthly]
+  python src/main.py ack EVENT_ID | clear
+  python src/main.py serve [--host H] [--port P]   # HTTP API + web GUI
   add --classifier to enable Llama Guard (needs transformers/torch)
 
 Self-contained: capabilities of days 01-06 are re-implemented here and nothing

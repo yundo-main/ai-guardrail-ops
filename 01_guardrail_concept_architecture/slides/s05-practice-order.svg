@@ -19,13 +19,13 @@
     <circle cx="122" cy="323" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
     <text class="h" x="122" y="328" font-size="14" text-anchor="middle">2</text>
     <text class="p" x="148" y="317" font-size="14">파이프라인 실행</text>
-    <text class="code" x="148" y="338" font-size="12">python3 01_guardrail_concept_architecture/src/architecture.py</text>
+    <text class="code" x="148" y="338" font-size="12">python 01_guardrail_concept_architecture/src/architecture.py</text>
     <path class="arrow" d="M340 351 V359"/>
     <rect class="codebox" x="95" y="365" width="480" height="56" rx="10"/>
     <circle cx="122" cy="393" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
     <text class="h" x="122" y="398" font-size="14" text-anchor="middle">3</text>
     <text class="p" x="148" y="387" font-size="14">단위 테스트 (선택)</text>
-    <text class="code" x="148" y="408" font-size="12">python3 -m unittest discover -s 01_guardrail_concept_architecture/tests -v</text>
+    <text class="code" x="148" y="408" font-size="12">python -m unittest discover -s 01_guardrail_concept_architecture/tests -v</text>
     <path class="arrow" d="M340 421 V429"/>
     <rect class="codebox" x="95" y="435" width="480" height="56" rx="10"/>
     <circle cx="122" cy="463" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>

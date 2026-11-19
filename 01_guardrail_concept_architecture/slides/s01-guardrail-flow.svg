@@ -20,5 +20,5 @@
   <g class="line" aria-hidden="true"><path d="M240 340h60"/><path d="M480 340h60"/><path d="M720 340h60"/><path d="M960 340h60"/></g>
   <g class="head" aria-hidden="true"><path d="m290 333 10 7-10 7z"/><path d="m530 333 10 7-10 7z"/><path d="m770 333 10 7-10 7z"/><path d="m1010 333 10 7-10 7z"/></g>
   <rect class="alert" x="260" y="490" width="760" height="76" rx="14"/><text class="h" x="640" y="522" text-anchor="middle">Critical 이벤트 → 즉시 알림 → 운영 리포트</text><text class="p" x="640" y="550" text-anchor="middle">위험 등급 · 공격 유형 · 차단 건수 · 미대응 이슈</text>
-  <text class="foot" x="60" y="666">7장 · 공통 처리 흐름 · 1 / 6</text>
+  <text class="foot" x="60" y="666">1단계 · 공통 처리 흐름 · 1 / 7</text>
 </svg>

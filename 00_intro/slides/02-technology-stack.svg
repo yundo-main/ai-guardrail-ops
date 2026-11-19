@@ -26,7 +26,7 @@
   <rect class="cb" x="60"  y="185" width="360" height="145" rx="12"/>
   <text class="h"   x="84"  y="218">① 실행 환경 · 1~6단계</text>
   <text class="p"   x="84"  y="248">Python 3.12+ 권장 · 3.9 호환</text>
-  <text class="code" x="84" y="278">python3 -m unittest discover -s tests -v</text>
+  <text class="code" x="84" y="278">python -m unittest discover -s tests -v</text>
   <text class="p"   x="84"  y="308">pip install -r requirements.txt</text>
 
   <rect class="cg" x="440" y="185" width="360" height="145" rx="12"/>
@@ -57,7 +57,7 @@
   <rect class="cg" x="820" y="352" width="400" height="145" rx="12"/>
   <text class="h"   x="844" y="385">⑥ 검증 도구 · 제출 전</text>
   <text class="code" x="844" y="415">xmllint --noout *.svg</text>
-  <text class="code" x="844" y="445">python3 -m py_compile src/*.py</text>
+  <text class="code" x="844" y="445">python -m py_compile src/*.py</text>
   <text class="code" x="844" y="475">curl http://127.0.0.1:8000/health</text>
 
   <!-- 하단 배너 -->

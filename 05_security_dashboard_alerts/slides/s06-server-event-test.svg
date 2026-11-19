@@ -27,7 +27,7 @@ text{fill:var(--ink)}
   <text x="105" y="264" font-size="16" font-weight="700" text-anchor="middle" fill="#0b1220">1</text>
   <text class="p" x="135" y="250" font-size="15">의존성 설치 (최초 1회)</text>
   <rect class="codebox" x="135" y="258" width="450" height="34" rx="8"/>
-  <text class="code" x="148" y="281" font-size="13">python3 -m pip install -r requirements.txt</text>
+  <text class="code" x="148" y="281" font-size="13">python -m pip install -r requirements.txt</text>
 
   <circle cx="105" cy="328" r="16" fill="var(--accent)"/>
   <text x="105" y="334" font-size="16" font-weight="700" text-anchor="middle" fill="#0b1220">2</text>

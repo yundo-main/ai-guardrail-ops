@@ -34,5 +34,5 @@
   <path class="line" d="M360 360h130M790 360h130"/>
   <text class="label" x="60" y="555">적용 시 주의</text>
   <text class="p" x="60" y="590">분류기를 정책 엔진과 동일시하지 않는다. 오탐·미탐, 카테고리 정의, 사람 검토 경로를 별도로 평가한다.</text>
-  <text class="foot" x="60" y="666">2단계 · 2단계 · 4 / 8 · 실제 호출: Ollama llama-guard3 (기본) / Transformers 선택</text>
+  <text class="foot" x="60" y="666">2단계 · 4 / 9 · 실제 호출: Ollama llama-guard3 (기본) / Transformers 선택</text>
 </svg>

@@ -23,35 +23,35 @@
   <rect class="ci" x="60" y="224" width="1160" height="58" rx="10"/>
   <text class="h" x="84" y="248" font-size="17">01 · Guardrail 개념·아키텍처</text>
   <text class="p" x="330" y="248" font-size="15">파이프라인 분기 구조 실행 + 단위 테스트</text>
-  <text class="code" x="84" y="269" font-size="13">python3 01_.../src/architecture.py</text>
+  <text class="code" x="84" y="269" font-size="13">python 01_.../src/architecture.py</text>
 
-  <text class="code" x="700" y="269" font-size="13">python3 -m unittest discover -s 01_.../tests</text>
+  <text class="code" x="700" y="269" font-size="13">python -m unittest discover -s 01_.../tests</text>
   <rect class="ci" x="60" y="290" width="1160" height="58" rx="10"/>
   <text class="h" x="84" y="314" font-size="17">02 · Llama Guard·NeMo</text>
   <text class="p" x="330" y="314" font-size="15">분류기·대화 레일 비교 — Ollama 기본 경로</text>
-  <text class="code" x="84" y="335" font-size="13">python3 02_.../src/main.py</text>
+  <text class="code" x="84" y="335" font-size="13">python 02_.../src/main.py</text>
   <rect class="ci" x="60" y="356" width="1160" height="58" rx="10"/>
   <text class="h" x="84" y="380" font-size="17">03 · 정책 차단·출력 검열</text>
   <text class="p" x="330" y="380" font-size="15">입력 차단 + 출력 마스킹 → JSON·HTML 결과</text>
-  <text class="code" x="84" y="401" font-size="13">python3 03_.../src/guardrail.py</text>
+  <text class="code" x="84" y="401" font-size="13">python 03_.../src/guardrail.py</text>
   <rect class="ci" x="60" y="422" width="1160" height="58" rx="10"/>
   <text class="h" x="84" y="446" font-size="17">04 · 위험 등급·보안 이벤트</text>
   <text class="p" x="330" y="446" font-size="15">03 결과 JSON → SecurityEvent 변환 (03 선행 필요)</text>
-  <text class="code" x="84" y="467" font-size="13">PYTHONPATH=04_.../src python3 04_.../src/risk.py</text>
+  <text class="code" x="84" y="467" font-size="13">PYTHONPATH=04_.../src python 04_.../src/risk.py</text>
   <rect class="ci" x="60" y="488" width="1160" height="58" rx="10"/>
   <text class="h" x="84" y="512" font-size="17">05 · 대시보드·알림</text>
   <text class="p" x="330" y="512" font-size="15">FastAPI 이벤트 API + 지표·Critical 알림 (+Discord)</text>
   <text class="code" x="84" y="533" font-size="13">uvicorn api:app --app-dir 05_.../src --port 8000</text>
 
-  <text class="code" x="700" y="533" font-size="13">python3 05_.../src/report.py</text>
+  <text class="code" x="700" y="533" font-size="13">python 05_.../src/report.py</text>
   <rect class="ci" x="60" y="554" width="1160" height="58" rx="10"/>
   <text class="h" x="84" y="578" font-size="17">06 · 통합 실습·운영 리포트</text>
   <text class="p" x="330" y="578" font-size="15">전체 흐름 통합 실행 — 05 metrics 선행, USE_LLM=1 옵션</text>
-  <text class="code" x="84" y="599" font-size="13">python3 06_.../src/app.py</text>
+  <text class="code" x="84" y="599" font-size="13">python 06_.../src/app.py</text>
   <rect class="ci" x="60" y="620" width="1160" height="58" rx="10"/>
   <text class="h" x="84" y="644" font-size="17">10 · 통합 프레임워크</text>
   <text class="p" x="330" y="644" font-size="15">CLI·HTTP·GUI 통합 운영 데모</text>
-  <text class="code" x="84" y="665" font-size="13">python3 10_.../guardrail-ops/src/main.py demo</text>
+  <text class="code" x="84" y="665" font-size="13">python 10_.../guardrail-ops/src/main.py demo</text>
 
   <text class="code" x="700" y="665" font-size="13">serve --port 8000</text>
   <text class="p" x="60" y="700" font-size="14">04는 03 결과 · 05는 04 이벤트 · 06은 05 metrics가 선행 조건 — 각 단계 readme의 실습 섹션에 상세 절차</text>

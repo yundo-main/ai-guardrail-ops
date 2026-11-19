@@ -12,5 +12,5 @@
   <path class="line" d="M580 360h120"/><text class="label" x="570" y="335">역할은 동일하지 않음</text>
   <text class="p" x="70" y="580">Ollama는 일반 응답 생성 경로를 단순화한다. Transformers는 Llama Guard를 전용 안전성 분류기로 직접 실행할 때 필요하다.</text>
   <text class="p" x="70" y="615">수업에서는 Ollama 경로를 먼저 완성하고, Transformers는 별도 심화 실습으로 비교한다.</text>
-  <text class="foot" x="60" y="675">2단계 · 2단계 · 보충 페이지 · 실행 백엔드 선택 기준</text>
+  <text class="foot" x="60" y="675">2단계 · 보충 페이지 · 실행 백엔드 선택 기준 · 6 / 9</text>
 </svg>

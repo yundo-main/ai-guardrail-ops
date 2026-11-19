@@ -13,7 +13,7 @@
     <circle cx="122" cy="253" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
     <text class="h" x="122" y="258" font-size="14" text-anchor="middle">1</text>
     <text class="p" x="148" y="247" font-size="14">어댑터 비교 (오프라인)</text>
-    <text class="code" x="148" y="268" font-size="12">python3 02_llama_guard_nemo_guardrails/src/main.py</text>
+    <text class="code" x="148" y="268" font-size="12">python 02_llama_guard_nemo_guardrails/src/main.py</text>
     <path class="arrow" d="M340 281 V289"/>
     <rect class="codebox" x="95" y="295" width="480" height="56" rx="10"/>
     <circle cx="122" cy="323" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
@@ -37,13 +37,13 @@
     <circle cx="122" cy="533" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
     <text class="h" x="122" y="538" font-size="14" text-anchor="middle">5</text>
     <text class="p" x="148" y="527" font-size="14">결과 확인</text>
-    <text class="code" x="148" y="548" font-size="12">python3 -m json.tool 02_llama_guard_nemo_guardrails/results/step02-real-guardrails.json</text>
+    <text class="code" x="148" y="548" font-size="12">python -m json.tool 02_llama_guard_nemo_guardrails/results/step02-real-guardrails.json</text>
     <path class="arrow" d="M340 561 V569"/>
     <rect class="codebox" x="95" y="575" width="480" height="56" rx="10"/>
     <circle cx="122" cy="603" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
     <text class="h" x="122" y="608" font-size="14" text-anchor="middle">6</text>
     <text class="p" x="148" y="597" font-size="14">단위 테스트 (선택)</text>
-    <text class="code" x="148" y="618" font-size="12">python3 -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v</text>
+    <text class="code" x="148" y="618" font-size="12">python -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v</text>
 
   <rect class="panel" x="660" y="160" width="560" height="474" rx="16"/>
   <text class="h" x="690" y="205">산출물 · 주의</text>
@@ -51,5 +51,5 @@
     <text class="p" x="700" y="284" font-size="15">• real은 provider 실패 시 성공으로 위장하지 않음</text>
     <text class="p" x="700" y="318" font-size="15">• --backend transformers는 심화 경로 (s11 참조)</text>
 
-  <text class="foot" x="60" y="705">2단계 · 실습 순서 · 7 / 11</text>
+  <text class="foot" x="60" y="705">2단계 · 실습 순서 · 7 / 9</text>
 </svg>

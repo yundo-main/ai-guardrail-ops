@@ -32,10 +32,10 @@
 ```bash
 # 1) 6단계 통합 실행 — 정책·가드레일·이벤트·지표·리포트를 한 번에 수행
 #    → 06_operations_report_integrated_lab/results/ 에 step06-report.json 생성
-python3 06_operations_report_integrated_lab/src/app.py
+python 06_operations_report_integrated_lab/src/app.py
 
 # 2) 결과 확인
-python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json
+python -m json.tool 06_operations_report_integrated_lab/results/step06-report.json
 ```
 
 선택적으로 `USE_LLM=1`을 지정하면 `src/llm.py`가 로컬 Ollama의 `/api/chat`을 호출한다. 모델 응답은 더미 응답과 동일하게 입력 검사와 출력 검열을 거친다.

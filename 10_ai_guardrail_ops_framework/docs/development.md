@@ -91,7 +91,7 @@ input_guardrail → dialogue_rail → model → classifier → output_guardrail
 `tests/test_framework.py` — 15개. 결정론을 위해 `Pipeline(model=dummy_model)`을 명시한다(기본은 Ollama라 네트워크 의존). 커버 범위: allow/block/review 분기, fail-closed, NORMALIZE 우회, 점수 분류, 기간 필터, spans/audit 영속화, dialogue_rail 단계.
 
 ```bash
-python3 -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v
+python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v
 ```
 
 ## 설계 원칙

@@ -1,6 +1,6 @@
 """Step 02 entry point.
 
-  python3 02_llama_guard_nemo_guardrails/src/main.py             # compare (default)
+  python 02_llama_guard_nemo_guardrails/src/main.py             # compare (default)
   python3.12 02_llama_guard_nemo_guardrails/src/main.py real --prompt "..."  # JSON + HTML 보고서
 
 Layout (each subpackage owns one responsibility):

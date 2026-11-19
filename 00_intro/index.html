@@ -153,35 +153,35 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <p>단계별 슬라이드 구성표는 각 단계 폴더의 <code>slides/readme.md</code>에 분리했다.</p>
 <h4>실행</h4>
 <div class="codebox"><pre><code># 최초 환경 구성 (저장소 루트에서 실행)
-python3 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
-python3 -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 
 # 전체 테스트 — 단계별 tests/ 디렉터리에서 실행
-python3 -m unittest discover -s 01_guardrail_concept_architecture/tests -v
-python3 -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v
-python3 -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
-python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v
+python -m unittest discover -s 01_guardrail_concept_architecture/tests -v
+python -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v
+python -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
+python -m unittest discover -s 05_security_dashboard_alerts/tests -v
 
 # 1~4단계 단독 실행 및 결과 생성
-python3 01_guardrail_concept_architecture/src/architecture.py
-python3 02_llama_guard_nemo_guardrails/src/main.py
-python3 03_policy_blocking_output_filtering/src/guardrail.py
-PYTHONPATH=04_risk_rating_system/src python3 04_risk_rating_system/src/risk.py
+python 01_guardrail_concept_architecture/src/architecture.py
+python 02_llama_guard_nemo_guardrails/src/main.py
+python 03_policy_blocking_output_filtering/src/guardrail.py
+PYTHONPATH=04_risk_rating_system/src python 04_risk_rating_system/src/risk.py
 
 # 5단계 API 서버 — 별도 터미널에서 계속 실행
-python3 -m pip install -r 05_security_dashboard_alerts/requirements.txt
+python -m pip install -r 05_security_dashboard_alerts/requirements.txt
 uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 
 # 5단계 API를 종료한 뒤 새 터미널에서 6단계 실행
-python3 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
+python 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
 <h4>실행 결과 확인</h4>
 <p>1~2단계는 터미널에 구조 요약을 출력한다. 3~4·6단계는 실행 후 각 단계 폴더의 <code>results/</code>에 JSON 결과를 저장한다(5단계는 API <code>/metrics</code>로 조회).</p>
 <div class="codebox"><pre><code># JSON을 사람이 읽기 좋은 형식으로 확인
-python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
-python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
-python3 -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
-python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre><button class="copybtn" type="button">복사</button></div>
+python -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
+python -m json.tool 04_risk_rating_system/results/step04-security-event.json
+python -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
+python -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>5단계 API는 서버를 켠 별도 터미널에서 다음처럼 확인한다.</p>
 <div class="codebox"><pre><code>curl http://127.0.0.1:8000/health
 curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/events
@@ -194,7 +194,7 @@ curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/alerts/critica
 <p>기본 실행은 더미 응답을 사용한다. Ollama를 설치하고 서버와 모델을 준비한 뒤 <code>USE_LLM=1</code>을 지정하면 6단계 통합 실습이 로컬 모델 응답을 받아 출력 검열 단계로 전달한다.</p>
 <div class="codebox"><pre><code>ollama serve
 ollama pull qwen2.5:3b
-USE_LLM=1 OLLAMA_MODEL=qwen2.5:3b python3 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
+USE_LLM=1 OLLAMA_MODEL=qwen2.5:3b python 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
 <h4>5단계 웹 API·대시보드</h4>
 <p>API는 기본적으로 <code>dev-only-key</code>를 사용한다. 공유·배포 전에는 <code>GUARDRAIL_API_KEY</code>를 반드시 변경하고, 저장 위치는 <code>GUARDRAIL_DB_PATH</code>로 지정한다.</p>
 <div class="codebox"><pre><code>export GUARDRAIL_API_KEY=&#x27;change-me&#x27;
@@ -221,7 +221,7 @@ uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000<
 <h4>프론트엔드</h4>
 <table><tr><th>기술</th><th>용도</th></tr><tr><td>순수 HTML/CSS/JS (<code>file://</code> 동작)</td><td>단계별 학습 포털·통합 용어집·루트 인덱스</td></tr><tr><td>SVG 뷰어 (팝업·‹›/←→ 이동)</td><td>발표 슬라이드 열람</td></tr><tr><td>FastAPI 서빙 정적 페이지</td><td>10 프레임워크 운영 대시보드·챗봇 (<code>/ops</code>·<code>/chat</code>)</td></tr><tr><td>다크 모드 (<code>localStorage</code> 테마)</td><td>10 프레임워크 페이지 테마 전환</td></tr></table>
 <h4>문서·슬라이드·검증</h4>
-<table><tr><th>기술</th><th>용도</th></tr><tr><td>SVG (1280×720, CSS 클래스, 다크 모드, <code>role</code>/<code>aria</code>)</td><td>단계별 발표 슬라이드</td></tr><tr><td>Markdown</td><td>readme·용어집·개발 문서</td></tr><tr><td><code>python3 -m unittest</code></td><td>각 단계 <code>tests/</code> 단위 테스트</td></tr><tr><td><code>xmllint --noout</code> / <code>py_compile</code> / <code>node --check</code></td><td>SVG·Python·JS 문법 검증</td></tr><tr><td><code>curl</code></td><td>API 엔드포인트 확인</td></tr></table>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td>SVG (1280×720, CSS 클래스, 다크 모드, <code>role</code>/<code>aria</code>)</td><td>단계별 발표 슬라이드</td></tr><tr><td>Markdown</td><td>readme·용어집·개발 문서</td></tr><tr><td><code>python -m unittest</code></td><td>각 단계 <code>tests/</code> 단위 테스트</td></tr><tr><td><code>xmllint --noout</code> / <code>py_compile</code> / <code>node --check</code></td><td>SVG·Python·JS 문법 검증</td></tr><tr><td><code>curl</code></td><td>API 엔드포인트 확인</td></tr></table>
 <p>단계 간 연결은 외부 메시지 큐·DB 없이 <b>JSON 결과 파일 + REST API</b>로 구성한다.</p>
 </section>
 <section class="ltab" id="tab-slides" hidden>
@@ -316,7 +316,7 @@ qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre><button class=
 <h4>프론트엔드</h4>
 <table><tr><th>기술</th><th>용도</th></tr><tr><td>순수 HTML/CSS/JS (<code>file://</code> 동작)</td><td>단계별 학습 포털·통합 용어집·루트 인덱스</td></tr><tr><td>SVG 뷰어 (팝업·‹›/←→ 이동)</td><td>발표 슬라이드 열람</td></tr><tr><td>FastAPI 서빙 정적 페이지</td><td>10 프레임워크 운영 대시보드·챗봇 (<code>/ops</code>·<code>/chat</code>)</td></tr><tr><td>다크 모드 (<code>localStorage</code> 테마)</td><td>10 프레임워크 페이지 테마 전환</td></tr></table>
 <h4>문서·슬라이드·검증</h4>
-<table><tr><th>기술</th><th>용도</th></tr><tr><td>SVG (1280×720, CSS 클래스, 다크 모드, <code>role</code>/<code>aria</code>)</td><td>단계별 발표 슬라이드</td></tr><tr><td>Markdown</td><td>readme·용어집·개발 문서</td></tr><tr><td><code>python3 -m unittest</code></td><td>각 단계 <code>tests/</code> 단위 테스트</td></tr><tr><td><code>xmllint --noout</code> / <code>py_compile</code> / <code>node --check</code></td><td>SVG·Python·JS 문법 검증</td></tr><tr><td><code>curl</code></td><td>API 엔드포인트 확인</td></tr></table>
+<table><tr><th>기술</th><th>용도</th></tr><tr><td>SVG (1280×720, CSS 클래스, 다크 모드, <code>role</code>/<code>aria</code>)</td><td>단계별 발표 슬라이드</td></tr><tr><td>Markdown</td><td>readme·용어집·개발 문서</td></tr><tr><td><code>python -m unittest</code></td><td>각 단계 <code>tests/</code> 단위 테스트</td></tr><tr><td><code>xmllint --noout</code> / <code>py_compile</code> / <code>node --check</code></td><td>SVG·Python·JS 문법 검증</td></tr><tr><td><code>curl</code></td><td>API 엔드포인트 확인</td></tr></table>
 <p>단계 간 연결은 외부 메시지 큐·DB 없이 <b>JSON 결과 파일 + REST API</b>로 구성한다.</p>
 <h3>로컬 구현 예제</h3>
 <p>외부 API나 LLM 없이 핵심 흐름을 재현하는 교육용 예제다.</p>
@@ -325,35 +325,35 @@ qlmanage -t -s 1280 -o /tmp slides/00-course-flow.svg</code></pre><button class=
 <p>단계별 슬라이드 구성표는 각 단계 폴더의 <code>slides/readme.md</code>에 분리했다.</p>
 <h4>실행</h4>
 <div class="codebox"><pre><code># 최초 환경 구성 (저장소 루트에서 실행)
-python3 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
-python3 -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 
 # 전체 테스트 — 단계별 tests/ 디렉터리에서 실행
-python3 -m unittest discover -s 01_guardrail_concept_architecture/tests -v
-python3 -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v
-python3 -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
-python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v
+python -m unittest discover -s 01_guardrail_concept_architecture/tests -v
+python -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v
+python -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
+python -m unittest discover -s 05_security_dashboard_alerts/tests -v
 
 # 1~4단계 단독 실행 및 결과 생성
-python3 01_guardrail_concept_architecture/src/architecture.py
-python3 02_llama_guard_nemo_guardrails/src/main.py
-python3 03_policy_blocking_output_filtering/src/guardrail.py
-PYTHONPATH=04_risk_rating_system/src python3 04_risk_rating_system/src/risk.py
+python 01_guardrail_concept_architecture/src/architecture.py
+python 02_llama_guard_nemo_guardrails/src/main.py
+python 03_policy_blocking_output_filtering/src/guardrail.py
+PYTHONPATH=04_risk_rating_system/src python 04_risk_rating_system/src/risk.py
 
 # 5단계 API 서버 — 별도 터미널에서 계속 실행
-python3 -m pip install -r 05_security_dashboard_alerts/requirements.txt
+python -m pip install -r 05_security_dashboard_alerts/requirements.txt
 uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 
 # 5단계 API를 종료한 뒤 새 터미널에서 6단계 실행
-python3 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
+python 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
 <h4>실행 결과 확인</h4>
 <p>1~2단계는 터미널에 구조 요약을 출력한다. 3~4·6단계는 실행 후 각 단계 폴더의 <code>results/</code>에 JSON 결과를 저장한다(5단계는 API <code>/metrics</code>로 조회).</p>
 <div class="codebox"><pre><code># JSON을 사람이 읽기 좋은 형식으로 확인
-python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
-python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
-python3 -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
-python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre><button class="copybtn" type="button">복사</button></div>
+python -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
+python -m json.tool 04_risk_rating_system/results/step04-security-event.json
+python -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
+python -m json.tool 06_operations_report_integrated_lab/results/step06-report.json</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>5단계 API는 서버를 켠 별도 터미널에서 다음처럼 확인한다.</p>
 <div class="codebox"><pre><code>curl http://127.0.0.1:8000/health
 curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/events
@@ -366,7 +366,7 @@ curl -H &#x27;X-API-Key: dev-only-key&#x27; http://127.0.0.1:8000/alerts/critica
 <p>기본 실행은 더미 응답을 사용한다. Ollama를 설치하고 서버와 모델을 준비한 뒤 <code>USE_LLM=1</code>을 지정하면 6단계 통합 실습이 로컬 모델 응답을 받아 출력 검열 단계로 전달한다.</p>
 <div class="codebox"><pre><code>ollama serve
 ollama pull qwen2.5:3b
-USE_LLM=1 OLLAMA_MODEL=qwen2.5:3b python3 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
+USE_LLM=1 OLLAMA_MODEL=qwen2.5:3b python 06_operations_report_integrated_lab/src/app.py</code></pre><button class="copybtn" type="button">복사</button></div>
 <h4>5단계 웹 API·대시보드</h4>
 <p>API는 기본적으로 <code>dev-only-key</code>를 사용한다. 공유·배포 전에는 <code>GUARDRAIL_API_KEY</code>를 반드시 변경하고, 저장 위치는 <code>GUARDRAIL_DB_PATH</code>로 지정한다.</p>
 <div class="codebox"><pre><code>export GUARDRAIL_API_KEY=&#x27;change-me&#x27;

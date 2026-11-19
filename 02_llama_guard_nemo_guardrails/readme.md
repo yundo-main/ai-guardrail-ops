@@ -49,7 +49,7 @@ Transformers는 필수 실행 경로가 아니다. Llama Guard 전용 모델(`me
 역할 비교만 확인할 때는 다음 명령을 실행한다. 외부 패키지·모델 없이 동작한다.
 
 ```bash
-python3 02_llama_guard_nemo_guardrails/src/main.py            # compare (기본)
+python 02_llama_guard_nemo_guardrails/src/main.py            # compare (기본)
 ```
 
 `main.py`에 서브커맨드를 생략하면 `compare`가 기본 실행된다. `src/contracts/adapters.py`에
@@ -116,7 +116,7 @@ safe/unsafe·범주를 얻고 → `dialogue/nemo_guardrails_client.py`가 `nemo_
 
 ```bash
 # JSON 구조 확인
-python3 -m json.tool 02_llama_guard_nemo_guardrails/results/step02-real-guardrails.json
+python -m json.tool 02_llama_guard_nemo_guardrails/results/step02-real-guardrails.json
 
 # HTML 보고서 열기
 open 02_llama_guard_nemo_guardrails/results/step02-real-guardrails.html
@@ -168,7 +168,7 @@ LLAMA_GUARD_BACKEND=transformers python 02_llama_guard_nemo_guardrails/src/main.
 어댑터 경계 동작만 검증한다. 저장소 루트에서 실행한다.
 
 ```bash
-python3 -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v
+python -m unittest discover -s 02_llama_guard_nemo_guardrails/tests -v
 ```
 
 - `tests/test_real_guard_adapters.py` — Llama Guard 출력 파서의 fail-closed 동작

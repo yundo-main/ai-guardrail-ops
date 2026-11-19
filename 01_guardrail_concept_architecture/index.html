@@ -145,7 +145,10 @@ monitoring: 항상 — 이벤트 기록과 대응 연결
 
 실습 결과: decision=allow / response=더미 모델 응답: Guardrail의 기본 흐름을 설명해줘</code></pre>
 <h3>실습 단계</h3><ol><li>사용자 입력 → 입력 가드레일 → 모델 → 출력 검열 → 관제 흐름을 그린다.</li><li>각 단계의 검사 대상과 실패 시 대응을 정의한다.</li><li><a href="../00_intro/slides/00-course-flow.svg">course-flow.svg</a>와 <a href="slides/s01-guardrail-flow.svg">s01-guardrail-flow.svg</a>를 기준 자료로 확인한다.</li></ol>
+<h3>추가 명령</h3><div class="codebox"><pre><code>python 01_guardrail_concept_architecture/src/architecture.py
 
+# 단위 테스트 (선택, 오프라인)
+python -m unittest discover -s 01_guardrail_concept_architecture/tests -v</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>소스 구조</h3>
 <h3>파일·디렉터리 역할</h3><table><tr><th>경로</th><th>역할</th></tr><tr><td><code>src/architecture.py</code></td><td><code>PipelineStage</code> 정의와 더미 모델 기반 최소 파이프라인 실행</td></tr><tr><td><code>slides/s00-tech-spec.svg</code></td><td>1단계에 필요한 Python·표준 라이브러리 기술 사양</td></tr><tr><td><code>slides/s01-guardrail-flow.svg</code></td><td>전체 입력·출력 가드레일 처리 흐름</td></tr><tr><td><code>slides/s02-guardrail-architecture.svg</code></td><td>Guardrail 아키텍처와 통제 위치</td></tr><tr><td><code>slides/s03-threats-and-controls.svg</code></td><td>위협 유형과 통제 지점</td></tr><tr><td><code>slides/s04-architecture-source.svg</code></td><td><code>architecture.py</code> 소스 설명과 실행 방법</td></tr><tr><td><code>slides/s05-practice-order.svg</code></td><td>실습 순서 — architecture.py 실행·테스트 명령</td></tr><tr><td><code>slides/s06-architecture-checklist.svg</code></td><td>1단계 복습 체크리스트</td></tr><tr><td><code>slides/s07-summary.svg</code></td><td>1단계 핵심 요약과 질문</td></tr><tr><td><code>slides/readme.md</code></td><td>슬라이드 순서·제목·산출물 목록</td></tr></table>
 <p class="sub" style="margin-top:.8rem">※ 브라우저에서는 실행할 수 없습니다 — 명령을 복사해 터미널에 붙여넣으세요.</p>
@@ -197,10 +200,10 @@ monitoring: 항상 — 이벤트 기록과 대응 연결
 <p>실습 코드는 <code>src/architecture.py</code>에서 실행한다. 1단계는 실제 LLM을 호출하지 않고</p>
 <p>결정적인 더미 모델로 입력 → 모델 → 출력 → 관제의 삽입 지점을 실행한다. 이후 단계는</p>
 <p>이 파이프라인의 각 위치를 실제 provider·정책·관제 기능으로 확장한다.</p>
-<div class="codebox"><pre><code>python3 01_guardrail_concept_architecture/src/architecture.py
+<div class="codebox"><pre><code>python 01_guardrail_concept_architecture/src/architecture.py
 
 # 단위 테스트 (선택, 오프라인)
-python3 -m unittest discover -s 01_guardrail_concept_architecture/tests -v</code></pre><button class="copybtn" type="button">복사</button></div>
+python -m unittest discover -s 01_guardrail_concept_architecture/tests -v</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>산출물</h3>
 <ul><li>Guardrail 아키텍처 요약</li><li>입력·출력 검사 지점 표</li><li>위협 시나리오별 통제 지점</li></ul>
 <h3>단계 간 연결</h3>

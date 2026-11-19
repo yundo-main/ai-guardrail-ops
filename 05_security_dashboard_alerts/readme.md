@@ -50,14 +50,14 @@
 실행:
 
 ```bash
-python3 -m pip install -r 05_security_dashboard_alerts/requirements.txt
+python -m pip install -r 05_security_dashboard_alerts/requirements.txt
 uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 
 # 단위 테스트 (선택)
-python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v
+python -m unittest discover -s 05_security_dashboard_alerts/tests -v
 
 # 결과 리포트 생성 — DB 이벤트를 step05-metrics.json + .html로 저장
-python3 05_security_dashboard_alerts/src/report.py
+python 05_security_dashboard_alerts/src/report.py
 ```
 
 기본 API 키는 `dev-only-key`이며 요청 헤더에 `X-API-Key`를 넣는다. 배포 전에는 `GUARDRAIL_API_KEY`를 변경한다. API 문서는 서버 실행 후 `http://127.0.0.1:8000/docs`, 웹 화면은 `http://127.0.0.1:8000/dashboard`에서 확인한다. 이벤트는 기본적으로 `results/security_events.db`에 저장된다.

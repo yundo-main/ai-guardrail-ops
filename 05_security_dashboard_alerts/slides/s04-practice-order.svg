@@ -13,7 +13,7 @@
     <circle cx="122" cy="253" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
     <text class="h" x="122" y="258" font-size="14" text-anchor="middle">1</text>
     <text class="p" x="148" y="247" font-size="14">의존성 설치</text>
-    <text class="code" x="148" y="268" font-size="12">python3 -m pip install -r 05_security_dashboard_alerts/requirements.txt</text>
+    <text class="code" x="148" y="268" font-size="12">python -m pip install -r 05_security_dashboard_alerts/requirements.txt</text>
     <path class="arrow" d="M340 281 V289"/>
     <rect class="codebox" x="95" y="295" width="480" height="56" rx="10"/>
     <circle cx="122" cy="323" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
@@ -31,7 +31,7 @@
     <circle cx="122" cy="463" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
     <text class="h" x="122" y="468" font-size="14" text-anchor="middle">4</text>
     <text class="p" x="148" y="457" font-size="14">리포트 생성</text>
-    <text class="code" x="148" y="478" font-size="12">python3 05_security_dashboard_alerts/src/report.py</text>
+    <text class="code" x="148" y="478" font-size="12">python 05_security_dashboard_alerts/src/report.py</text>
     <path class="arrow" d="M340 491 V499"/>
     <rect class="codebox" x="95" y="505" width="480" height="56" rx="10"/>
     <circle cx="122" cy="533" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
@@ -43,7 +43,7 @@
     <circle cx="122" cy="603" r="13" fill="none" stroke="var(--line)" stroke-width="2"/>
     <text class="h" x="122" y="608" font-size="14" text-anchor="middle">6</text>
     <text class="p" x="148" y="597" font-size="14">단위 테스트 (선택)</text>
-    <text class="code" x="148" y="618" font-size="12">python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v</text>
+    <text class="code" x="148" y="618" font-size="12">python -m unittest discover -s 05_security_dashboard_alerts/tests -v</text>
 
   <rect class="panel" x="660" y="160" width="560" height="474" rx="16"/>
   <text class="h" x="690" y="205" font-size="24">산출물 · 주의</text>

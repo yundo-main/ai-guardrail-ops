@@ -146,7 +146,7 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
   &quot;risk&quot;: &quot;Critical&quot;,
   &quot;category&quot;: &quot;guardrail&quot;,
   &quot;detail&quot;: &quot;&quot;,
-  &quot;timestamp&quot;: &quot;2026-11-18T20:44:10.497254+00:00&quot;,
+  &quot;timestamp&quot;: &quot;2026-11-19T01:56:49.855025+00:00&quot;,
   &quot;schema_version&quot;: &quot;1.0&quot;,
   &quot;trace_id&quot;: &quot;step03-guardrail-result&quot;,
   &quot;source_stage&quot;: &quot;step04&quot;,
@@ -158,14 +158,14 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 }</code></pre>
 <h3>실습 단계</h3><ol><li>입력 차단과 출력 검열 사례를 등급별로 분류한다.</li><li>등급별 대응 시간과 담당자를 정의한다.</li><li><code>src/monitoring.py</code>의 <code>SecurityEvent</code> 구조로 이벤트를 생성한다.</li></ol>
 <h3>추가 명령</h3><div class="codebox"><pre><code># 1) 3단계 결과 생성 (아직 없다면 먼저 실행)
-python3 03_policy_blocking_output_filtering/src/guardrail.py
+python 03_policy_blocking_output_filtering/src/guardrail.py
 
 # 2) 4단계 실행 — 03 결과를 읽어 이벤트로 변환
 #    → 04_risk_rating_system/results/ 에 JSON + HTML 생성
-PYTHONPATH=04_risk_rating_system/src python3 04_risk_rating_system/src/risk.py
+PYTHONPATH=04_risk_rating_system/src python 04_risk_rating_system/src/risk.py
 
 # 3) 결과 확인
-python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
+python -m json.tool 04_risk_rating_system/results/step04-security-event.json
 open 04_risk_rating_system/results/step04-security-event.html</code></pre><button class="copybtn" type="button">복사</button></div>
 <h3>소스 구조</h3>
 <h3>파일·디렉터리 역할</h3><table><tr><th>경로</th><th>역할</th></tr><tr><td><code>src/policy.py</code></td><td>4단계 이벤트 판정용 <code>Decision</code>·<code>RiskLevel</code> 정의</td></tr><tr><td><code>src/monitoring.py</code></td><td><code>SecurityEvent</code> 생성과 API 전달 payload 직렬화</td></tr><tr><td><code>src/risk.py</code></td><td>점수 기반 위험 분류와 3단계 JSON→4단계 이벤트 변환·JSON+HTML 저장</td></tr><tr><td><code>src/report.py</code></td><td>보안 이벤트 JSON을 독립 HTML 보고서로 렌더링</td></tr><tr><td><code>slides/s00-tech-spec.svg</code></td><td>위험 점수·이벤트·JSON 연결 기술 사양</td></tr><tr><td><code>slides/s01-risk-rating.svg</code></td><td>위험 등급 체계 개요</td></tr><tr><td><code>slides/s02-risk-theory.svg</code></td><td>등급 기준과 대응 이론</td></tr><tr><td><code>slides/s03-risk-source.svg</code></td><td><code>risk.py</code> 소스 설명</td></tr><tr><td><code>slides/s04-runtime-flow.svg</code></td><td>코드 실행 흐름도 — risk.py 호출 순서·점수 규칙</td></tr><tr><td><code>slides/s05-event-format.svg</code></td><td>보안 이벤트 산출물 형식 — JSON 필드·생성 흐름</td></tr><tr><td><code>slides/s06-practice-order.svg</code></td><td>실습 순서 — 03 선행·risk.py 변환·결과 확인</td></tr><tr><td><code>slides/s07-flow.svg</code></td><td>실습 Flow 도식 — 3단계 JSON → 이벤트 변환·5단계 전달 전체 절차</td></tr><tr><td><code>slides/s08-risk-checklist.svg</code></td><td>등급·대응·이벤트 체크리스트</td></tr><tr><td><code>slides/s09-summary.svg</code></td><td>4단계 핵심 요약과 질문</td></tr><tr><td><code>slides/readme.md</code></td><td>슬라이드 순서·제목·산출물 목록</td></tr></table>
@@ -218,14 +218,14 @@ open 04_risk_rating_system/results/step04-security-event.html</code></pre><butto
 <p>점수 기반 분류 예제는 <code>src/risk.py</code>에서 실행한다.</p>
 <blockquote style="border-left:3px solid var(--accent);margin:.6rem 0;padding:.3rem .9rem;color:var(--muted);background:#f8fafc;border-radius:0 8px 8px 0"></blockquote>
 <div class="codebox"><pre><code># 1) 3단계 결과 생성 (아직 없다면 먼저 실행)
-python3 03_policy_blocking_output_filtering/src/guardrail.py
+python 03_policy_blocking_output_filtering/src/guardrail.py
 
 # 2) 4단계 실행 — 03 결과를 읽어 이벤트로 변환
 #    → 04_risk_rating_system/results/ 에 JSON + HTML 생성
-PYTHONPATH=04_risk_rating_system/src python3 04_risk_rating_system/src/risk.py
+PYTHONPATH=04_risk_rating_system/src python 04_risk_rating_system/src/risk.py
 
 # 3) 결과 확인
-python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
+python -m json.tool 04_risk_rating_system/results/step04-security-event.json
 open 04_risk_rating_system/results/step04-security-event.html</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>3단계 결과 파일(<code>03_policy_blocking_output_filtering/results/step03-guardrail-result.json</code>)이 있으면 위 명령이 이를 읽어 <code>results/step04-security-event.json</code>과 같은 이름의 <code>.html</code> 보고서를 생성한다. 파일이 없으면 점수 분류 예시만 출력된다.</p>
 <h3>산출물</h3>

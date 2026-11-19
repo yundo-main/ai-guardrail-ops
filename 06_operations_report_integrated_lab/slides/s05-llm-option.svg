@@ -47,7 +47,7 @@
 <text class="p14" x="180" y="862" font-size="20">서버·모델 다운로드 없이 커리큘럼 전체 실행</text>
 
 <rect class="codebox" x="142" y="890" width="720" height="64" rx="14"/>
-<text class="code" x="180" y="932" font-size="19">python3 06_operations_report_integrated_lab/src/app.py</text>
+<text class="code" x="180" y="932" font-size="19">python 06_operations_report_integrated_lab/src/app.py</text>
 
 <!-- 우측: USE_LLM=1 Ollama 실행 -->
 <rect class="panel" x="990" y="240" width="840" height="720" rx="24"/>
@@ -72,7 +72,7 @@
 <text class="p14" x="1080" y="862" font-size="20">실행은 중단되지 않고 리포트에 폴백 표시</text>
 
 <rect class="codebox" x="1042" y="890" width="720" height="64" rx="14"/>
-<text class="code" x="1080" y="924" font-size="19">USE_LLM=1 python3 src/app.py</text>
+<text class="code" x="1080" y="924" font-size="19">USE_LLM=1 python src/app.py</text>
 <text class="code" x="1080" y="948" font-size="17" fill="var(--muted)"># 06 폴더에서 실행 · Ollama 서버 필요</text>
 
 <text class="p14" x="90" y="1015" font-size="21">※ 두 모드 모두 같은 안전 경로(safe_response → SecurityEvent → metrics)를 거치며, 달라지는 것은 응답 생성 단계뿐이다.</text>

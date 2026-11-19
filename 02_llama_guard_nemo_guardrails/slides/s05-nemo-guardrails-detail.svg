@@ -34,5 +34,5 @@
   <path class="line" d="M360 360h130M790 360h130"/>
   <text class="label" x="60" y="555">적용 시 주의</text>
   <text class="p" x="60" y="590">대화 흐름 제어가 민감정보 검열이나 위험성 분류를 대신하지 않는다. Llama Guard·정책·출력 검열과 책임을 나눠야 한다.</text>
-  <text class="foot" x="60" y="666">2단계 · 2단계 · 5 / 8 · 실제 호출: src/dialogue/nemo_guardrails_client.py → LLMRails</text>
+  <text class="foot" x="60" y="666">2단계 · 5 / 9 · 실제 호출: src/dialogue/nemo_guardrails_client.py → LLMRails</text>
 </svg>

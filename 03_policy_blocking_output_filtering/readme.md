@@ -31,14 +31,14 @@
 
 ```bash
 # 1) 3단계 단위 테스트 (선택)
-python3 -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
+python -m unittest discover -s 03_policy_blocking_output_filtering/tests -v
 
 # 2) 3단계 실행 — 입력 차단·출력 검열 데모
 #    → 03_policy_blocking_output_filtering/results/ 에 JSON + HTML 생성
-python3 03_policy_blocking_output_filtering/src/guardrail.py
+python 03_policy_blocking_output_filtering/src/guardrail.py
 
 # 3) 결과 확인
-python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
+python -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
 open 03_policy_blocking_output_filtering/results/step03-guardrail-result.html
 ```
 

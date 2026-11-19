@@ -21,10 +21,10 @@
 ## 결과 확인 명령
 
 ```bash
-python3 -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
-python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
-python3 -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
-python3 -m json.tool 06_operations_report_integrated_lab/results/step06-report.json
+python -m json.tool 03_policy_blocking_output_filtering/results/step03-guardrail-result.json
+python -m json.tool 04_risk_rating_system/results/step04-security-event.json
+python -m json.tool 05_security_dashboard_alerts/results/step05-metrics.json
+python -m json.tool 06_operations_report_integrated_lab/results/step06-report.json
 ```
 
 5단계 결과는 API 서버에서 `GET /metrics`로 조회하며, 응답을 `step05-metrics.json`으로 저장하면 6단계가 자동으로 읽는다. 각 JSON의 `schema_version`, `event_id`, `trace_id`, `decision`, `risk`, `category`, `metrics`, `upstream_metrics` 필드를 중심으로 단계별 결과를 확인한다.

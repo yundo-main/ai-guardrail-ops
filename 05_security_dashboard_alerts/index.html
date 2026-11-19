@@ -142,14 +142,14 @@ footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:1.6rem}
 <p class="sub" id="copyMsg" style="margin-top:.4rem"></p>
 
 <h3>실습 단계</h3><ol><li><code>dashboard_metrics()</code>로 이벤트를 집계한다.</li><li>위험 등급별·카테고리별 분포를 확인한다.</li><li><code>critical_alert()</code>가 Critical 이벤트에만 payload를 생성하는지 검증한다.</li><li>Discord에서 알림을 받을 채널을 연다.</li><li>채널 설정 → <b>연동(Integrations)</b> → <b>웹후크(Webhooks)</b> → <b>새 웹후크</b>를 만든다.</li><li>웹후크 이름(예: <code>AI Guardrail 알림</code>)을 지정하고 <b>웹후크 URL을 복사</b>한다.</li><li><code>src/discord.py</code> 상단의 <code>WEBHOOK_URL</code>에 복사한 URL을 직접 붙여넣는다. 비워 두면 발송은 건너뛴다.</li><li>Critical 이벤트를 등록하면 채널에 embed 알림이 도착한다.</li></ol>
-<h3>추가 명령</h3><div class="codebox"><pre><code>python3 -m pip install -r 05_security_dashboard_alerts/requirements.txt
+<h3>추가 명령</h3><div class="codebox"><pre><code>python -m pip install -r 05_security_dashboard_alerts/requirements.txt
 uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 
 # 단위 테스트 (선택)
-python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v
+python -m unittest discover -s 05_security_dashboard_alerts/tests -v
 
 # 결과 리포트 생성 — DB 이벤트를 step05-metrics.json + .html로 저장
-python3 05_security_dashboard_alerts/src/report.py</code></pre><button class="copybtn" type="button">복사</button></div>
+python 05_security_dashboard_alerts/src/report.py</code></pre><button class="copybtn" type="button">복사</button></div>
 <div class="codebox"><pre><code># Critical 차단 이벤트
 curl -X POST http://127.0.0.1:8000/events \
   -H &#x27;Content-Type: application/json&#x27; -H &#x27;X-API-Key: dev-only-key&#x27; \
@@ -240,14 +240,14 @@ Critical 이벤트가 등록되면 `critical_alert()` payload가 생성되고, `
 <p><code>src/api.py</code>는 대시보드용 집계 결과를 HTTP API로 제공한다. 이벤트는 기본 SQLite 저장소에 기록하며, 실제 운영 환경에서는 PostgreSQL이나 이벤트 스트림으로 교체할 수 있다.</p>
 <table><tr><th>메서드</th><th>경로</th><th>역할</th></tr><tr><td><code>GET</code></td><td><code>/health</code></td><td>서비스 상태 확인</td></tr><tr><td><code>POST</code></td><td><code>/guardrail/chat</code></td><td>실제 NeMo Guardrails·Llama Guard 호출 및 결과 저장</td></tr><tr><td><code>POST</code></td><td><code>/events</code></td><td>보안 이벤트 등록</td></tr><tr><td><code>GET</code></td><td><code>/events</code></td><td>이벤트 목록 조회</td></tr><tr><td><code>GET</code></td><td><code>/metrics</code></td><td>대시보드 지표 조회</td></tr><tr><td><code>GET</code></td><td><code>/alerts/critical</code></td><td>Critical 알림 목록 조회</td></tr><tr><td><code>DELETE</code></td><td><code>/events</code></td><td>실습용 이벤트 초기화</td></tr><tr><td><code>GET</code></td><td><code>/dashboard</code></td><td>웹 기반 지표 화면</td></tr><tr><td><code>POST</code></td><td><code>/events/{event_id}/acknowledge</code></td><td>운영자 확인 상태 기록</td></tr></table>
 <p>실행:</p>
-<div class="codebox"><pre><code>python3 -m pip install -r 05_security_dashboard_alerts/requirements.txt
+<div class="codebox"><pre><code>python -m pip install -r 05_security_dashboard_alerts/requirements.txt
 uvicorn api:app --app-dir 05_security_dashboard_alerts/src --reload --port 8000
 
 # 단위 테스트 (선택)
-python3 -m unittest discover -s 05_security_dashboard_alerts/tests -v
+python -m unittest discover -s 05_security_dashboard_alerts/tests -v
 
 # 결과 리포트 생성 — DB 이벤트를 step05-metrics.json + .html로 저장
-python3 05_security_dashboard_alerts/src/report.py</code></pre><button class="copybtn" type="button">복사</button></div>
+python 05_security_dashboard_alerts/src/report.py</code></pre><button class="copybtn" type="button">복사</button></div>
 <p>기본 API 키는 <code>dev-only-key</code>이며 요청 헤더에 <code>X-API-Key</code>를 넣는다. 배포 전에는 <code>GUARDRAIL_API_KEY</code>를 변경한다. API 문서는 서버 실행 후 <code>http://127.0.0.1:8000/docs</code>, 웹 화면은 <code>http://127.0.0.1:8000/dashboard</code>에서 확인한다. 이벤트는 기본적으로 <code>results/security_events.db</code>에 저장된다.</p>
 <h4>이벤트 등록 예시 (위험 등급별)</h4>
 <p>서버 실행 후 아래 3건을 등록하면 대시보드에서 등급·판정 분포를 바로 확인할 수 있다.</p>

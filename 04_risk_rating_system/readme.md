@@ -37,14 +37,14 @@
 
 ```bash
 # 1) 3단계 결과 생성 (아직 없다면 먼저 실행)
-python3 03_policy_blocking_output_filtering/src/guardrail.py
+python 03_policy_blocking_output_filtering/src/guardrail.py
 
 # 2) 4단계 실행 — 03 결과를 읽어 이벤트로 변환
 #    → 04_risk_rating_system/results/ 에 JSON + HTML 생성
-PYTHONPATH=04_risk_rating_system/src python3 04_risk_rating_system/src/risk.py
+PYTHONPATH=04_risk_rating_system/src python 04_risk_rating_system/src/risk.py
 
 # 3) 결과 확인
-python3 -m json.tool 04_risk_rating_system/results/step04-security-event.json
+python -m json.tool 04_risk_rating_system/results/step04-security-event.json
 open 04_risk_rating_system/results/step04-security-event.html
 ```
 

@@ -21,11 +21,11 @@
   <rect class="cp" x="60"  y="158" width="360" height="345" rx="14"/>
   <text class="h"  x="84"  y="196">03·04·06단계 JSON</text>
   <text class="p"  x="84"  y="226">정책·이벤트·통합 리포트 확인</text>
-  <text class="code" x="84" y="268">python3 -m json.tool \</text>
+  <text class="code" x="84" y="268">python -m json.tool \</text>
   <text class="code" x="84" y="290">  results/step03-guardrail-result.json</text>
-  <text class="code" x="84" y="330">python3 -m json.tool \</text>
+  <text class="code" x="84" y="330">python -m json.tool \</text>
   <text class="code" x="84" y="352">  results/step04-security-event.json</text>
-  <text class="code" x="84" y="392">python3 -m json.tool \</text>
+  <text class="code" x="84" y="392">python -m json.tool \</text>
   <text class="code" x="84" y="414">  results/step06-report.json</text>
   <text class="p"  x="84"  y="454">확인 필드: decision · risk · trace_id</text>
   <text class="p"  x="84"  y="478">status · source_stage · schema_version</text>
@@ -54,7 +54,7 @@
   <text class="code" x="844" y="388">risk: Low|Medium|High|Critical</text>
   <text class="p"  x="844" y="424">독립 결과: results/</text>
   <text class="p"  x="844" y="454">통합 결과: integration/results/</text>
-  <text class="p"  x="844" y="478">테스트: python3 -m unittest discover</text>
+  <text class="p"  x="844" y="478">테스트: python -m unittest discover</text>
 
   <!-- 푸터 -->
   <text class="foot" x="60"   y="668">실행 순서: 03 JSON → 04 이벤트 → 05 API 지표 → 06 리포트 · API 요청에는 X-API-Key 사용</text>

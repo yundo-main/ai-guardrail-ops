@@ -44,18 +44,18 @@
 ### CLI
 
 ```bash
-python3 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py demo
-python3 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py run --prompt "..."
-python3 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py metrics | events | report --period weekly
-python3 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py ack EVENT_ID --actor 이름 --reason 사유
-python3 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py clear
-python3 -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v
+python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py demo
+python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py run --prompt "..."
+python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py metrics | events | report --period weekly
+python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py ack EVENT_ID --actor 이름 --reason 사유
+python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py clear
+python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v
 ```
 
 ### HTTP 서버 + 웹 GUI
 
 ```bash
-python3 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --port 8000
+python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --port 8000
 # 브라우저에서 http://127.0.0.1:8000 접속
 ```
 
