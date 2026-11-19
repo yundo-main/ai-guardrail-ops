@@ -17,8 +17,6 @@
   </style>
   <rect class="bg" width="1280" height="720"/>
   <!-- 헤더 -->
-  <rect class="chip" x="60" y="40" width="46" height="30" rx="15"/>
-  <text class="chip-text" x="83" y="61" text-anchor="middle">7</text>
   <text class="title"   x="60" y="118">학습 기술 스택과 준비물</text>
   <text class="summary" x="60" y="150">1단계부터 6단계까지 어떤 기술이 필요하고 무엇이 선택 사항인지 한눈에 확인한다</text>
   <!-- 카드 3×2 그리드: 너비=360, 간격=20 → 60+360+20+360+20+360=1180 ≤ 1280 -->

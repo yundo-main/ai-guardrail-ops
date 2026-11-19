@@ -67,7 +67,7 @@ python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --port 8000
 | GET | `/chat` | 챗봇 전용 페이지 (모든 메시지가 가드레일 통과) |
 | POST | `/v1/check` | `{"prompt": "..."}` → 파이프라인 실행 + 이벤트 저장 |
 | GET | `/metrics` `/events` `/alerts` `/audit` | 집계·이벤트·Critical 알림·변경 감사 조회 |
-| GET | `/report?period=weekly\|monthly&format=json\|html` | 기간별 운영 리포트 — `format=html`은 인쇄용 HTML |
+| GET | `/report` | 기간별 운영 리포트 — `?period=weekly` 또는 `monthly`, `format=json`(기본) 또는 `html`(인쇄용) |
 | POST | `/ack` `/clear` | 이벤트 확인 / 전체 삭제(`{"confirm": true}` 필요) |
 | GET | `/health` `/openapi.json` | 상태·API 명세 |
 

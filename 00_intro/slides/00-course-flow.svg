@@ -18,8 +18,6 @@
   </style>
   <rect class="bg" width="1280" height="720"/>
   <!-- 헤더 -->
-  <rect class="chip" x="60" y="44" width="46" height="30" rx="15"/>
-  <text class="chip-text" x="83" y="65" text-anchor="middle">7</text>
   <text class="title" x="60" y="128">AI 가드레일과 보안 관제 운영</text>
   <text class="summary" x="60" y="162">개념과 아키텍처부터 정책 통제, 관제, 운영 리포트까지 연결한다</text>
   <!-- 카드 6개: x=60,255,450,645,840,1035  너비=180  간격=15(화살표) -->
