@@ -71,6 +71,7 @@ def main(argv=None) -> int:
     r = sub.add_parser("run"); r.add_argument("--prompt", required=True)
     sub.add_parser("metrics"); sub.add_parser("events"); sub.add_parser("clear")
     rep = sub.add_parser("report"); rep.add_argument("--period", default="weekly")
+    rep.add_argument("--html", action="store_true", help="write printable HTML to guardrail-ops/results/")
     a = sub.add_parser("ack"); a.add_argument("event_id")
     a.add_argument("--actor", default=None); a.add_argument("--reason", default=None)
     srv = sub.add_parser("serve")
@@ -105,7 +106,15 @@ def main(argv=None) -> int:
         elif args.cmd == "events":
             emit([e.as_dict() for e in store.list()])
         elif args.cmd == "report":
-            emit(period_report(store.list(), args.period))
+            payload = period_report(store.list(), args.period)
+            if args.html:
+                from observe.report import render_html
+                out = _ROOT / "guardrail-ops" / "results" / f"report-{args.period}.html"
+                out.parent.mkdir(parents=True, exist_ok=True)
+                out.write_text(render_html(payload), encoding="utf-8")
+                print(out)
+            else:
+                emit(payload)
         elif args.cmd == "ack":
             event = store.acknowledge(args.event_id, actor=args.actor, reason=args.reason)
             if event is None:

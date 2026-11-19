@@ -37,7 +37,7 @@
 - **대화 주제 레일** — NeMo Guardrails 역할의 토픽 게이트 (선택, `--rail`)
 - **위험 등급** — Low~Critical 4단계, 규칙 고정값 또는 3축 점수 분류
 - **관측** — trace_id·단계별 지연, SQLite 이벤트 저장, 주간/월간 리포트, Critical 알림
-- **웹 GUI** — 랜딩(`/`) + 운영 페이지(`/ops`, 7개 탭) + 챗봇 페이지(`/chat`) 분리 구성
+- **웹 GUI** — 랜딩(`/`) + 운영 페이지(`/ops`, 7개 탭) + 챗봇 페이지(`/chat`) 분리 구성. 정책 탭에서 규칙·마스킹 패턴을 폼(추가·삭제·수정) 또는 JSON으로 편집 — 저장 전 정규식 검증으로 즉시 적용
 
 ## 실행
 
@@ -46,7 +46,7 @@
 ```bash
 python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py demo
 python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py run --prompt "..."
-python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py metrics | events | report --period weekly
+python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py metrics | events | report --period weekly [--html]
 python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py ack EVENT_ID --actor 이름 --reason 사유
 python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py clear
 python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v
@@ -67,7 +67,7 @@ python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --port 8000
 | GET | `/chat` | 챗봇 전용 페이지 (모든 메시지가 가드레일 통과) |
 | POST | `/v1/check` | `{"prompt": "..."}` → 파이프라인 실행 + 이벤트 저장 |
 | GET | `/metrics` `/events` `/alerts` `/audit` | 집계·이벤트·Critical 알림·변경 감사 조회 |
-| GET | `/report?period=weekly\|monthly` | 기간별 운영 리포트 |
+| GET | `/report?period=weekly\|monthly&format=json\|html` | 기간별 운영 리포트 — `format=html`은 인쇄용 HTML |
 | POST | `/ack` `/clear` | 이벤트 확인 / 전체 삭제(`{"confirm": true}` 필요) |
 | GET | `/health` `/openapi.json` | 상태·API 명세 |
 

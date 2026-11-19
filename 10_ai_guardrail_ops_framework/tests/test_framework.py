@@ -11,7 +11,7 @@ sys.path.insert(0, str(_ROOT / "guardrail-ops" / "src"))
 from core.pipeline import Pipeline  # noqa: E402
 from core.types import Decision, RiskLevel, SecurityEvent  # noqa: E402
 from observe.metrics import critical_alert, metrics, stage_latency  # noqa: E402
-from observe.report import period_report  # noqa: E402
+from observe.report import period_report, render_html  # noqa: E402
 from observe.store import EventStore  # noqa: E402
 from providers.classifier import parse_guard_output  # noqa: E402
 from risk.classify import to_event  # noqa: E402
@@ -108,6 +108,14 @@ class FrameworkTest(unittest.TestCase):
         ]
         self.assertEqual(period_report(evs, "weekly")["events_in_period"], 1)
         self.assertEqual(period_report(evs, "monthly")["events_in_period"], 2)
+
+    def test_period_report_html_render(self):
+        payload = period_report(self.store.list(), "weekly")
+        html = render_html(payload)
+        self.assertIn("<!DOCTYPE html>", html)
+        self.assertIn("AI Guardrail 운영 리포트", html)
+        self.assertIn("recent_events", payload)
+        self.assertIn("규약 데이터 보기", html)
 
     def test_spans_persisted_in_event(self):
         rec = self.pipe.run("Summarize the retention policy.")

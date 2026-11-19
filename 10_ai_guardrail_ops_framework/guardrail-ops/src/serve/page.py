@@ -103,6 +103,14 @@ button.act.loading{opacity:.6;pointer-events:none;position:relative}
 .kpi .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 .empty{color:var(--faint);text-align:center;padding:2rem 1rem;font-size:.85rem}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:8px}::-webkit-scrollbar-track{background:transparent}
+.rcard{border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;margin:.6rem 0;background:var(--card)}
+.rcard.gone{opacity:.35}
+.rcard .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.rcard input[type=text],.rcard select{width:100%;box-sizing:border-box}
+.rcard .pat{font-family:ui-monospace,monospace;font-size:.8rem}
+.rcard .flags label{margin-right:.9rem;font-size:.8rem;white-space:nowrap}
+.rcard .del{padding:.2rem .6rem;font-size:.75rem}
+@media(max-width:720px){.rcard .grid2{grid-template-columns:1fr}}
 __LLMW_CSS__</style></head><body>
 <div class="top"><div><h1>AI Guardrail Ops</h1><div class="sub">입력 가드레일 → LLM → 출력 마스킹 파이프라인 관제 대시보드</div></div>
 <div class="right"><a class="chat-page-link" href="/" style="margin-right:.4rem">← 홈</a><a class="chat-page-link" href="/chat" target="_blank">챗봇 페이지 →</a><span class="status-pill" id="statusPill">연결 확인 중…</span><label class="small"><input type="checkbox" id="auto" onchange="toggleAuto()"> 자동 새로고침(10s)</label>
@@ -146,9 +154,11 @@ __LLMW_CSS__</style></head><body>
 <div class="small" style="margin-top:.5rem">* 저장 즉시 파이프라인에 적용되며 guardrail-ops/.env에 영속화됩니다(서버 재시작 후에도 유지).</div></div>
 </section>
 <section id="tab-policy" hidden>
-<div class="card"><div class="row" style="justify-content:space-between"><b>입력 정책 규칙 (가드레일)</b><button class="ghost" onclick="toggleEditor()">JSON 편집</button></div><div class="tbl-wrap" id="rules"></div>
+<div class="card"><div class="row" style="justify-content:space-between"><b>입력 정책 규칙 (가드레일)</b><span class="row" style="margin:0"><button class="ghost" onclick="toggleRuleEditor()">규칙 편집</button><button class="ghost" onclick="toggleEditor()">JSON 편집</button></span></div><div class="tbl-wrap" id="rules"></div>
+<div id="ruleEditor" hidden style="margin-top:.8rem"><div id="ruleForms"></div><div class="row"><button class="ghost" onclick="addRuleForm()">+ 규칙 추가</button><button class="act" onclick="saveRuleForms()">규칙 저장</button><span class="small" id="ruleMsg"></span></div></div>
 <div id="editor" hidden style="margin-top:.8rem"><textarea id="policyJson" style="height:340px;font-family:ui-monospace,monospace;font-size:.78rem"></textarea><div class="row"><button class="act" onclick="savePolicy()">정책 저장</button><span class="small" id="policyMsg"></span></div></div></div>
-<div class="card"><div class="row" style="justify-content:space-between"><b>출력 마스킹 패턴</b><button class="ghost" onclick="toggleMaskEditor()">마스킹 JSON 편집</button></div><div class="tbl-wrap" id="masking"></div>
+<div class="card"><div class="row" style="justify-content:space-between"><b>출력 마스킹 패턴</b><span class="row" style="margin:0"><button class="ghost" onclick="toggleMaskFormEditor()">패턴 편집</button><button class="ghost" onclick="toggleMaskEditor()">마스킹 JSON 편집</button></span></div><div class="tbl-wrap" id="masking"></div>
+<div id="maskFormEditor" hidden style="margin-top:.8rem"><div id="maskForms"></div><div class="row"><button class="ghost" onclick="addMaskForm()">+ 패턴 추가</button><button class="act" onclick="saveMaskForms()">패턴 저장</button><span class="small" id="maskFormMsg"></span></div></div>
 <div id="maskEditor" hidden style="margin-top:.8rem"><textarea id="maskJson" style="height:220px;font-family:ui-monospace,monospace;font-size:.78rem"></textarea><div class="row"><button class="act" onclick="saveMasking()">마스킹 저장</button><span class="small" id="maskMsg"></span></div></div></div>
 </section>
 <section id="tab-help" hidden>
@@ -205,11 +215,11 @@ __LLMW_CSS__</style></head><body>
 <tr><td>프롬프트 검사</td><td>검사 탭에 입력 → "검사 실행". 예시 버튼 클릭 시 바로 실행된다.</td></tr>
 <tr><td>차단/검토 결과 확인</td><td>이벤트 탭에서 필터링, "상세"로 span·감사 로그 확인.</td></tr>
 <tr><td>지표·추이 보기</td><td>대시보드 탭 — KPI, 일별 추이, 카테고리/리스크 차트.</td></tr>
-<tr><td>정책 규칙 수정</td><td>정책 탭 → "JSON 편집" → 저장(검증 후 즉시 적용).</td></tr>
-<tr><td>마스킹 패턴 수정</td><td>정책 탭 → "마스킹 JSON 편집" → 저장.</td></tr>
+<tr><td>정책 규칙 수정</td><td>정책 탭 → "규칙 편집"(폼: 추가·삭제·수정) 또는 "JSON 편집" → 저장(검증 후 즉시 적용).</td></tr>
+<tr><td>마스킹 패턴 수정</td><td>정책 탭 → "패턴 편집"(폼) 또는 "마스킹 JSON 편집" → 저장.</td></tr>
 <tr><td>LLM 설정 변경</td><td>LLM 탭 — 모델/Base URL/사용 여부 저장 시 즉시 적용.</td></tr>
 <tr><td>이벤트 확인 처리</td><td>이벤트 탭 → open 이벤트의 "ack" (처리자·사유 입력 가능).</td></tr>
-<tr><td>주간/월간 리포트</td><td>리포트 탭 → 주간(7일)/월간(30일) 버튼.</td></tr>
+<tr><td>주간/월간 리포트</td><td>리포트 탭 → 주간(7일)/월간(30일) 버튼. "HTML 리포트 열기"로 인쇄용 페이지(/report?format=html) 제공.</td></tr>
 </table></div></div>
 </section>
 <section id="tab-report" hidden>
@@ -326,10 +336,74 @@ try{const r=await api('POST','/policy',{masking:$('maskJson').value});
 if(r.error){msg.textContent='오류: '+r.error;toast('마스킹 저장 실패: '+r.error,true);return}
 msg.textContent='저장됨 (즉시 적용)';toast('마스킹 패턴 저장 완료');loadPolicy();
 }catch(_){msg.textContent='JSON 파싱 오류 — 문법을 확인하세요'}}
+/* ---- structured rule/masking editors ---- */
+const RF=['IGNORECASE','DOTALL','NORMALIZE'],MF=['IGNORECASE','DOTALL'];
+let RULE_FORMS=[],MASK_FORMS=[];
+function flagBoxes(flags,prefix,allowed){return allowed.map(f=>`<label><input type="checkbox" class="${prefix}-flag" value="${f}" ${(flags||[]).includes(f)?'checked':''}> ${f}</label>`).join(' ')}
+function ruleMode(rad){const c=rad.closest('.rcard');c.querySelector('.rf-risk').disabled=rad.value!=='fixed';c.querySelectorAll('.rf-score').forEach(s=>s.disabled=rad.value!=='score')}
+function renderRuleForms(){const el=$('ruleForms');if(!el)return;
+el.innerHTML=RULE_FORMS.map((r,i)=>{const hasRisk='risk' in r;
+const riskOpts=['Low','Medium','High','Critical'].map(v=>`<option value="${v}" ${r.risk===v?'selected':''}>${v}</option>`).join('');
+const scores=['impact','exploitability','exposure'].map(k=>`<label class="small">${k}<input type="text" class="rf-score" data-k="${k}" value="${r[k]??0}" ${hasRisk?'disabled':''} style="width:2.6rem"></label>`).join(' ');
+return `<div class="rcard" data-i="${i}">
+<div class="row" style="justify-content:space-between;margin:.1rem 0 .5rem"><b class="small">#${i+1} ${esc(r.rule_id||'')}</b><button class="ghost del" onclick="this.closest('.rcard').classList.add('gone')">삭제</button></div>
+<div class="grid2">
+<label class="small">rule_id<br><input type="text" class="rf-id" value="${esc(r.rule_id)}"></label>
+<label class="small">decision<br><select class="rf-dec">${['block','review','allow'].map(v=>`<option ${r.decision===v?'selected':''}>${v}</option>`).join('')}</select></label>
+</div>
+<label class="small" style="display:block;margin-top:.45rem">pattern (정규식)<br><input type="text" class="rf-pat pat" value="${esc(r.pattern)}"></label>
+<label class="small" style="display:block;margin-top:.45rem">reason<br><input type="text" class="rf-reason" value="${esc(r.reason)}"></label>
+<div class="row" style="margin:.5rem 0 .2rem"><span class="small">위험도:</span>
+<label class="small"><input type="radio" class="rf-mode" name="rm${i}" value="fixed" ${hasRisk?'checked':''} onchange="ruleMode(this)"> 고정</label>
+<select class="rf-risk" ${hasRisk?'':'disabled'}>${riskOpts}</select>
+<label class="small"><input type="radio" class="rf-mode" name="rm${i}" value="score" ${hasRisk?'':'checked'} onchange="ruleMode(this)"> 점수(0~3)</label>
+<span class="flags">${scores}</span></div>
+<div class="row flags">${flagBoxes(r.flags,'rf',RF)}</div>
+</div>`}).join('')}
+function toggleRuleEditor(){const e=$('ruleEditor');e.hidden=!e.hidden;
+if(!e.hidden&&window.POLICY){RULE_FORMS=JSON.parse(JSON.stringify(window.POLICY.config||[]));renderRuleForms()}}
+function addRuleForm(){RULE_FORMS.push({rule_id:'NEW-001',pattern:'new_rule',reason:'custom rule',risk:'Medium',decision:'review',flags:['IGNORECASE']});renderRuleForms()}
+async function saveRuleForms(){const msg=$('ruleMsg');msg.textContent='저장 중…';const out=[];
+for(const card of document.querySelectorAll('#ruleForms .rcard:not(.gone)')){
+const i=+card.dataset.i,o={...(RULE_FORMS[i]||{})};
+['rule_id','pattern','reason','risk','decision','flags','impact','exploitability','exposure'].forEach(k=>delete o[k]);
+o.rule_id=card.querySelector('.rf-id').value.trim();o.pattern=card.querySelector('.rf-pat').value;o.reason=card.querySelector('.rf-reason').value;o.decision=card.querySelector('.rf-dec').value;
+const flags=[...card.querySelectorAll('.rf-flag:checked')].map(c=>c.value);if(flags.length)o.flags=flags;
+if(card.querySelector('.rf-mode:checked').value==='fixed')o.risk=card.querySelector('.rf-risk').value;
+else['impact','exploitability','exposure'].forEach(k=>o[k]=Math.max(0,Math.min(3,+card.querySelector(`.rf-score[data-k="${k}"]`).value||0)));
+out.push(o)}
+if(out.some(r=>!r.rule_id||!r.pattern)){msg.textContent='rule_id·pattern은 비울 수 없습니다';return}
+try{const r=await api('POST','/policy',{config:JSON.stringify(out)});
+if(r.error){msg.textContent='오류: '+r.error;toast('규칙 저장 실패: '+r.error,true);return}
+msg.textContent=`저장됨 (${r.updated.join(', ')}, 즉시 적용)`;toast('정책 규칙 저장 완료');$('ruleEditor').hidden=true;loadPolicy();
+}catch(_){msg.textContent='저장 실패'}}
+function renderMaskForms(){const el=$('maskForms');if(!el)return;
+el.innerHTML=MASK_FORMS.map((m,i)=>`<div class="rcard" data-i="${i}">
+<div class="row" style="justify-content:space-between;margin:.1rem 0 .5rem"><b class="small">#${i+1} ${esc(m.field||'')}</b><button class="ghost del" onclick="this.closest('.rcard').classList.add('gone')">삭제</button></div>
+<div class="grid2">
+<label class="small">field<br><input type="text" class="mf-field" value="${esc(m.field)}"></label>
+<label class="small">pattern (정규식)<br><input type="text" class="mf-pat pat" value="${esc(m.pattern)}"></label>
+</div>
+<div class="row flags" style="margin-top:.4rem">${flagBoxes(m.flags,'mf',MF)}</div>
+</div>`).join('')}
+function toggleMaskFormEditor(){const e=$('maskFormEditor');e.hidden=!e.hidden;
+if(!e.hidden&&window.POLICY){MASK_FORMS=JSON.parse(JSON.stringify(window.POLICY.masking_config||[]));renderMaskForms()}}
+function addMaskForm(){MASK_FORMS.push({field:'custom_field',pattern:'',flags:[]});renderMaskForms()}
+async function saveMaskForms(){const msg=$('maskFormMsg');msg.textContent='저장 중…';const out=[];
+for(const card of document.querySelectorAll('#maskForms .rcard:not(.gone)')){
+const i=+card.dataset.i,o={...(MASK_FORMS[i]||{})};delete o.field;delete o.pattern;delete o.flags;
+o.field=card.querySelector('.mf-field').value.trim();o.pattern=card.querySelector('.mf-pat').value;
+const flags=[...card.querySelectorAll('.mf-flag:checked')].map(c=>c.value);if(flags.length)o.flags=flags;
+out.push(o)}
+if(out.some(m=>!m.field||!m.pattern)){msg.textContent='field·pattern은 비울 수 없습니다';return}
+try{const r=await api('POST','/policy',{masking:JSON.stringify(out)});
+if(r.error){msg.textContent='오류: '+r.error;toast('마스킹 저장 실패: '+r.error,true);return}
+msg.textContent='저장됨 (즉시 적용)';toast('마스킹 패턴 저장 완료');$('maskFormEditor').hidden=true;loadPolicy();
+}catch(_){msg.textContent='저장 실패'}}
 const loadLlm=()=>lwLoad();
 async function testLlm(){toast('연결 테스트 중…');await lwLoad();toast('상태를 새로고침했습니다')}
 async function loadReport(period){const r=await fetch('/report?period='+period).then(x=>x.json());
-$('report').innerHTML=`<div class="card"><b>${period} 리포트 (${r.events_in_period??'-'}건, ${r.period_days}일)</b><pre>${esc(JSON.stringify(r,null,2))}</pre></div>`}
+$('report').innerHTML=`<div class="card"><b>${period} 리포트 (${r.events_in_period??'-'}건, ${r.period_days}일)</b> <a href="/report?period=${period}&format=html" target="_blank" rel="noopener" style="margin-left:.6rem">HTML 리포트 열기</a><pre>${esc(JSON.stringify(r,null,2))}</pre></div>`}
 show('tab-check');charCount();ping();setInterval(ping,30000);
 </script></body></html>"""
 

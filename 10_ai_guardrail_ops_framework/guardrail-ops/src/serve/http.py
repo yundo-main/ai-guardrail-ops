@@ -56,8 +56,9 @@ OPENAPI = {
                     "post": {"summary": "replace policy-rules.json (validated before save)", "requestBody": {"content": {
                         "application/json": {"schema": {"type": "object", "properties": {
                             "config": {"description": "rule array (object or JSON string)"}}}}}}}},
-        "/report": {"get": {"summary": "weekly|monthly ops report", "parameters": [
-            {"name": "period", "in": "query", "schema": {"enum": ["weekly", "monthly"], "default": "weekly"}}]}},
+        "/report": {"get": {"summary": "weekly|monthly ops report (format=json|html)", "parameters": [
+            {"name": "period", "in": "query", "schema": {"enum": ["weekly", "monthly"], "default": "weekly"}},
+            {"name": "format", "in": "query", "schema": {"enum": ["json", "html"], "default": "json"}}]}},
         "/ack": {"post": {"summary": "acknowledge an event (actor/reason recorded in audit trail)", "requestBody": {"content": {"application/json": {
             "schema": {"type": "object", "properties": {"event_id": {"type": "string"},
                         "actor": {"type": "string"}, "reason": {"type": "string"}}, "required": ["event_id"]}}}}}},
@@ -217,12 +218,18 @@ def run_server(host: str = "127.0.0.1", port: int = 8000, db: str | None = None,
                     "output_masking": [{"field": name, "pattern": pat.pattern} for name, pat in gout.OUTPUT_PATTERNS],
                 })
             if path == "/report":
-                period = parse_qs(urlsplit(self.path).query).get("period", ["weekly"])[0]
+                qs = parse_qs(urlsplit(self.path).query)
+                period = qs.get("period", ["weekly"])[0]
+                fmt = qs.get("format", ["json"])[0]
                 with lock:
                     try:
-                        return self._json(200, period_report(store.list(), period))
+                        payload = period_report(store.list(), period)
                     except ValueError as exc:
                         return self._json(400, {"error": str(exc)})
+                if fmt == "html":
+                    from observe.report import render_html
+                    return self._html(render_html(payload))
+                return self._json(200, payload)
             self._json(404, {"error": "not found"})
 
         def do_POST(self):
@@ -299,7 +306,8 @@ def run_server(host: str = "127.0.0.1", port: int = 8000, db: str | None = None,
                         return self._json(400, {"error": f"masking validation failed: {exc}"})
                     finally:
                         Path(tmp_path).unlink(missing_ok=True)
-                    gout.PATTERNS_PATH.write_text(text, encoding="utf-8")
+                    gout.PATTERNS_PATH.write_text(
+                        json.dumps(entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
                     with lock:
                         gout.OUTPUT_PATTERNS = load_patterns()
                     saved.append("masking")
@@ -323,7 +331,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8000, db: str | None = None,
                     finally:
                         Path(tmp_path).unlink(missing_ok=True)
                     DEFAULT_RULES_PATH.write_text(
-                        text if isinstance(text, str) else json.dumps(entries, ensure_ascii=False, indent=2),
+                        json.dumps(entries, ensure_ascii=False, indent=2) + "\n",
                         encoding="utf-8")
                     with lock:
                         pipeline.rules = load_rules()

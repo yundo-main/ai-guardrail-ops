@@ -5,7 +5,10 @@
     "reason": "prompt injection",
     "risk": "High",
     "decision": "block",
-    "flags": ["IGNORECASE", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "INJ-002",
@@ -13,7 +16,10 @@
     "reason": "jailbreak attempt",
     "risk": "High",
     "decision": "block",
-    "flags": ["IGNORECASE", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "INJ-003",
@@ -21,7 +27,11 @@
     "reason": "prompt extraction attempt",
     "risk": "High",
     "decision": "block",
-    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "DOTALL",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "EXF-001",
@@ -29,7 +39,11 @@
     "reason": "secret exfiltration request",
     "risk": "Critical",
     "decision": "block",
-    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "DOTALL",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "EXF-002",
@@ -37,7 +51,11 @@
     "reason": "sensitive file access request",
     "risk": "Critical",
     "decision": "block",
-    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "DOTALL",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "EXF-003",
@@ -45,7 +63,10 @@
     "reason": "environment secret disclosure request",
     "risk": "Critical",
     "decision": "block",
-    "flags": ["IGNORECASE", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "TOOL-001",
@@ -53,7 +74,11 @@
     "reason": "dangerous tool or infrastructure action",
     "risk": "Critical",
     "decision": "block",
-    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "DOTALL",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "TOOL-002",
@@ -61,7 +86,10 @@
     "reason": "destructive system command",
     "risk": "Critical",
     "decision": "block",
-    "flags": ["IGNORECASE", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "TOOL-003",
@@ -69,7 +97,11 @@
     "reason": "privilege escalation request",
     "risk": "High",
     "decision": "block",
-    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "DOTALL",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "ABUSE-001",
@@ -77,7 +109,10 @@
     "reason": "harmful cyber request",
     "risk": "High",
     "decision": "block",
-    "flags": ["IGNORECASE", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "ABUSE-002",
@@ -85,7 +120,11 @@
     "reason": "malware development request",
     "risk": "Critical",
     "decision": "block",
-    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "DOTALL",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "ABUSE-003",
@@ -93,7 +132,10 @@
     "reason": "social engineering request",
     "risk": "High",
     "decision": "block",
-    "flags": ["IGNORECASE", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "ABUSE-004",
@@ -101,7 +143,11 @@
     "reason": "security control bypass request",
     "risk": "High",
     "decision": "block",
-    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "DOTALL",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "INJ-004",
@@ -109,7 +155,10 @@
     "reason": "prompt injection (korean)",
     "risk": "High",
     "decision": "block",
-    "flags": ["IGNORECASE", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "EXF-004",
@@ -117,7 +166,11 @@
     "reason": "secret exfiltration request (korean)",
     "risk": "Critical",
     "decision": "block",
-    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "DOTALL",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "TOOL-004",
@@ -125,7 +178,11 @@
     "reason": "destructive action or privilege escalation (korean)",
     "risk": "Critical",
     "decision": "block",
-    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "DOTALL",
+      "NORMALIZE"
+    ]
   },
   {
     "rule_id": "ABUSE-005",
@@ -133,6 +190,10 @@
     "reason": "harmful cyber request (korean)",
     "risk": "High",
     "decision": "block",
-    "flags": ["IGNORECASE", "DOTALL", "NORMALIZE"]
+    "flags": [
+      "IGNORECASE",
+      "DOTALL",
+      "NORMALIZE"
+    ]
   }
 ]
