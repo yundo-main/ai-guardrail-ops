@@ -28,6 +28,7 @@ __pycache__/
 
 # 10 프레임워크 런타임 결과
 10_ai_guardrail_ops_framework/**/results/
+10_ai_guardrail_ops_framework/rail
 
 # LLM
 AGENTS.md

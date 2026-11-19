@@ -99,30 +99,45 @@ python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --port 8000
 
 ```text
 10_ai_guardrail_ops_framework/
+├── readme.md                     # 사용자 문서 (실행·API·GUI)
+├── index.html                    # 포털 페이지 (생성물)
 ├── docs/
-│   └── diagrams/
-├── chatbot/
-├── guardrail/
+│   ├── development.md            # 개발 문서 — 구조·설계·확장 방법
+│   └── diagrams/                 # 서비스 파이프라인 SVG 도식 3종
+├── chatbot/                      # 별도 학습용 챗봇 (자체 readme·번호 순 스크립트)
+├── guardrail/                    # 판정 엔진 — 입출력 정책·마스킹·위험도·LLM 프로바이더
 │   ├── config/
+│   │   ├── policy-rules.json     #   입력 정책 규칙 17개
+│   │   └── output-patterns.json  #   출력 마스킹 패턴 4종
 │   └── src/
 │       ├── core/
+│       │   ├── types.py          #     공통 타입·단계 span 어휘
+│       │   └── pipeline.py       #     가드레일 파이프라인 (단계별 span 기록)
 │       ├── guard/
+│       │   ├── policy.py         #     입력 정책 — JSON 규칙, fail-closed
+│       │   └── output.py         #     출력 검열 — 민감정보 마스킹
 │       ├── providers/
+│       │   ├── model.py          #     모델 백엔드 (기본 결정론적, USE_LLM 시 Ollama)
+│       │   ├── classifier.py     #     Llama Guard 3 분류기 (선택)
+│       │   ├── dialogue.py       #     NeMo Guardrails식 주제·대화 레일 (선택)
+│       │   └── deepseek.py       #     DeepSeek API 백엔드 (OpenAI 호환)
 │       └── risk/
-├── guardrail-ops/
+│           ├── classify.py       #     RunRecord → SecurityEvent 변환
+│           └── score.py          #     위험도 점수화 (impact+exploitability+exposure)
+├── guardrail-ops/                # 관측·서빙 계층 — 이벤트 저장·지표·알림·HTTP/GUI
 │   ├── src/
+│   │   ├── main.py               #     CLI 진입점 (demo/run/serve/metrics/report…)
 │   │   ├── observe/
+│   │   │   ├── store.py          #       SQLite 이벤트 저장소 (GUARDRAIL_OPS_DB)
+│   │   │   ├── metrics.py        #       집계 지표 + Critical 알림 페이로드
+│   │   │   ├── report.py         #       주간·월간 운영 리포트 생성
+│   │   │   └── runtime.py        #       .env 기반 런타임 설정 영속화
 │   │   └── serve/
-│   └── results/
+│   │       ├── http.py           #       stdlib HTTP 서버 — JSON API + OpenAPI
+│   │       └── page.py           #       단일 페이지 GUI (vanilla JS + canvas)
+│   └── results/                  #     실행 시 생성 — events.db · alerts.jsonl
 └── tests/
+    └── test_framework.py         # 프레임워크 단위 테스트 15건
 ```
 
-주요 파일(디렉터리 아님):
-
-- `readme.md` — 사용자 문서
-- `docs/development.md` — 개발 문서·로그
-- `guardrail-ops/src/main.py` — CLI 진입점
-- `guardrail-ops/.env` — LLM 설정 영속화
-- `guardrail/config/policy-rules.json` — 정책 규칙 17개
-- `guardrail/config/output-patterns.json` — 출력 마스킹 패턴 4종
-- `guardrail-ops/results/events.db` · `alerts.jsonl` — 실행 시 생성
+`guardrail-ops/.env`는 LLM 설정 영속화용 로컬 파일로 git 추적되지 않는다 (`.env.sample` 참고).
