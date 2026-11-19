@@ -20,7 +20,7 @@ guardrail/src/               # 가드레일 엔진 (판정·분류·마스킹)
 └── providers/
     ├── model.py       # LLM_PROVIDER 선택: dummy / Ollama / DeepSeek
     ├── deepseek.py    # DeepSeek API (OpenAI 호환, lazy)
-    ├── classifier.py  # Llama Guard 3 (Transformers, lazy)
+    ├── classifier.py  # Llama Guard 3 (Ollama /api/chat, stdlib)
     └── dialogue.py    # 토픽 레일: KeywordTopicRail / NemoGuardrailsRail(lazy)
 
 guardrail/config/
@@ -96,7 +96,7 @@ python -m unittest discover -s 10_ai_guardrail_ops_framework/tests -v
 
 ## 설계 원칙
 
-- 표준 라이브러리만 사용(무거운 의존성은 선택 사항: transformers/torch, nemoguardrails).
+- 표준 라이브러리만 사용(외부 의존은 선택 사항: 실행 중인 Ollama 서버·모델, nemoguardrails 패키지).
 - 실패는 안전한 쪽으로: 분류기·레일 오류 → 차단/검토, 정책 파일 오류 → 중단.
 - 이벤트에는 원문을 남기지 않는다.
 - 단계 폴더(01~06)를 import하지 않는 독립 프레임워크.

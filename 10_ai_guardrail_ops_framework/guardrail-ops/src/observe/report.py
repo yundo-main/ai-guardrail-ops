@@ -1,4 +1,4 @@
-"""Weekly/monthly operations report (day 6 capability)."""
+"""Weekly/monthly operations report (step06 capability)."""
 
 from __future__ import annotations
 

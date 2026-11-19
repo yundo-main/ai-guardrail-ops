@@ -84,8 +84,8 @@ python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --port 8000
 | `DEEPSEEK_API_KEY` | DeepSeek API 키 (provider=deepseek 시) | 없음 |
 | `DEEPSEEK_MODEL` | 사용할 DeepSeek 모델 | `deepseek-chat` |
 | `DEEPSEEK_BASE_URL` | DeepSeek 엔드포인트 | `https://api.deepseek.com` |
-| `--classifier` | Llama Guard 3 안전성 분류 활성화 | 꺼짐 (transformers/torch 필요) |
-| `LLAMA_GUARD_MODEL` | 분류기 모델 ID | `meta-llama/Llama-Guard-3-8B` |
+| `--classifier` | Llama Guard 3 안전성 분류 활성화 (Ollama `/api/chat`) | 꺼짐 (Ollama 서버 + 가드 모델 필요) |
+| `OLLAMA_GUARD_MODEL` | 분류기 모델 | `llama-guard3:1b` |
 | `--rail keywords` | 결정론적 주제 레일 | 꺼짐 |
 | `GUARDRAIL_TOPICS` | 레일 주제 JSON `{"주제":["키워드"]}` | 내장 general 토픽 |
 | `--rail nemo` | NeMo Guardrails 레일 | 꺼짐 (nemoguardrails 필요) |
@@ -118,7 +118,7 @@ python 10_ai_guardrail_ops_framework/guardrail-ops/src/main.py serve --port 8000
 │       │   └── output.py         #     출력 검열 — 민감정보 마스킹
 │       ├── providers/
 │       │   ├── model.py          #     모델 백엔드 (기본 결정론적, USE_LLM 시 Ollama)
-│       │   ├── classifier.py     #     Llama Guard 3 분류기 (선택)
+│       │   ├── classifier.py     #     Llama Guard 3 분류기 — Ollama (선택)
 │       │   ├── dialogue.py       #     NeMo Guardrails식 주제·대화 레일 (선택)
 │       │   └── deepseek.py       #     DeepSeek API 백엔드 (OpenAI 호환)
 │       └── risk/

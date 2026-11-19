@@ -1,4 +1,4 @@
-"""Output redaction (day 3 capability). Patterns live in config/output-patterns.json."""
+"""Output redaction (step03 capability). Patterns live in config/output-patterns.json."""
 
 from __future__ import annotations
 

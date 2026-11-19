@@ -1,4 +1,4 @@
-"""Shared vocabulary of the framework (self-contained; no imports from days 01-06)."""
+"""Shared vocabulary of the framework (self-contained; no imports from steps 01-06)."""
 
 from __future__ import annotations
 

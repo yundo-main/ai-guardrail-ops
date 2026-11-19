@@ -5,10 +5,10 @@
   python src/main.py metrics | events | report [--period weekly|monthly]
   python src/main.py ack EVENT_ID | clear
   python src/main.py serve [--host H] [--port P]   # HTTP API + web GUI
-  add --classifier to enable Llama Guard (needs transformers/torch)
+  add --classifier to enable Llama Guard via Ollama (needs a running server)
 
-Self-contained: capabilities of days 01-06 are re-implemented here and nothing
-is imported from the day folders.
+Self-contained: capabilities of steps 01-06 are re-implemented here and nothing
+is imported from the step folders.
 
 Layout: core/ (types, pipeline) · guard/ (policy, output) · risk/ (events)
         observe/ (store, metrics, report) · providers/ (model, classifier)
@@ -65,7 +65,7 @@ def main(argv=None) -> int:
     p.add_argument("--db", default=None, help="SQLite path (default results/events.db)")
     p.add_argument("--classifier", action="store_true")
     p.add_argument("--rail", default=None, choices=["keywords", "nemo"],
-                   help="dialogue/topic rail (day 2): keywords=deterministic, nemo=NeMo Guardrails")
+                   help="dialogue/topic rail (step02): keywords=deterministic, nemo=NeMo Guardrails")
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("demo")
     r = sub.add_parser("run"); r.add_argument("--prompt", required=True)

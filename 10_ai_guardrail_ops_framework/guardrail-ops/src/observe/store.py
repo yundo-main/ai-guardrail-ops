@@ -1,4 +1,4 @@
-"""SQLite event store (day 5 capability). Path via GUARDRAIL_OPS_DB or constructor."""
+"""SQLite event store (step05 capability). Path via GUARDRAIL_OPS_DB or constructor."""
 
 from __future__ import annotations
 
@@ -52,7 +52,7 @@ class EventStore:
                                  "spans_json": r["spans_json"] or ""}) for r in rows]
 
     def _audit(self, event_id: str, field: str, old, new, actor: str | None, reason: str | None) -> None:
-        """Day-4 rule: grade/status changes never overwrite silently — actor, time, reason are recorded apart."""
+        """Step04 rule: grade/status changes never overwrite silently — actor, time, reason are recorded apart."""
         with self._conn:
             self._conn.execute(
                 "INSERT INTO audit (event_id, field, old_value, new_value, actor, reason, timestamp)"

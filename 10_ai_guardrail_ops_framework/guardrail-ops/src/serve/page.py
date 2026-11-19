@@ -614,7 +614,7 @@ LLM 요청이 정책·레일·분류기·마스킹을 통과하는 파이프라�
 <details class="dt"><summary>providers/</summary><div class="dt-kids">
 <div class="dtl">model.py — LLM 어댑터 선택·history</div>
 <div class="dtl">deepseek.py — DeepSeek API</div>
-<div class="dtl">classifier.py — Llama Guard 3</div>
+<div class="dtl">classifier.py — Llama Guard 3 (Ollama)</div>
 <div class="dtl">dialogue.py — 대화 레일 keyword/nemo</div>
 </div></details>
 <details class="dt"><summary>risk/</summary><div class="dt-kids">

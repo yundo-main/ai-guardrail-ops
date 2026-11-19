@@ -1,4 +1,4 @@
-"""Turn a RunRecord into a SecurityEvent (day 4 capability)."""
+"""Turn a RunRecord into a SecurityEvent (step04 capability)."""
 
 from __future__ import annotations
 

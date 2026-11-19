@@ -1,4 +1,4 @@
-"""Aggregate metrics and critical alerts (day 5 capability)."""
+"""Aggregate metrics and critical alerts (step05 capability)."""
 
 from __future__ import annotations
 

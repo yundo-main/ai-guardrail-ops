@@ -1,4 +1,4 @@
-"""Optional dialogue/topic rails (day 2 capability: NeMo Guardrails role).
+"""Optional dialogue/topic rails (step02 capability: NeMo Guardrails role).
 
 Two backends behind one callable interface `rail(user_text, assistant_text) -> dict`:
 

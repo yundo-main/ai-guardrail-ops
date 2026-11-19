@@ -1,12 +1,17 @@
-"""Optional safety classifier (day 2 capability): Llama Guard 3 via Transformers.
+"""Optional safety classifier: Llama Guard via a local Ollama server.
 
-Lazy import: the framework runs without torch/transformers. Unknown or malformed
-output is treated as unsafe (fail closed).
+Calls ``/api/chat`` on Ollama with a pulled guard model (default
+``llama-guard3:1b``). Only stdlib ``urllib`` is used, so the framework still
+runs without torch/transformers — it just needs a running Ollama server.
+Unknown or malformed output is treated as unsafe (fail closed).
 """
 
 from __future__ import annotations
 
+import json
 import os
+from urllib.error import URLError
+from urllib.request import Request, urlopen
 
 
 def parse_guard_output(raw: str) -> dict:
@@ -16,24 +21,46 @@ def parse_guard_output(raw: str) -> dict:
 
 
 class LlamaGuardClassifier:
-    def __init__(self, model_id: str | None = None, max_new_tokens: int = 128):
-        try:
-            from transformers import AutoModelForCausalLM, AutoTokenizer
-        except ImportError as exc:
-            raise RuntimeError("Install transformers/torch (Python 3.12) to use the Llama Guard classifier.") from exc
-        self.model_id = model_id or os.getenv("LLAMA_GUARD_MODEL", "meta-llama/Llama-Guard-3-8B")
-        self.max_new_tokens = max_new_tokens
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_id)
-        self.model = AutoModelForCausalLM.from_pretrained(self.model_id, torch_dtype="auto", device_map="auto")
+    """Call Llama Guard through a local Ollama ``/api/chat`` endpoint.
+
+    Set ``OLLAMA_BASE_URL``/``OLLAMA_GUARD_MODEL`` to override the defaults.
+    """
+
+    PROVIDER = "ollama/llama-guard"
+
+    def __init__(self, model: str | None = None, base_url: str | None = None, timeout: int = 120):
+        self.model = model or os.getenv("OLLAMA_GUARD_MODEL", "llama-guard3:1b")
+        self.base_url = (base_url or os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")).rstrip("/")
+        self.timeout = timeout
 
     def __call__(self, user_text: str, assistant_text: str | None = None) -> dict:
         chat = [{"role": "user", "content": user_text}]
         if assistant_text:
             chat.append({"role": "assistant", "content": assistant_text})
-        inputs = self.tokenizer.apply_chat_template(chat, add_generation_prompt=True, tokenize=True, return_dict=True, return_tensors="pt")
-        inputs = inputs.to(self.model.device)
-        out = self.model.generate(**inputs, max_new_tokens=self.max_new_tokens, pad_token_id=self.tokenizer.eos_token_id)
-        raw = self.tokenizer.decode(out[0][inputs["input_ids"].shape[-1]:], skip_special_tokens=True)
+        body = json.dumps(
+            {
+                "model": self.model,
+                "messages": chat,
+                "stream": False,
+                "options": {"num_predict": 128},
+            }
+        ).encode("utf-8")
+        request = Request(
+            f"{self.base_url}/api/chat",
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urlopen(request, timeout=self.timeout) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except (OSError, URLError) as exc:
+            raise RuntimeError(
+                f"Ollama server is unreachable at {self.base_url}. "
+                "Start Ollama and pull the guard model first."
+            ) from exc
+        raw = payload.get("message", {}).get("content", "")
         result = parse_guard_output(raw)
-        result["model"] = self.model_id
+        result["model"] = self.model
+        result["provider"] = self.PROVIDER
         return result

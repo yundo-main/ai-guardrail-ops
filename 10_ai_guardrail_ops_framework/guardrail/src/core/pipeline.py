@@ -1,4 +1,4 @@
-"""Guardrail pipeline with per-stage spans (day 1 architecture + observability).
+"""Guardrail pipeline with per-stage spans (step01 architecture + observability).
 
 input policy -> model -> [classifier] -> output redaction -> (caller records event)
 """

@@ -1,4 +1,4 @@
-"""Input policy (day 3 capability): JSON rules with a fail-closed built-in default."""
+"""Input policy (step03 capability): JSON rules with a fail-closed built-in default."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ def load_rules(path: str | Path | None = None) -> tuple[tuple[str, re.Pattern, s
     for e in entries:
         flag_names = e.get("flags", [])
         flags = sum(_FLAGS.get(f, 0) for f in flag_names)
-        # day-4 scoring: a rule may fix "risk" directly or supply impact/exploitability/exposure (0-3 each)
+        # step04 scoring: a rule may fix "risk" directly or supply impact/exploitability/exposure (0-3 each)
         if "risk" in e:
             risk = RiskLevel(e["risk"])
         else:

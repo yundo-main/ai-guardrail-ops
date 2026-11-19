@@ -1,4 +1,4 @@
-"""Model backends (day 6 capability). Default is a deterministic stand-in."""
+"""Model backends (step06 capability). Default is a deterministic stand-in."""
 
 from __future__ import annotations
 
