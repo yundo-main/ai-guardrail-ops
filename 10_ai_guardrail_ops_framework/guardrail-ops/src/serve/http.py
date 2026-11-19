@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import subprocess
 import tempfile
 from collections import defaultdict, deque
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -30,17 +29,6 @@ MAX_BODY = 1_000_000          # 1 MB request body cap
 CHECK_RATE_LIMIT = 30         # POST /v1/check per client per window
 RATE_WINDOW = 60.0            # seconds
 ALERT_TAIL = 50
-REPO_ROOT = _ROOT.parent  # ai-guardrails-ops/ — step folders live here
-RUN_TIMEOUT = 30
-# /run-step whitelist: fixed commands only, no user-supplied shell input
-STEP_COMMANDS = {
-    "01": "python 01_guardrail_concept_architecture/src/architecture.py",
-    "02": "python 02_llama_guard_nemo_guardrails/src/main.py",
-    "03": "python 03_policy_blocking_output_filtering/src/guardrail.py",
-    "04": "PYTHONPATH=04_risk_rating_system/src python 04_risk_rating_system/src/risk.py",
-    "05": "python -m pip install -q -r 05_security_dashboard_alerts/requirements.txt && uvicorn api:app --app-dir 05_security_dashboard_alerts/src --port 8001",
-    "06": "python 06_operations_report_integrated_lab/src/app.py",
-}
 
 OPENAPI = {
     "openapi": "3.0.3",
@@ -73,8 +61,6 @@ OPENAPI = {
         "/ack": {"post": {"summary": "acknowledge an event (actor/reason recorded in audit trail)", "requestBody": {"content": {"application/json": {
             "schema": {"type": "object", "properties": {"event_id": {"type": "string"},
                         "actor": {"type": "string"}, "reason": {"type": "string"}}, "required": ["event_id"]}}}}}},
-        "/run-step": {"post": {"summary": "run a whitelisted step practice command (01-06)", "requestBody": {"content": {
-            "application/json": {"schema": {"type": "object", "properties": {"step": {"type": "string", "enum": ["01","02","03","04","05","06"]}}, "required": ["step"]}}}}}},
         "/clear": {"post": {"summary": "delete all events (requires {\"confirm\": true})"}},
     },
 }
@@ -348,23 +334,6 @@ def run_server(host: str = "127.0.0.1", port: int = 8000, db: str | None = None,
                 if not saved:
                     return self._json(400, {"error": "nothing to save (config/rules/masking required)"})
                 return self._json(200, {"saved": True, "updated": saved})
-            if path == "/run-step":
-                step = str(body.get("step", ""))
-                cmd = STEP_COMMANDS.get(step)
-                if not cmd:
-                    return self._json(400, {"error": f"unknown step: {step}"})
-                try:
-                    r = subprocess.run(cmd, shell=True, cwd=REPO_ROOT,
-                                       capture_output=True, text=True, timeout=RUN_TIMEOUT)
-                    out = (r.stdout + r.stderr).strip()
-                    return self._json(200, {"step": step, "code": r.returncode,
-                                            "output": out[:8000] or "(출력 없음)"})
-                except subprocess.TimeoutExpired as exc:
-                    out = ((exc.stdout or b"") + (exc.stderr or b""))
-                    if isinstance(out, bytes):
-                        out = out.decode("utf-8", "replace")
-                    return self._json(200, {"step": step, "code": -1, "timeout": True,
-                                            "output": (out.strip() or "(시간 초과)")[:8000] + "\n… (30초 초과 — 서버형 명령은 부분 출력만 표시)"})
             if path == "/clear":
                 if body.get("confirm") is not True:
                     return self._json(400, {"error": "requires {\"confirm\": true}"})

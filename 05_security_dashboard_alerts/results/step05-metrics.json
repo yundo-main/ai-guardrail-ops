@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "source_stage": "step05",
   "next": "06_operations_report_integrated_lab",
-  "generated_at": "2026-11-18T20:56:47.873684+00:00",
+  "generated_at": "2026-11-19T02:22:43.241309+00:00",
   "total_events": 3,
   "blocked_events": 1,
   "review_events": 1,
