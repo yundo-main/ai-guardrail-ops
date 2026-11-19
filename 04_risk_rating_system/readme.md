@@ -36,6 +36,9 @@
 > 저장소 루트에서 실행한다. LLM·Ollama 없이 동작한다. **3단계 결과 파일이 먼저 필요하다.**
 
 ```bash
+# 0) 4단계 단위 테스트 (선택)
+python -m unittest discover -s 04_risk_rating_system/tests -v
+
 # 1) 3단계 결과 생성 (아직 없다면 먼저 실행)
 python 03_policy_blocking_output_filtering/src/guardrail.py
 

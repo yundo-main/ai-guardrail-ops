@@ -30,6 +30,9 @@
 > 저장소 루트에서 실행한다. LLM 없이도 동작하고, `USE_LLM=1`이면 로컬 Ollama를 선택적으로 사용한다.
 
 ```bash
+# 0) 6단계 단위 테스트 (선택)
+python -m unittest discover -s 06_operations_report_integrated_lab/tests -v
+
 # 1) 6단계 통합 실행 — 정책·가드레일·이벤트·지표·리포트를 한 번에 수행
 #    → 06_operations_report_integrated_lab/results/ 에 step06-report.json 생성
 python 06_operations_report_integrated_lab/src/app.py
